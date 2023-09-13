@@ -1,0 +1,147 @@
+\chapter{绪论}
+\section{误差}
+
+\subsection{误差来源与分类}
+\begin{enumerate}
+    \item (\emph{模型误差}):从实际模型中抽象出数学模型;
+    
+    例如, 一个质量为$m$的小球做自由落体运动, 则位置$s$与时间$t$的关系式满足:
+    \begin{equation*}
+        m\dv[2]{s}{t}=mg
+    \end{equation*}
+    不难想见, 该式仅在\emph{不考虑阻力}时成立.
+
+    \item (\emph{观测误差}):通过测量得到模型中参数的值;
+    \item (\emph{方法误差}(或称\emph{截断误差})):求近似解时所引入的误差;
+    \begin{example}
+        考虑函数$f(x)$做Taylor多项式展开所导致的截断误差.
+    \end{example}
+    \begin{solution}
+        对函数$f(x)$计算Taylor多项式, 有
+        \begin{equation*}
+            P_n(x)=f(0)+\frac{f'(0)}{1!}x+\frac{f''(0)}{2!}x^2+\cdots+\frac{f^{(n)}(0)}{n!}x^n
+        \end{equation*}
+        由于有限项, 因此多项式有截断误差
+        \begin{equation*}
+            R_n(x)=\frac{f^{(n+1)}(\xi)}{(n+1)!}x^{n+1}
+        \end{equation*}
+        其中, $\xi\in(x,0)$
+    \end{solution}
+
+    \item (\emph{舍入误差}):机器字长有限所引起的误差 
+\end{enumerate}
+
+其中, \emph{方法误差}和\emph{舍入误差}是数值分析所重点考虑的误差, 同时, \emph{方法误差是可以避免的}.
+
+\subsection{误差概念}
+\subsubsection{绝对误差与绝对误差限}
+\begin{definition}[绝对误差与绝对误差限]
+    设$x$是准确值, $x^*$是$x$的一个近似值, 则称
+    \begin{equation*}
+        e(x^*)=x^*-x
+    \end{equation*}
+    为$x^*$的\emph{绝对误差}, 简称\emph{误差}.
+
+    同时, 误差的绝对值的上限$\varepsilon(x^*)$, 即有
+    \begin{equation*}
+        \abs{e(x^*)}=\abs{x^*-x}\le\varepsilon(x^*)
+    \end{equation*}
+
+    $\varepsilon(x^*)$称为\emph{绝对误差限}.
+\end{definition}
+
+\begin{notice}
+    误差有正有负, 而误差限恒为正值.
+\end{notice}
+
+习惯上, 我们把精确值和测量值的关系表示为
+\begin{equation*}
+    x=x^*\pm\varepsilon
+\end{equation*}
+
+\subsubsection{相对误差与相对误差限}
+
+\begin{definition}[相对误差与相对误差限]
+    设$x$为准确值, $x^*$为近似值, 称
+    \begin{equation*}
+        e_r^*=e_r^*(x^*)=\frac{e(x^*)}{x}=\frac{x^*-x}{x}
+    \end{equation*}
+    为近似值$x^*$的\emph{相对误差}.
+
+    同时, 其绝对值的上限$\varepsilon_r^*$, 即有
+    \begin{equation*}
+        \abs{\frac{x-x^*}{x}}\le \varepsilon_r^*
+    \end{equation*}
+    
+    $\varepsilon_r^*$称为\emph{相对误差限}.
+\end{definition}
+
+可以证明, 当$e_r^*$较小时, 有
+\begin{equation*}
+    e_r^* \approx\frac{x^*-x}{x^*}
+\end{equation*}
+同时易得
+\begin{equation*}
+    \varepsilon_r^*=\frac{\varepsilon^*}{\abs{x^*}}
+\end{equation*}
+
+\subsubsection{有效数字}
+
+\begin{definition}[有效数字, 有效位数, 有效数]
+    若近似值$x^*$误差满足
+    \begin{equation*}
+        \abs{x-x^*}\le\frac{1}{2}\times10^{-n}
+    \end{equation*}
+    则称$x^*$近似表示$x$准确到小数点后第$n$位, 并从第$n$位起一直到最左边非零数字之间的一切数字称为\emph{有效数字}, 位数为\emph{有效位数}.
+
+    若所有数字均为有效数字, 则称为\emph{有效数}
+\end{definition}
+
+\begin{example}
+    考虑圆周率$\pi$, 且有近似值$\pi_1=3.14, \pi_2=3.1415, \pi_3=3.1416, \pi_4=3.14159$. 考虑它们的有效数字, 且判断是否为有效数.
+\end{example}
+
+\begin{solution}
+    对于$\pi_1=3.14$, 有$\abs{\pi-\pi_1}\approx0.00159\le0.5\times10^{-2}$, 即$\pi_1$精确到小数点后2位, 有效数字是3位, 是有效数.
+
+    同理, 有$\abs{\pi-\pi_2}\approx0.0000926\le0.5\times10^{-3}$, 即$\pi_2$精确到小数点后3位, 有效数字是4位, 不是有效数.
+
+    $\abs{\pi-\pi_3}\approx0.0000073\le0.5\times10^{-4}$, 即$\pi_3$精确到小数点后4位, 有效数字是5位, 是有效数.
+
+    $\abs{\pi-\pi_4}\approx0.0000026\le0.5\times10^{-5}$, 即$\pi_4$精确到小数点后5位, 有效数字是6位, 是有效数.
+\end{solution}
+
+从上例中不难看出, 有效数通常是采取\emph{四舍五入}所得到的近似值.
+
+\begin{extend}
+    我们可以简单给出关于\emph{四舍五入}的证明.
+
+    \begin{proof}
+        设准确值为$x$, 其近似值为$x^*$, 考虑近似值精确到小数点后$n$位, 即
+        \begin{equation*}
+            \abs{x-x^*}\le5\times10^{-(n+1)}
+        \end{equation*}
+
+        若其为有效数, 则$x^*$为小数点后$n$位, 不妨设
+        \begin{equation*}
+            x^*=a+b\cdot10^{-n}
+        \end{equation*}
+        其中$b\in[1,10)$
+
+        特别地, 分两种情况讨论. 
+
+        若$x>x^*$, 即真实值大于近似值, 此时有
+        \begin{equation*}
+            x\le x^*+5\times10^{-(n+1)}=a+b\cdot10^{-n}+5\times10^{-(n+1)}
+        \end{equation*}
+        即当小数点后第$n+1$位小于等于5时, 舍去后面的数字可以得到有效数.
+
+        若$x<x^*$, 即真实值小于近似值, 此时有
+        \begin{align*}
+            x\ge x^*-5\times10^{-(n+1)}&=a+b\cdot10^{-n}-5\times10^{-(n+1)}\\
+            &=a+(b-1)\cdot10^{-n}+5\times10^{-(n+1)}
+        \end{align*}
+        即当小数点后第$n+1$位大于等于5时, 进位可以得到有效数.
+    \end{proof}
+\end{extend}
+

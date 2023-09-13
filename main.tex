@@ -1,0 +1,31 @@
+\documentclass{book}
+
+\usepackage{ctex}
+\usepackage{amsmath}
+\usepackage{physics}
+\usepackage{listings}
+\usepackage{graphicx}
+\usepackage{color}
+\usepackage{chemformula}
+\usepackage{amsthm}
+
+\title{数值分析笔记}
+\author{张佳琪}
+
+\newtheorem{theorem}{\indent 定理}[section]
+\newtheorem{lemma}[theorem]{\indent 引理}
+\newtheorem{proposition}[theorem]{\indent 命题}
+\newtheorem{corollary}[theorem]{\indent 推论}
+\newtheorem{definition}{\indent 定义}[section]
+\newtheorem{example}{\indent 例}[section]
+\newtheorem{remark}{\indent 注}[section]
+\newenvironment{solution}{\begin{proof}[\indent\bf 解]}{\end{proof}}
+\newenvironment{notice}{\textbf{注意: }}{}
+\newenvironment{extend}{\itshape 扩展: }{}
+\renewcommand{\proofname}{\indent\bf 证明}
+
+\begin{document}
+    \maketitle
+    \tableofcontents
+    \include{Chapter1/chapter}
+\end{document}
