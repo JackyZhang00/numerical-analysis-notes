@@ -1,0 +1,54 @@
+\documentclass{book}
+
+\usepackage{ctex}
+\usepackage{amsmath}
+\usepackage{physics}
+\usepackage{listings}
+\usepackage{graphicx}
+\usepackage[dvipsnames]{xcolor}
+\usepackage{chemformula}
+\usepackage{amsthm}
+\usepackage{siunitx}
+
+\title{数值分析笔记\\Python version}
+\author{Jiaqi Z.}
+
+\newtheorem{theorem}{\indent 定理}[section]
+\newtheorem{lemma}[theorem]{\indent 引理}
+\newtheorem{proposition}[theorem]{\indent 命题}
+\newtheorem{corollary}[theorem]{\indent 推论}
+\newtheorem{definition}{\indent 定义}[section]
+\newtheorem{example}{\indent 例}[section]
+\newtheorem{remark}{\indent 注}[section]
+\newenvironment{solution}{\begin{proof}[\indent\bf 解]}{\end{proof}}
+\newenvironment{notice}{\textbf{注意: }}{}
+\newenvironment{extend}{\itshape 扩展: }{}
+\renewcommand{\proofname}{\indent\bf 证明}
+
+\newcommand{\approxstar}[1]{#1^*}
+
+% 代码环境设置
+
+\lstset{
+    language=Python, % 设置语言
+ basicstyle=\ttfamily, % 设置字体族
+ breaklines=true, % 自动换行
+ keywordstyle=\bfseries\color{NavyBlue}, % 设置关键字为粗体，颜色为 NavyBlue
+ morekeywords={}, % 设置更多的关键字，用逗号分隔
+ emph={self}, % 指定强调词，如果有多个，用逗号隔开
+    emphstyle=\bfseries\color{Rhodamine}, % 强调词样式设置
+    commentstyle=\itshape\color{black!50!white}, % 设置注释样式，斜体，浅灰色
+    stringstyle=\bfseries\color{PineGreen!90!black}, % 设置字符串样式
+    columns=flexible,
+    numbers=left, % 显示行号在左边
+    numbersep=2em, % 设置行号的具体位置
+    numberstyle=\footnotesize, % 缩小行号
+    frame=single, % 边框
+    framesep=1em % 设置代码与边框的距离
+}
+
+\begin{document}
+    \maketitle
+    \tableofcontents
+    \include{Chapter1/python}
+\end{document}
