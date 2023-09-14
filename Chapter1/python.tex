@@ -149,7 +149,7 @@
 
 \begin{definition}
     设$x^*$为任一十进制数, 则$x^*$可表示为
-    \begin{equation*}
+    \begin{equation*}\label{eqn:1.3.1}
         x^*=\pm0.a_1a_2\cdots a_n\cdots\times10^m
     \end{equation*}
     其中, $a_1$为1到9之间的一个数字, $a_2\cdots a_n$为0到9之间的一个数字, $m$为整数. 这样表示的$x^*$称为\emph{十进制浮点数(规格化浮点数)}.
@@ -206,13 +206,13 @@
     \end{equation*}
 \end{solution}
 
-\subsection{相对误差限和有效数字的关系} % 修改
+\subsection{相对误差限和有效数字的关系}
 
 关于有效数字和相对误差限之间的关系, 有如下定理.
 \begin{theorem}\label{dingli1.1}
     对于用式(\ref{eqn:1.3.1})表示的近似数$x^*$, 若$x^*$具有$n$位有效数字, 则其相对误差限为
     \begin{equation*}
-        \varepsilon_r^*\le\frac{1}{2a_1}\times10^{-(n-1)}
+        \varepsilon_r^*\le\frac{1}{2a_1}\times10^{-n}
     \end{equation*}
 \end{theorem}
 
@@ -223,7 +223,7 @@
     \end{equation*}
     当$x^*$有$n$位有效数字时, 有
     \begin{equation*}
-        \abs{x-x^*}=\abs{x^*}\varepsilon_r^*\le(a_1+1)\times10^m\times\frac{1}{2(a_1+1)}\times10^{-n+1}=0.5\times10^{m-n+1}
+        \abs{x-x^*}=\abs{x^*}\varepsilon_r^*\le(a_1+1)\times10^m\times\frac{1}{2(a_1+1)}\times10^{-n}=0.5\times10^{m-n}
     \end{equation*}
     故$x^*$有$n$位有效数字.
 \end{proof}
@@ -236,7 +236,7 @@
 \begin{solution}
     由定理\ref{dingli1.1}可知
     \begin{equation*}
-        \varepsilon_r^*\le\frac{1}{2a_1}\times10^{-n+1}
+        \varepsilon_r^*\le\frac{1}{2a_1}\times10^{-n}
     \end{equation*}
     由于$\sqrt{20}\approx4.4$, 故$a_1=4$, 只需要取$n=4$, 有
     \begin{equation*}
