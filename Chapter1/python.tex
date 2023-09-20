@@ -474,3 +474,171 @@ for n in range(0,9):
 \begin{notice}
     在本例中, 使用第二种方法得到的只有三位有效数字, 这是因为第四位有效数字是0而不是1.
 \end{notice}
+
+\subsection{避免除数绝对值远小于被除数绝对值}
+
+例如, $\frac{42}{0.01}$和$\frac{42}{0.011}$的结果分别是4200和3818.18, 明显可以发现, 除数只变化了0.001, 结果变化了381.82
+
+\subsection{避免大数"吃"小数}
+
+由于计算机字长是有限的, 在计算过程中需要考虑到\emph{对阶}, 例如, 计算下面的式子:
+\begin{equation*}
+    10^{9}+1
+\end{equation*}
+在计算前首先需要将其规格化, 即将上式化为
+\begin{equation*}
+    0.1\times10^{10}+0.1\times10^1
+\end{equation*}
+在计算机计算过程中, 需要进行\emph{对阶}, 即将指数部分化为相同的. 在这里, 计算机将会做如下处理:
+\begin{equation*}
+    0.1\times10^{10}+0.0000000001\times10^{10}=0.1000000001\times10^{10}
+\end{equation*}
+
+同时, 考虑到计算机内部的小数存储是有长度限制的, 假设以8位为例, 则上式中的小数最后一位的1将被舍去, 从而得到结果为$0.1\times10^{10}$, 显然与结果不符.
+
+下面的例子将详细说明这一点:
+
+\begin{example}
+    用单精度(浮点数保留8位小数)计算
+    \begin{equation*}
+        10^9+40+39+\cdots+1
+    \end{equation*}
+\end{example}
+\begin{solution}
+    假设从左到右计算, 由于
+    \begin{equation*}
+        10^9+40=0.1\times10^{10}+0.4\times10^2\approx0.1\times10^{10}
+    \end{equation*}
+    会出现大数"吃"小数的情况.
+
+    假设从右到左计算, 则首先计算$1+2+\cdots+40$,不难得结果为820, 即有
+    \begin{align*}
+        \text{原式} &= 820+10^9 = 0.82\times10^3+0.1\times10^{10}\\
+        &=0.000000082\times10^{10}+0.1\times10^{10}\\
+        &=0.100000082\times10^{10}
+        &\approx0.10000008\times10^{10}=1000000800
+    \end{align*}
+    显然误差较小.
+\end{solution}
+
+下面的代码将演示这一点
+
+\begin{notice}
+    由于计算机内部的存储方式和实际计算有些许误差(计算机采用二进制存储), 因此运行结果可能与理论分析不一样.
+\end{notice}
+
+\begin{lstlisting}
+# 演示大数"吃"小数 Exercise1-2.py
+import numpy as np
+# 使用从左到右的计算方式, 会有很大误差
+def example1():
+    result = np.float32(0)
+    result = result + np.float32(1e9)
+    for i in range(1,41):
+        result = result + np.float32(i)
+    print(f"从左到右计算结果为{result}")
+# 使用从右到左的计算方式, 误差较小
+def example2():
+    result = np.float32(0)
+    for i in range(1,41):
+        result = result + np.float32(i)
+    result = result + np.float32(1e9)
+    print(f"从右到左计算结果为{result}")
+# 运行结果
+example1()
+example2()
+\end{lstlisting}
+
+\subsection{简化计算步骤, 避免误差积累}
+\begin{example}
+    多项式求值: 给定$x$, 求下列$n$次多项式的值:
+    \begin{equation*}
+        P(x) = a_0+a_1x+\cdots+a_nx^n
+    \end{equation*}
+\end{example}
+
+\begin{solution}
+    若采用直接求和的方法, 则有
+    \begin{equation*}
+        P_n(x)=a_0+a_1x+a_2x\cdot x+\cdots+a_n\underbrace{x\cdot x\cdot x\cdots x}_{n\text{个}x}
+    \end{equation*}
+    一共需要$\frac{n(n+1)}{2}$次乘法, $n$次加法
+
+    若使用逐项求和, 即令
+    \begin{equation*}
+        x^2=x\cdot x, x^3 = x^2 \cdot x, \cdots x^n = x^{n-1}\cdot x
+    \end{equation*}
+    一共需要$(2n-1)$次乘法, $n$次加法
+
+    若采用秦九韶算法(Horner算法), 则可以将上式整理为
+    \begin{equation*}
+        P_n(x) = a_0+x(a_1+x(a_2+x(\cdots+x(a_{n-1}+a_nx)\cdots)))
+    \end{equation*}
+    一共需要$n$次乘法, $n$次加法
+\end{solution}
+
+可以明显发现, 使用秦九韶算法的效率明显优于其他两个算法.
+
+对于秦九韶算法, 可以使用如下递推公式:
+\begin{equation*}
+    \begin{cases}
+        S_n = a_n\\
+        S_k = xS_{k+1}+a_k, k=n-1,n-2,\cdots,0\\
+        P_n(x) = S_0
+    \end{cases}
+\end{equation*}
+
+实际上机运行可以参考如下代码：
+\begin{lstlisting}
+# 演示100000次多项式不同算法时间差异(假设每一项系数a_n都是2) Exercise1-3.py
+import time
+POWER = 100000
+# 直接求和
+def method1():
+    result = 0
+    x = 2
+    a = []
+    for i in range(0,POWER+1):
+        a.append(2)
+    start_time = time.time()
+    for i in range(0,POWER+1):
+        result = result + a[i]*x**i
+    end_time = time.time()
+    # print(result)
+    print(end_time-start_time)
+# 使用逐项求和
+def method2():
+    result = 0
+    x = [1,2]
+    for i in range(2,POWER+1):
+        x.append(x[i-1]*2)
+    a = []
+    for i in range(0,POWER+1):
+        a.append(2)
+    start_time = time.time()
+    for i in range(0,POWER+1):
+        result = result + a[i]*x[i]
+    end_time = time.time()
+    # print(result)
+    print(end_time-start_time)
+# 秦九韶算法
+def method3():
+    s = 2
+    x = 2
+    start_time = time.time()
+    for i in range(1,POWER+1):
+        s = s*x+2
+        # s.append(s[i-1]*x+2)
+    end_time = time.time()
+    # print(s)
+    print(end_time-start_time)
+
+method1()
+method2()
+method3()
+\end{lstlisting}
+
+\begin{notice}
+    在本地测试时, 得到运行结果分别为10.107, 0.264, 0.249(单位"秒"). 这个时间可能在不同计算机上会有所差距, 但一般情况下, 随着
+    多项式次数的增加, 时间差距会逐渐拉大. 同时, 三种算法的时间增长速率也会有明显差距.
+\end{notice}
