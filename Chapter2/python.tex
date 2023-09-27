@@ -119,9 +119,9 @@
 \subsection{Lagrange插值多项式}
 
 将上述结论推广至$n$阶情况.即假设有$n+1$个节点$x_0,x_1,\cdots,x_n$的$n$阶插值多项式$L_n(x)$, 且满足条件
-\begin{equation*}
+\begin{equation}\label{eqn:2.2.8}
     L_n(x_i) = y_i,i=1,2,\cdots,n
-\end{equation*}
+\end{equation}
 
 类似于线性插值和抛物插值, 我们首先需要定义出\emph{基函数}.
 
@@ -204,3 +204,273 @@ plt.show()
     \caption{Lagrange多项式插值(使用上述代码生成)}
     \label{fig:Lagrange多项式插值}
 \end{figure}
+
+\subsection{插值余项}
+
+使用$L_n(x)$近似表示$f(x)$, 则会引起截断误差. 其截断误差为$R_n(x)=f(x)-L_n(x)$. 通常会称$R_n(x)$为插值多项式的\emph{余项}或简称为\emph{插值余项}.
+
+为估计插值余项, 有如下定理:
+
+\begin{theorem}
+    设$f^{(n)}(x)$在$[a,b]$上连续, $f^{(n+1)}(x)$在$(a,b)$存在, 节点$a\le x_0<x_1<\cdots<x_n\le b$, $L_n(x)$是满足条件式(\ref{eqn:2.2.8})的插值多项式, 则对于任何$x\in[a,b]$, 插值余项
+    \begin{equation}\label{eqn:2.2.14}
+        R_n(x)=f(x)-L_n(x)=\frac{f^{(n+1)}(\xi)}{(n+1)!}\prod_{i=0}^n(x-x_i)
+    \end{equation}
+    其中, $\xi\in(a,b)$且依赖于$x$
+\end{theorem}
+
+\begin{proof}
+    由插值条件可知, $R_n(x)$在节点$x_k,k=0,1,\cdots,n$上为0,即可以做因式分解
+    \begin{equation*}
+        R_n(x)=K(x)(x-x_0)(x-x_1)\cdots(x-x_n)=K(x)\prod_{i=0}^n(x-x_i)
+    \end{equation*}
+    其中, $K(x)$是与$x$有关的待定系数.
+
+    把$x$视作区间$[a,b]$上的一个固定点, 作函数
+    \begin{equation*}
+        \varphi(t)=f(t)-L_n(t)-K(t)(t-x_0)(t-x_1)\cdots(t-x_n)
+    \end{equation*}
+    因此, $\varphi(t)$在$x_0,x_1,\cdots,x_n$和$x$处均为0, 即在区间$[a,b]$上有$n+2$个零点. 根据Roll定理可知, $\varphi'(t)$在两个零点间至少有一个零点, 即在区间$[a,b]$上, $\varphi'(t)$至少有$n+1$个零点. 以此类推, 不难得$\varphi^{(n+1)}$在区间$(a,b)$内至少有一个零点, 将其记为$\xi\in(a,b)$, 使得
+    \begin{equation*}
+        \varphi^{(n+1)}(\xi)=f^{(n+1)}(\xi)-(n+1)!K(x)=0
+    \end{equation*}
+    整理可得
+    \begin{equation*}
+        K(x)=\frac{f^{(n+1)}(\xi)}{(n+1)!}, \xi\in(a,b)
+    \end{equation*}
+
+    将其代入上式, 可得余项表达式(\ref{eqn:2.2.14})
+\end{proof}
+
+通常, $\xi$无法具体确定, 从而实际操作中, 经常估计误差上限. 由
+\begin{equation*}
+    \abs{f^{(n+1)}(x)}\le M_{n+1}
+\end{equation*}
+对于任意的$x\in(a,b)$, 将
+\begin{equation*}
+    \frac{M_{n+1}}{(n+1)!}\prod_{i=0}^n\abs{x-x_i}
+\end{equation*}
+作为误差估计上限. 通常取
+\begin{equation*}
+    M_{n+1}=\max_{a\le x\le b}\abs{f^{(n+1)}(x)}
+\end{equation*}
+特别的, 若$f(x)$为任一次数小于等于$n$的多项式, 即$f(x)\in H_n\in\spn{1,x,x^2,\cdots,x^n}$, 此时$f^{(n+1)}\equiv0$, 即$R_n(x)\equiv 0$. 因此, 插值多项式对于次数小于等于$n$的多项式总是精确的.
+
+\begin{example}
+    设有$x_0\ne x_1\ne x_2\ne x_3\ne x_4$, 且$l_i(x),i=0,1,2,3,4$为Lagrange插值基函数. 求
+    \begin{equation*}
+        \sum_{i=0}^4\left(3x_i^4+4x_i^2+2x_i+1\right)l_i(x)
+    \end{equation*}
+\end{example}
+
+\begin{solution}
+    设函数$f(x)=3x^4+4x^2+2x+1$, 则
+    \begin{equation*}
+        \text{原式}=\sum_{i=0}^4f(x_i)l_i(x)=f(x)
+    \end{equation*}
+\end{solution}
+
+\begin{example}
+    已知$\sin\frac{\pi}{6}=\frac{1}{2},\sin\frac{\pi}{4}=\frac{\sqrt{2}}{2},\sin\frac{\pi}{3}=\frac{\sqrt{3}}{2}$, 利用$\sin{x}$的一次, 二次Lagrange插值, 计算$\sin{50^\circ}$并估计误差
+\end{example}
+
+% 未完成
+\begin{solution}
+    当$n=1$时, 利用$x_0, x_1$, 有
+    \begin{align*}
+        \Rightarrow &L_1(x)=\frac{x-\frac{\pi}{4}}{\frac{\pi}{6}-\frac{\pi}{4}}\cdot\frac{1}{2}+\frac{x-\frac{\pi}{6}}{\frac{\pi}{4}-\frac{\pi}{6}}\cdot\frac{\sqrt{2}}{2}\\
+        \Rightarrow &L_1(\frac{5}{18}\pi)\approx0.77614
+    \end{align*}
+    其误差
+    \begin{equation*}
+        R_1(x)=\frac{f''(\xi)}{2!}\abs{x-\frac{\pi}{6}}\abs{x-\frac{\pi}{4}}
+    \end{equation*}
+    其中$\abs{\sin{\xi}}\le\frac{\sqrt{2}}{2}$, 因此有
+    \begin{equation*}
+        \abs{R_1(\frac{5}{18}\pi)}<0.01319
+    \end{equation*}
+
+    类似地, 利用$x_1,x_2$, 可得$L_1(x)\approx0.76008$, 估计误差, 由于$\abs{\sin{\xi}}\le\frac{\sqrt{3}}{2}$
+    \begin{equation*}
+        \abs{R_1(\frac{5}{18}\pi)}<0.00660
+    \end{equation*}
+
+    当$n=2$时,有
+\end{solution}
+
+% 事后估计
+
+\subsection{Lagrange插值优缺点}
+
+优点: 具有严格的规律性, 便于记忆与理论推导;
+
+缺点: 计算量大, 每次添加(或删除)节点都需要重新计算基函数, 不具有承袭性.
+
+为解决上述缺点, 将引出新的插值法, 即Newton插值.
+
+\section{Newton插值}
+
+\subsection{Newton插值}
+
+与Lagrange插值类似, 首先考虑$n=1$
+
+\begin{example}
+    已知两个节点$x_0,x_1$, 其函数值分别为$y_0,y_1$, 试求一次多项式$P_1(x)=A_0+A_1x$, 使得$P_1(x_0)=y_0, P_1(x_1)=y_1$
+\end{example}
+
+\begin{solution}
+    利用直线方程点斜式, 可知
+    \begin{equation*}
+        P_1(x)=y_0+\frac{y_1-y_0}{x_1-x_0}(x-x_0)
+    \end{equation*}
+
+    此时, 插值节点为$x_0,x_1$, 基函数设为$1,(x-x_0)$, 组合系数为$A_0=y_0, A_1=\frac{y_1-y_0}{x_1-x_0}$
+\end{solution}
+
+考虑$n=2$的情况, 要求具有承袭性. 设$g(x)=P_2(x)-P_1(x)$, 则$g(x)$为次数不超过2的多项式, 且有
+\begin{equation*}
+    g(x_i)=P_2(x_i)-P_1(x_i)=y_i-y_i=0, i=0,1
+\end{equation*}
+因此可对其进行因式分解, 有
+\begin{align*}
+    g(x)&=A_2(x-x_0)(x-x_1)\\
+    \Rightarrow  P_2(x)=P_1(x)+A_2(x-x_0)(x-x_1)
+\end{align*}
+
+故, 对于$n=2$而言, 插值节点为$x_0,x_1,x_2$, 基函数为$1,(x-x_0),(x-x_0)(x-x_1)$, 组合系数为$A_0,A_1,A_2$. 插值多项式为
+\begin{equation*}
+    P_2(x)=A_0+A_1(x-x_0)+A_2(x-x_0)(x-x_1)
+\end{equation*}
+
+类似地, 给定插值条件
+\begin{equation*}
+    N_n(x_i)=f(x_i), i=0,1,\cdots,n
+\end{equation*}
+, 插值节点为$x_i, i=0,1,\cdots,n$, 基函数为$1,(x-x_0),(x-x_0)(x-x_1),\cdots,(x-x_0)(x-x_1)\cdots(x-x_{n-1})$, 组合系数为$A_i,i=0,1,\cdots,n$
+
+下面需要讨论如何求解组合系数.
+
+设$A_n(x)=A_0+A_1(x)(x-x_0)+A_2(x-x_0)(x-x_1)+\cdots+A_n(x-x_0)(x-x_1)\cdots(x-x_n)$, 利用插值条件
+\begin{equation*}
+    N_n(x_i)=f(x_i),i=0,1,\cdots,n
+\end{equation*}
+代入, 得线性方程组
+\begin{equation*}
+    \mqty(1&0&\cdots&0\\1&x_1-x_0&\cdots&0\\\vdots&\vdots&&\vdots\\1&x_n-x_0&\cdots&\prod_{i=0}^{n-1}(x_n-x_i))\mqty(A_0\\A_1\\\vdots\\A_n)=\mqty(f(x_0)\\f(x_1)\\\vdots\\f(x_n))
+\end{equation*}
+
+求解方程组, 可得
+\begin{align*}
+    A_0&=f(x_0)\\
+    A_1&=\frac{f(x_1)-f(x_0)}{x_1-x_0}\\
+    A_2&=\frac{\frac{f(x_2)-f(x_0)}{x_2-x_0}-\frac{f(x_1)-f(x_0)}{x_1-x_0}}{x_2-x_1}\\
+    &\vdots
+\end{align*}
+
+为简化计算, 总结上述规律, 给出下面关于\emph{差商}的定义
+
+\subsection{差商}
+
+\subsubsection{差商的定义}
+
+\begin{definition}[差商]
+    称
+    \begin{equation*}
+        f[x_0,x_k] = \frac{f(x_k)-f(x_0)}{x_k-x_0}
+    \end{equation*}
+    为函数$f(x)$关于点$x_0,x_k$的\emph{一阶差商}, 称
+    \begin{equation*}
+        f[x_0,x_1,x_k]=\frac{f[x_0,x_k]-f[x_0,x_1]}{x_k-x_1}
+    \end{equation*}
+    为$f(x)$关于点$x_0,x_1,x_k$的\emph{二阶差商}. 一般地, 称
+    \begin{equation*}
+        f[x_0,x_1,\cdots,x_k]=\frac{f[x_0,x_1,\cdots,x_{k-2},x_k]-f[x_0,x_1,\cdots,x_{k-1}]}{x_k-x_{k-1}}
+    \end{equation*}
+    为$f(x)$的\emph{$k$阶差商}.
+\end{definition}
+
+由差商定义可知: \emph{高阶差商是两个低一阶差商的差商}.
+
+利用差商定义, 可知组合系数为:
+\begin{align*}
+    A_0&=f(x_0)=f[x_0]\\
+    A_1&=f[x_0,x_1]\\
+    &\vdots\\
+    A_n&=f[x_0,x_1,\cdots,x_n]
+\end{align*}
+\begin{equation*}
+    \Rightarrow N_n(x)=f(x_0)+f[x_0,x_1](x-x_0)+f[x_0,x_1,x_2](x-x_0)(x-x_1)+\cdots+f[x_0,x_1,\cdots,x_n](x-x_0)(x-x_1)\cdots(x-x_{n-1})
+\end{equation*}
+
+\subsubsection{差商性质}
+
+差商与函数值有如下关系:
+
+\begin{theorem}
+    记$\omega(x)=(x-x_0)(x-x_1)\cdots(x-x_n)$, 则
+    \begin{equation*}
+        f[x_0,x_1,\cdots,x_n]=\sum_{i=0}^n\frac{f(x_i)}{\omega'(x_i)}
+    \end{equation*}
+\end{theorem}
+
+\begin{proof}
+    对于$f(x)$, 使用Lagrange插值法, 可得:
+    \begin{equation*}
+        L_n(x)=\sum_{i=0}^nf(x_i)l_i(x)
+    \end{equation*}
+    使用Newton插值法, 可得:
+    \begin{equation*}
+        N_n(x)=f(x_0)+f[x_0,x_1](x-x_0)+\cdots+f[x_0,x_1,\cdots,x_n](x-x_0)(x-x_1)\cdots(x-x_{n-1})
+    \end{equation*}
+
+    由于插值多项式具有唯一性, 因此两种插值方法得到的结果相同, 即同次系数相等. 整理可得
+    \begin{equation*}
+        \sum_{i=0}^nf(x_i)=f[x_0,x_1,\cdots,x_n](x-x_0)(x-x_1)\cdots(x-x_{n-1})
+    \end{equation*}
+    对$\omega(x)$求导后, 原式得证.
+\end{proof}
+
+差商的值与节点的排列顺序无关, 即\emph{差商具有对称性}. 用公式表示为:
+\begin{equation*}
+    f[x_0,\cdots,x_i,\cdots,x_j\cdots,x_n]=f[x_0,\cdots,x_j,\cdots,x_i\cdots,x_n]
+\end{equation*}
+
+设$f(x)$在$[a,b]$有$n$阶导数, 且$x_0,x_1,\cdots,x_n\in[a,b]$, 则存在$\xi\in(a,b)$, 使得
+\begin{equation*}
+    f[x_0,x_1,\cdots,x_n]=\frac{f^{(n)}(\xi)}{n!}
+\end{equation*}
+
+\begin{example}
+    若$f(x)=3x^4+4x^2+2x+1$, 计算
+    \begin{equation*}
+        f[2^0,2^1,2^2,2^3,2^4], f[2^0,2^1,2^2,2^3,2^4,2^5]
+    \end{equation*}
+\end{example}
+
+\begin{solution}
+    \begin{align*}
+        f[2^0,2^1,2^2,2^3,2^4]&=\frac{f^{(4)}(\xi)}{4!}=3\\
+        f[2^0,2^1,2^2,2^3,2^4,2^5]&=\frac{f^{(5)}(\xi)}{5!}=0
+    \end{align*}
+\end{solution}
+
+由前面的性质, 不难得到, 对于差商而言, 有
+\begin{equation*}
+    f[x_0.x_1,\cdots,x_n]=\frac{f[x_1,x_2,\cdots,x_n]-f[x_0,x_1,\cdots,x_{n-1}]}{x_n-x_0}
+\end{equation*}
+
+该性质表明在实际计算差商过程中, 可以使用列表法计算.
+
+\subsection{Newton插值余项}
+
+\begin{theorem}%待证明
+    Newton插值多项式的余项为:
+
+    \begin{equation*}
+        R_n(x)=f[x_0,x_1,\cdots,x_n]\omega_{n+1}(x)
+    \end{equation*}
+    其中,
+    \begin{equation*}
+        \omega_{n+1}(x)=(x-x_0)(x-x_1)\cdots(x-x_n)=\prod_{i=0}^n(x-x_i)
+    \end{equation*}
+\end{theorem}
