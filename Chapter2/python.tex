@@ -137,10 +137,10 @@
 \end{definition}
 
 利用其性质, 可以得到基函数形式为
-\begin{equation*}
+\begin{equation}\label{eqn:2.2.10}
     l_k(x)=\frac{(x-x_0)\cdots(x-x_{k-1})(x-x_{k+1})\cdots(x-x_n)}{(x_k-x_0)\cdots(x_k-x_{k-1})
     (x_k-x_{k+1})\cdots(x_k-x_n)}, k=0,1,\cdots,n
-\end{equation*}
+\end{equation}
 
 \begin{extend}
     下面将说明如何计算基函数的形式.
@@ -567,10 +567,202 @@ plt.show()
 
 变换$x=x_n-th(-1\le t\le0)$, 并利用公式(\ref{eqn:2.5.8}), 代入可得
 \begin{equation*}
-    N_n(x_n+th)=&f_n+t\nablaf_n+\frac{t(t+1)}{2!}\nabla^2f_n+\cdots+\frac{t(t+1)\cdots(t+n-1)}{n!}\nabla^nf_n
+    N_n(x_n+th)=f_n+t\nabla f_n+\frac{t(t+1)}{2!}\nabla^2f_n+\cdots+\frac{t(t+1)\cdots(t+n-1)}{n!}\nabla^nf_n
 \end{equation*}
 
 上式称为\emph{Newton后插公式}或\emph{表末公式}. 其余项为
 \begin{equation*}
     R_n(x)=f(x)-N_n(x_n+th)=\frac{t(t+1)\cdots(t+n)h^{n+1}f^{(n+1)}(\xi)}{(n+1)!}, \xi\in(x_0,x_n)
 \end{equation*}
+
+\section{Hermite插值}
+
+\subsection{引入, Hermite插值多项式的存在唯一性}
+在有些情况下, 不仅要求节点上函数值相等, 同时\emph{要求节点上导数值相等, 甚至要求高阶导数值相等}. 满足该要求的插值多项式就是\emph{Hermite插值多项式}.
+
+仅讨论函数值与导数值个数相等情况. 设在节点$a\le x_0<x_1<\cdots<x_n\le b$上, $y_i=f(x_i), m_i=f'(x_i)(i=0,1,\cdots,n)$, 要求插值多项式$H(x)$满足条件
+\begin{equation*}
+    H(x_i)=y_i, H'(x_i)=m_i, (i=0,1,\cdots,n)
+\end{equation*}
+给出$(2n+2)$个条件, 可唯一确定一个次数不超过$2n+1$的多项式$H_{2n+1}$, 其形式为
+\begin{equation*}
+    H_{2n+1}(x)=a_0+a_1x+\cdots+a_{2n+1}x^{2n+1}
+\end{equation*}
+
+\subsection{Hermite插值多项式构造}
+
+\subsubsection{Lagrange型Hermite插值多项式}
+先求插值基函数$\alpha_i(x)$和$\beta_i(x),i=0,1,\cdots,n$, 共有$2n+2$个, 每一个都是$2n+1$次多项式, 且满足条件:
+\begin{equation*}
+    \begin{cases}
+        \alpha_i(x_k)=\delta_{ik}=
+        \begin{cases}
+            0, j\ne k,\\
+            1, j=k,
+        \end{cases}, \alpha'_i(x_k)=0\\
+        \beta_i(x_k)=0, \beta'_i(x_k)=\delta_{ik}
+    \end{cases}
+\end{equation*}
+
+因此, 满足插值条件的插值多项式$H(x)=H_{2n+1}(x)$可用插值基函数表示为
+\begin{equation*}
+    H_{2n+1}(x)=\sum_{i=0}^n\left[y_i\alpha_i(x)+m_i\beta_i(x)\right]
+\end{equation*}
+显然有
+\begin{equation*}
+    H_{2n+1}(x_k)=y_k, H'_{2n+1}(x_k)=m_k, k=0,1,\cdots,n
+\end{equation*}
+
+为构造基函数, 使用Lagrange插值基函数$l_i(x)$, 令
+\begin{equation*}
+    \alpha_i(x)=(ax+b)l_i^2(x)
+\end{equation*}
+其中$l_i(x)$是式(\ref{2.2.10})所表示的基函数. 由上述条件, 有
+\begin{align*}
+    \alpha_i(x_i)&=(ax_i+b)l_i^2(x_i)=1,\\
+    \alpha'_i(x_i)&=l_i(x_i)\left[al_i(x_i)+2(ax_i+b)l'_i(x_i)\right]=0
+\end{align*}
+整理可得
+\begin{equation*}
+    \begin{cases}
+        ax_i+b=1\\
+        a+2l'_i(x_i)=0
+    \end{cases}
+\end{equation*}
+解得
+\begin{equation*}
+    a=-2l'_i(x_i), b=1+2x_il'_i(x_i)
+\end{equation*}
+
+由于
+\begin{equation*}
+    l_i(x)=\frac{(x-x_0)\cdots(x-x_{i-1})(x-x_{i+1})\cdots(x-x_n)}{(x_i-x_0)\cdots(x_i-x_{i-1})(x_i-x_{i+1})\cdots(x_i-x_n)}
+\end{equation*}
+取对数后求导, 得
+\begin{equation*}
+    l_i'(x_i)=\sum_{\substack{k=0\\k\ne i}}^n\frac{1}{x_i-x_k}
+\end{equation*}
+于是可得
+\begin{equation}\label{eqn:2.6.4}
+    \alpha_i(x)=\left[1-2(x-x_i)\sum_{\substack{k=0\\k\ne i}}^n\frac{1}{x_i-x_k}\right]l_i^2(x)
+\end{equation}
+同理可得
+\begin{equation}\label{eqn:2.6.5}
+    \beta_i(x)=(x-x_i)l_i^2(x)
+\end{equation}
+
+\begin{extend}
+    下面证明\emph{满足插值条件得插值多项式是唯一的}.
+
+    \begin{proof}
+        使用反证法, 设$H_{2n+1}(x)$和$\overline{H}_{2n+1}(x)$均满足条件, 则有
+        \begin{equation*}
+            \varphi(x)=H_{2n+1}(x)-\overline{H}_{2n+1}(x)
+        \end{equation*}
+        其在每个节点上均有二重根, 故$\varphi(x)$有$2n+2$重根, 但$\varphi(x)$是不高于$2n+1$次的多项式, 故$\varphi\equiv0$.
+
+        唯一性得证.
+    \end{proof}
+\end{extend}
+
+利用Lagrange插值余项证明方法, 可得若$f(x)$在$(a,b)$内的$2n+2$阶导数存在, 则插值余项为
+\begin{equation}\label{eqn:2.6.6}
+    R(x)=f(x)-H_{2n+1}(x)=\frac{f^{(2n+2)}(\xi)}{(2n+2)!}\omega_{n+1}^2(x)
+\end{equation}
+其中$\xi\in(a,b)$且与$x$有关.
+
+考虑特殊情况$n=1$, 取节点为$x_k,x_{k+1}$, 插值多项式为$H_3(x)$, 满足条件
+\begin{equation}\label{eqn:2.6.7}
+    \begin{cases}
+        H_3(x_k)=y_k, H_3(x_{k+1})=y_{k+1}\\
+        H_3'(x_k)=m_k, H_3'(x_{k+1})=m_{k+1}
+    \end{cases}
+\end{equation}
+相应的插值基函数为$\alpha_k(x),\alpha_{k+1}(x),\beta_k(x),\beta_{k+1}(x)$, 且满足条件
+\begin{gather*}
+    \alpha_k(x_k)=1,\alpha_k(x_{k+1})=0, \alpha_k'(x_k)=\alpha_k'(x_{k+1})=0,\\
+    \alpha_{k+1}(x_k)=0,\alpha_{k+1}(x_{k+1})=1,\\
+    \alpha_{k+1}'(x_k)=\alpha_{k+1}'(x_{k+1})=0,\\
+    \beta_k(x_k)=\beta_k(x_{k+1})=0,\\
+    \beta_k'(x_k)=1,\beta_k'(x_{k+1})=0,\\
+    \beta_{k+1}(x_k)=\beta_{k+1}(x_{k+1})=0,\\
+    \beta_{k+1}'(x_k)=0,\beta_{k+1}'(x_{k+1})=1
+\end{gather*}
+
+根据式(\ref{eqn:2.6.4})和(\ref{eqn:2.6.5}), 可得
+\begin{gather*}
+    \begin{cases}
+        \alpha_k(x)=\left(1+2\frac{x-x_k}{x_{k+1}-x_k}\right)\left(\frac{x-x_{k+1}}{x_k-x_{k+1}}\right)^2,\\
+        \alpha_{k+1}(x)=\left(1+2\frac{x-x_{k+1}}{x_k-x_{k+1}}\right)\left(\frac{x-x_{k}}{x_{k+1}-x_{k}}\right)^2;
+    \end{cases}\\
+    \begin{cases}
+        \beta_k(x)=(x-x_k)\left(\frac{x-x_{k+1}}{x_k-x_{k+1}}\right)^2,\\
+        \beta_{k+1}(x)=(x-x_{k+1})\left(\frac{x-x_k}{x_{k+1}-x_k}\right)^2
+    \end{cases}
+\end{gather*}
+满足式(\ref{eqn:2.6.7})的插值多项式是
+\begin{equation*}
+    H_3(x)=y_k\alpha_k(x)+y_{k+1}\alpha_{k+1}(x)+m_k\beta_k(x)+m_{k+1}\beta_{k+1}(x)
+\end{equation*}
+由式(\ref{eqn:2.6.6})可得其余项为
+\begin{equation*}
+    R_3(x)=\frac{1}{4!}f^{(4)}(\xi)(x-x_k)^2(x-x_{k+1})^2
+\end{equation*}
+
+\subsubsection{Newton型Hermite插值多项式}
+
+若给定插值条件
+\begin{equation*}
+    H(x_0)=f(x_0),H'(x_0)=f'(x_0),\cdots,H^{(m)}(x_0)=f^{(m)}(x_0)
+\end{equation*}
+
+利用Newton插值法, 其节点为$x_0,x_0,\cdots,x_0$, 基函数分别为$1,(x-x_0),(x-x_0)^2,\cdots,(x-x_0)^m$, 组合系数为$f(x_0),f[x_0,x_0],\cdots,f[x_0,x_0,\cdots,x_0]$
+
+考虑差商与导数的性质, 有
+\begin{equation*}
+    f[x_0,x_0,\cdots,x_0]=\frac{f^{(n)}}{n!}
+\end{equation*}
+故容易得到, Newton型Hermite插值多项式为
+\begin{equation*}
+    H(x)=f(x_0)+f'(x_0)(x-x_0)+\cdots+\frac{f^{(m)}}{m!}(x-x_0)^m
+\end{equation*}
+
+\begin{example}
+    给定函数表
+    \begin{table}[h]
+        \centering
+        \begin{tabular}{|c|c|c|c|}
+            $x_i$&3&4&6\\
+            \hline
+            $y_i$&6&0&2\\
+            \hline
+            $y_i'$&1&&-1\\
+        \end{tabular}
+    \end{table}
+    求插值多项式$P_4(x)$
+\end{example}
+
+\begin{solution}
+    利用Newton法, 列差商表如下所示
+    \begin{table}[h]\label{tab:1}
+        \centering
+        \caption{差商表}
+        \begin{tabular}{|c|c|c|c|c|c|}
+            $x_k$&$f(x_k)$&一阶差商&二阶差商&三阶差商&四阶差商\\
+            \hline
+            3&6& & & & \\
+            3&6&$f[3,3]=1$& & &\\
+            4&0&$f[3,4]$&$f[3,3,4]$& &\\
+            6&2&$f[4,6]$&$f[3,4,6]$&$f[3,3,4,6]$&\\
+            6&2&$f[6,6]=-1$&$f[4,6,6]$&$f[3,4,6,6]$&$f[3,3,4,6,6]$\\
+        \end{tabular}
+    \end{table}
+    将差商表计算可得
+    \begin{equation*}
+        P_4=6+1(x-3)+(-7)(x-3)^2+\frac{28}{9}(x-3)^2(x-4)+\left(-\frac{38}{27}\right)(x-3)^2(x-4)(x-6)
+    \end{equation*}
+    其插值余项为
+    \begin{equation*}
+        R_4(x)=f[3,3,4,6,6,x](x-3)^2(x-4)(x-6)^2
+    \end{equation*}
+\end{solution}
