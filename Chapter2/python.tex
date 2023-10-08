@@ -398,9 +398,10 @@ plt.show()
     &\vdots\\
     A_n&=f[x_0,x_1,\cdots,x_n]
 \end{align*}
-\begin{equation*}
-    \Rightarrow N_n(x)=f(x_0)+f[x_0,x_1](x-x_0)+f[x_0,x_1,x_2](x-x_0)(x-x_1)+\cdots+f[x_0,x_1,\cdots,x_n](x-x_0)(x-x_1)\cdots(x-x_{n-1})
-\end{equation*}
+\begin{align*}
+    \Rightarrow N_n(x)=&f(x_0)+f[x_0,x_1](x-x_0)+f[x_0,x_1,x_2](x-x_0)(x-x_1)\\
+    &+\cdots+f[x_0,x_1,\cdots,x_n](x-x_0)(x-x_1)\cdots(x-x_{n-1})
+\end{align*}
 
 \subsubsection{差商性质}
 
@@ -419,9 +420,9 @@ plt.show()
         L_n(x)=\sum_{i=0}^nf(x_i)l_i(x)
     \end{equation*}
     使用Newton插值法, 可得:
-    \begin{equation*}
+    \begin{equation}\label{eqn:2.4.6}
         N_n(x)=f(x_0)+f[x_0,x_1](x-x_0)+\cdots+f[x_0,x_1,\cdots,x_n](x-x_0)(x-x_1)\cdots(x-x_{n-1})
-    \end{equation*}
+    \end{equation}
 
     由于插值多项式具有唯一性, 因此两种插值方法得到的结果相同, 即同次系数相等. 整理可得
     \begin{equation*}
@@ -474,3 +475,102 @@ plt.show()
         \omega_{n+1}(x)=(x-x_0)(x-x_1)\cdots(x-x_n)=\prod_{i=0}^n(x-x_i)
     \end{equation*}
 \end{theorem}
+
+\section{等距节点差商公式}
+
+\subsection{差分定义}
+
+\begin{definition}[差分]
+    设函数$y=f(x)$在等距节点$x_k=x_0+kh(k=0,1,\cdots,n)$上的值$f_k=f(x_k)$已知, 其中$h$为常数, 称为\emph{步长}, 称偏差
+
+    \begin{align*}
+        \Delta f_k&=f_{k+1}-f_k\\
+        \nabla f_k&=f_k-f_{k-1}\\
+        \delta f_k&=f(x_k+h/2)-f(x_k-h/2)=f_{k+\frac{1}{2}}-f_{k-\frac{1}{2}}\\
+    \end{align*}
+    分别称为$f(x)$在$x_k$处以$h$为步长的\emph{向前差分, 向后差分, 中心差分}. 符号$\Delta, \nabla, \delta$分别称为\emph{向前差分算子, 向后差分算子, 中心差分算子}.
+\end{definition}
+
+利用一阶差分, 类似可定义二阶差分为
+\begin{equation*}
+    \Delta^2f_k=\Delta f_{k+1}-\Delta f_k=f_{k+2}-2f_{k+1}+f_k
+\end{equation*},
+一般地, $m$阶差分为
+\begin{equation*}
+    \Delta^mf_k=\Delta^{m-1}f_{k+1}-\Delta^{m-1}f_k
+\end{equation*}
+
+\subsection{差分的性质}
+
+定义不变算子$I$和移位算子$E$, 即有
+\begin{equation*}
+    If_k=f_k, Ef_k=f_{k+1}
+\end{equation*}
+由差分定义, 可得$\Delta=E-I, \nabla=I-E^{-1}, \delta=E^{\frac{1}{2}}-E^{-\frac{1}{2}}$
+
+由不变算子和移位算子, 可得如下性质:
+
+各阶差分均可用函数值表示, 即
+
+\begin{align*}
+    \Delta^nf_k&=(E-1)^nf_k=\sum_{j=0}^n(-1)^j\mqty(n\\j)E^{n-j}f_k=\sum_{j=0}^n(-1)^j\mqty(n\\j)f_{n+k-j}\\
+    \nabla^nf_k&=(1-E^{-1})^nf_k=\sum_{j=0}^n(-1)^{n-j}\mqty(n\\j)E^{j-n}f_k=\sum_{j=0}^n(-1)^{n-j}\mqty(n\\j)f_{k+j-n}
+\end{align*}
+其中$\mqty(n\\j)=\frac{n(n-1)\cdots(n-j+1)}{j!}$为二项式展开系数
+
+差商与差分之间满足下面的关系. 例如, 对于向前差分, 由定义
+\begin{align*}
+    f[x_k,x_{k+1}]&=\frac{f_{k+1}-f_k}{x_{k+1}-x_k}=\frac{\Delta f_k}{h}\\
+    f[x_k,x_{k+1},x_{k+2}]&=\frac{f[x_{k+1},x_{k+2}]-f[x_k,x_{k+1}]}{x_{k+2}-x_k}=\frac{1}{2h^2}\Delta^2f_k
+\end{align*}
+一般有
+\begin{equation}\label{eqn:2.5.7}
+    f[x_k,x_{k+1},\cdots,x_{k+m}]=\frac{1}{m!}\frac{1}{h^m}\Delta^mf_k, m=1,2,\cdots,n
+\end{equation}
+
+同理, 对于向后差分, 有
+\begin{equation}\label{eqn:2.5.8}
+    f[x_k,x_{k-1},\cdots,x_{k-m}]=\frac{1}{m!}\frac{1}{h^m}\nabla^mf_k
+\end{equation}
+
+利用差商的导数关系, 可得差分与导数的关系为
+\begin{equation*}
+    \Delta^nf_k=j^nf^{(n)}(\xi)
+\end{equation*}
+
+\subsection{等距节点插值公式}
+
+利用Newton插值公式, 将差商用相应的差分替代, 即可得到等距节点插值公式. 
+
+若节点$x_k=x_0+kh, k=0,1,\cdots,n$, 要计算$x_0$附近点$x$的函数$f(x)$的值, 令$x=x_0+th$, 其中$0\le t\le1$, 于是有
+\begin{equation*}
+    \omega_{k+1}(x)=\prod_{j=0}^k(x-x_j)=t(t-1)\cdots(t-k)h^{k+1}
+\end{equation*}
+
+将该式与式(\ref{eqn:2.5.7})代入公式(\ref{eqn:2.4.6}), 可得
+\begin{equation*}
+    N_n(x_0+th)=f_0+t\Delta f_0+\frac{t(t-1)}{2!}\Delta^2f_0+\cdots+\frac{t(t-1)\cdots(t-n+1)}{n!}\Delta^nf_0
+\end{equation*}
+上式称为\emph{Newton前插公式}. 同时, 由于其使用$x_0$附近的点, 故又称为\emph{表初公式}.
+
+不难得到, 上式的余项可由式(\ref{eqn:2.2.14})得到
+\begin{equation*}
+    R_n(x)=\frac{t(t-1)\cdots(t-n)}{(n+1)!}h^{n+1}f^{(n+1)}(\xi), \xi\in(x_0,x_n)
+\end{equation*}
+
+类似地, 若要计算$x_n$附近的值$f(x)$, 则可将Newton插值公式(\ref{2.4.6})按照倒序排列, 即$x_n,x_{n-1},\cdots,x_0$的次序. 此时有
+
+\begin{align*}
+    N_n(x)=&f(x_n)+f[x_n,x_{n-1}](x-x_n)+f[x_n,x_{n-1},x_{n-2}](x-x_n)(x-x_{n-1})\\
+    &+\cdots+f[x_n,x_{n-1},\cdots,x_0](x-x_n)\cdots(x-x_1)
+\end{align*}
+
+变换$x=x_n-th(-1\le t\le0)$, 并利用公式(\ref{eqn:2.5.8}), 代入可得
+\begin{equation*}
+    N_n(x_n+th)=&f_n+t\nablaf_n+\frac{t(t+1)}{2!}\nabla^2f_n+\cdots+\frac{t(t+1)\cdots(t+n-1)}{n!}\nabla^nf_n
+\end{equation*}
+
+上式称为\emph{Newton后插公式}或\emph{表末公式}. 其余项为
+\begin{equation*}
+    R_n(x)=f(x)-N_n(x_n+th)=\frac{t(t+1)\cdots(t+n)h^{n+1}f^{(n+1)}(\xi)}{(n+1)!}, \xi\in(x_0,x_n)
+\end{equation*}
