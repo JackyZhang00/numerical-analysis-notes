@@ -912,9 +912,9 @@ plt.show()
 \subsection{分段三次Hermite插值}
 
 给定节点$a\le x_0<x_1<\cdots\le b$, $f(x)$在节点$x_i$上的函数值及导数值分别为$y_i,m_i$. 在每个子区间$[x_i,y_i]$上作两点三次Hermite插值, 插值函数为
-\begin{equation*}
+\begin{equation}\label{eqn:2.7.6}
     H(x)=\sum_{i=0}^n\left[y_i\varphi_i(x)+m_i\psi_i(x)\right]
-\end{equation*}
+\end{equation}
 其中基函数为
 \begin{align*}
     \varphi_i(x)&=
@@ -985,3 +985,380 @@ plt.show()
     \label{fig:三次Hermite插值}
 \end{figure}
 
+\section{三次样条插值}
+
+\subsection{三次样条函数}
+
+设对$y=f(x)$在区间$[a,b]$上给定一组节点$a=x_0<x_1<\cdots<x_n=b$和相应的函数值$y_0,y_1,\cdots,y_n$, 如果$s(x)$具有如下性质:
+\begin{enumerate}
+    \item 在每个子区间$[x_{i-1},x_i],i=1,2,\cdots,n$上$s(x)$是不高于三次的多项式;
+    \item $s(x),s'(x),s''(x)$在$[a,b]$上连续, 则称$s(x)$是\emph{三次样条函数}. 若再有
+    \item $s(x_i)=f(x_i),i=0,1,\cdots,n$, 则称$s(x)$为$y=f(x)$的\emph{三次样条插值函数}.
+\end{enumerate}
+
+\subsection{三次样条插值函数构造}
+
+首先对三次样条插值的存在性进行证明
+
+\begin{proof}
+    设有$n$个区间, 对于每个区间$S_i$, 插值函数为
+    \begin{equation*}
+        S_i(x)=a_i+b_ix+c_ix^2+d_ix^3, i=0,1,\cdots,n-1
+    \end{equation*}
+
+    对于每一个小区间, 两个端点给定, 总区间共有$2n$个条件.
+
+    对于节点$x_i$, 其一阶导数连续, 即
+    \begin{equation*}
+        S'_{i-1}(x_i)=S'_i(x_i)
+    \end{equation*}
+    共$(n-1)$个条件.
+
+    同理, 其二阶导数连续, 有$(n-1)$个条件.
+
+    因此, 给定条件共$(4n-2)$个, 小于$4n$, 因此解存在但不唯一.
+\end{proof}
+
+为保证解的唯一性, 需要补充边界条件. 常见的边界条件有如下四种:
+
+固支边界条件(D-1样条):
+\begin{equation*}
+    \begin{cases}
+        S'(x_0)=f'(x_0)=m_0\\
+        S'(x_n)=f'(x_n)=m_n
+    \end{cases}
+\end{equation*}
+
+弯矩边界条件(D-2样条):
+\begin{equation*}
+    \begin{cases}
+        S''(x_0)=f''(x_0)=M_0\\
+        S''(x_n)=f''(x_n)=M_n
+    \end{cases}
+\end{equation*}
+
+自然边界条件(自然样条):
+\begin{equation*}
+    \begin{cases}
+        S''(x_0)=0\\
+        S''(x_n)=0
+    \end{cases}
+\end{equation*}
+
+周期边界条件(周期样条):
+\begin{equation*}
+    \begin{cases}
+        S(x_0)=S(x_n)\\
+        S'(x_0)=S'(x_n)\\
+        S''(x_0)=S''(x_n)
+    \end{cases}
+\end{equation*}
+
+\subsection{三转角方程}
+
+假定$S'(x)$在节点$x_i$的值为$S'(x_i)=m_i,i=0,1,\cdots,n$, 由式(\ref{eqn:2.7.6})可得
+\begin{equation*}
+    S(x)=\sum_{i=0}^n\left[y_i\varphi_i(x)+m_i\psi_i(x)\right]
+\end{equation*}
+显然, 该表达式在$[a,b]$区间连续, 且满足插值条件. 而式中的导数值$m_i$未知, 因此可利用导数的连续条件:
+\begin{equation*}
+    S''(x_i-0)=S''(x_i+0), i=1,2,\cdots,n-1
+\end{equation*}
+以及边界条件确定. 
+
+下面考虑$S(x)$在$[x_i,x_{i+1}]$的表达式
+\begin{align*}
+    S(x)&=\frac{(x-x_{i+1})^2[h_i+2(x-x_i)]}{h_i^3}y_i+\frac{(x-x_i)^2[h_i+2(x_{i+1}-x)]}{h_i^3}y_{i+1}\\
+    &+\frac{(x-x_{i+1})^2(x-x_i)}{h_i^2}m_i+\frac{(x-x_i)^2(x-x_{i+1})}{h_i^2}m_{i+1}
+\end{align*}
+这里$h_i=x_{i+1}-x_i$, 对$S(x)$求二阶导数, 得
+\begin{align*}
+    S''(x)&=\frac{6x-2x_i-4x_{i+1}}{h_i^2}m_i+\frac{6x-4x_i-2x_{i+1}}{h_i^2}m_{i+1}\\
+    &+\frac{6(x_i+x_{i+1}-2x)}{h_i^3}(y_{i+1}-y_i)
+\end{align*}
+于是
+\begin{equation*}
+    S''(x_i+0)=-\frac{4}{h_i}m_i-\frac{2}{h_i}m_{i+1}+\frac{6}{h_i^2}(y_{i+1}-y_i)
+\end{equation*}
+
+同理, 可得$S''(x)$在区间$[x_{i-1},x_i]$得表达式为
+\begin{align*}
+    S''(x)&=\frac{6x-2x_{i-1}-4x_i}{h_{i-1}^2}m_{i-1}+\frac{6x-4x_{i-1}-2x_i}{h_{i-1}^2}m_i\\
+    &+\frac{6(x_{i-1}+x_i-2x)}{h_{i-1}^2}(y_i-y_{i-1})
+\end{align*}
+及
+\begin{equation*}
+    S''(x_i-0)=\frac{2}{H_{i-1}}m_{i-1}+\frac{4}{h_{i-1}}m_i-\frac{6}{h_{i-1}^2}(y_i-y_{i-1})
+\end{equation*}
+
+利用二阶导数连续性, 化简可得结果为
+\begin{equation}\label{eqn:2.8.9}
+    \lambda_im_{i-1}+2m_i+\mu_im_{i+1}=g_i, i=1,2,\cdots,n-1
+\end{equation}
+其中,
+\begin{align*}
+    \lambda_i&=\frac{h_i}{h_{i-1}+h_i}, \mu_i=\frac{h_{i-1}}{h_{i-1}+h_i}\\
+    g_i&=3(\lambda_if[x_{i-1},x_i]+\mu_if[x_i,x_{i+1}])
+\end{align*}
+方程是关于未知数$m_0,m_1,\cdots,m_n$的$n-1$个方程, 若加上固支边界条件$m_0=f'_0, m_n=f'_n$, 则方程为含有$m_1,\cdots,m_{n-1}$的$(n-1)$个方程, 使用矩阵形式可表示为
+\begin{equation*}
+    \mqty(2&\mu_1&0&\cdots&\cdots&0\\
+    \lambda_2&2&\mu_2&\ddots&&\vdots\\
+    0&\lambda_3&2&\mu_3&\ddots&\vdots\\
+    \vdots&\ddots&\ddots&\ddots&\ddots&0\\
+    0&&\ddots&\lambda_{n-2}&2&\mu_{n-2}\\
+    0&\cdots&\cdots&0&\lambda_{n-1}&2)\mqty(m_1\\m_2\\m_3\\\vdots\\m_{n-2}\\m_{n-1})=
+    \mqty(g_1-\lambda_1f'_0\\g_2\\\vdots\\g_{n-2}\\g_{n-1}-\mu_{n-1}f'_n)
+\end{equation*}
+
+如果边界条件为弯矩边界条件(或特殊情况下的自然边界条件), 则方程组为
+\begin{equation*}
+    \mqty(
+        2&1&0&\cdots&\cdots&0\\
+        \lambda_1&2&\mu_1&\ddots& &\vdots\\
+        0&\lambda_2&2&\mu_2&\ddots&\vdots\\
+        \vdots&\ddots&\ddots&\ddots&\ddots&0\\
+        \vdots& &\ddots&\lambda_{n-1}&2&\mu_{n-1}\\
+        0&\cdots&\cdots&0&1&2
+    )\mqty(m_0\\m_1\\m_2\\\vdots\\m_{n-1}\\m_n)=\mqty(g_0\\g_1\\g_2\\\vdots\\g_{n-1}\\g_n)
+\end{equation*}
+
+若采用周期性边界条件, 则
+\begin{equation*}
+    m_0=m_n
+\end{equation*}
+从而整理得方程组为
+\begin{equation*}
+    \mqty(
+        2&\mu_1&0&\cdots&0\\
+        \lambda_2&2&\mu_2&\ddots&\vdots\\
+        0&\lambda_3&\ddots&\ddots&0\\
+        \vdots&\ddots&\ddots&2&\mu_{n-1}\\
+        0&\cdots&0&\lambda_n&2
+    )\mqty(m_1\\m_2\\\vdots\\m_{n-1}\\m_n)=\mqty(g_1\\g_2\\\vdots\\g_{n-1}\\g_n)
+\end{equation*}
+
+上述方程组当中, 每个方程都联系三个$m_i$, 故称为\emph{三转角方程}. 同时, 三个方程组的系数矩阵都为严格对角占优矩阵, 故方程有唯一解.
+
+\begin{extend}
+    \begin{definition}[严格对角占优矩阵]
+        若方阵$A=(a_{ij})\in R^{n\cross n}$, 满足
+        \begin{equation*}
+            \abs{a_{ii}}>\sum_{j=1,j\ne i}^n\abs{a_{ij}}, i=1,2,\cdots,n
+        \end{equation*}
+        称$A$为\emph{严格对角占优矩阵}
+    \end{definition}
+\end{extend}
+
+\subsection{三弯矩方程}
+设函数$f(x)$是定义在区间$[a,b]$上的一个二次连续可微函数, 节点$a=x_0<x_1<\cdots<x_n=b$, 令
+\begin{equation*}
+    M_i=S''(x_i), i=0,1,\cdots,n
+\end{equation*}
+其中$S(x)$在每一个小区间$[x_i,x_{i+1}],i=0,1,\cdots, n-1$上都是三次多项式, 故$S''(x)$在$[x_i,x_{i+1}]$的表达式为:
+\begin{equation*}
+    S_i''(x)=M_i\frac{x_{i+1}-x}{h_{i+1}}+M_{i+1}\frac{x-x_i}{h_{i+1}}
+\end{equation*}
+其中, $h_{i+1}=x_{i+1}-x_i$, 将上式做两次积分, 得
+\begin{align*}
+    S_i'(x)&=-M_i\frac{(x_{i+1}-x_i)^2}{2h_{i+1}}+M_{i+1}\frac{(x-x_i)^2}{2h_{i+1}}+A_i\\
+    S_i(x)&=M_i\frac{(x_{i+1}-x)^3}{6h_{i+1}}+M_{i+1}\frac{(x-x_i)^3}{6h_{i+1}}+A_i(x-x_{i+1})+B_i
+\end{align*}
+其中, $A_i, B_i$为积分常数. 由插值条件并整理可得
+\begin{equation*}
+    \begin{cases}
+        A_i=\frac{y_{i+1}-y_i}{h_{i+1}}-\frac{h_{i+1}}{6}(M_{i+1}-M_i)\\
+        B_i=y_{i+1}-\frac{M_{i+1}}{6}h_{i+1}^2
+    \end{cases}
+\end{equation*}
+将其代入, 可得
+\begin{align*}
+    S_i(x)&=M_i\frac{(x_{i+1}-x)^3}{6h_{i+1}}+M_{i+1}\frac{(x-x_i)^3}{6h_{i+1}}\\
+    &+\left(y_i-\frac{M_i}{6}h_{i+1}^2\right)\frac{x_{i+1}-x}{h_{i+1}}+\left(y_{i+1}-\frac{M_{i+1}}{6}h_{i+1}^2\right)\frac{x-x_i}{h_{i+1}}, i=0,1,\cdots,n-1
+\end{align*}
+对上式进行微分, 有
+\begin{align*}
+    S_i'(x)&=-M_i\frac{(x_{i+1}-x)^2}{2h_{i+1}}+M_{i+1}\frac{(x-x_i)^2}{2h_{i+1}}+\frac{y_{i+1}-y_i}{h_{i+1}}-\frac{h_{i+1}}{6}(M_{i+1}-M_i)\\
+    S_{i-1}'(x)&=-M_{i-1}\frac{(x_{i}-x)^2}{2h_{i}}+M_{i}\frac{(x-x_{i-1})^2}{2h_{i}}+\frac{y_{i}-y_{i-1}}{h_{i}}-\frac{h_{i}}{6}(M_{i}-M_{i-1})\\
+    i&=1,2,\cdots,n-1
+\end{align*}
+因此有
+\begin{align*}
+    S_{i-1}'(x_i)&=\frac{h_i}{3}M_i+\frac{y_i-y_{i-1}}{h_i}+\frac{h_i}{6}M_{i-1}\\
+    S_{i}'(x_i)&=\frac{h_{i+1}}{3}M_i+\frac{y_{i+1}-y_{i}}{h_{i+1}}+\frac{h_{i+1}}{6}M_{i+1}\\
+\end{align*}
+由于$S'_{i-1}(x_i)=S_i'(x_i)$, 从而有
+\begin{equation*}
+    h_iM_{i-1}+2(h_i+h_{i+1})M_i+h_{i+1}M_{i+1}=6\left(\frac{y_{i+1}-y_i}{h_{i+1}}-\frac{y_i-y_{i-1}}{h_i}\right), i=1,2,\cdots, n-1
+\end{equation*}
+
+记
+\begin{align*}
+    \mu_i&=\frac{h_{i+1}}{h_i+h_{i+1}}\\
+    \lambda_i&=1-\lambda_i\\
+    d_i&=6\left[\frac{y_{i+1}-y_i}{h_{i+1}}-\frac{y_i-y_{i-1}}{h_i}\right]/(h_i+h_{i+1})=6f[x_{i-1},x_i,x_{i+1}]
+\end{align*}
+可将上式改写为
+\begin{equation*}
+    \lambda_iM_{i-1}+2M_i+\mu_iM_{i+1}=d_i, i=1,2,\cdots,n-1
+\end{equation*}
+
+可以发现, 上式与式(\ref{eqn:2.8.9})具有相同的形式, 因此所得到的线性方程组的形式也与上面相同.
+
+对于固支边界条件, 给定两端点导数值$S'(x_0)=y'_0,S'(x_n)=y'_n$, 有
+\begin{align*}
+    S'_0(x_0)&=\frac{y_1-y_0}{h_1}-\frac{h_1}{3}M_0-\frac{h_1}{6}M_1=y_0'=f[x_0,x_0]\\
+    S'_{n-1}(x_n)&=\frac{y_n-y_{n-1}}{h_n}+\frac{h_n}{6}M_{n-1}+\frac{h_n}{3}M_n=y_n'=f[x_n,x_n]
+\end{align*}
+于是可得
+\begin{align*}
+    2M_0+M_1&=\frac{6}{h_1}\left(\frac{y_1-y_0}{h_1}-y_0'\right)=6f[x_0,x_0,x_1]\\
+    M_{n-1}+2M_n&=\frac{6}{h_n}\left(y_n'-\frac{y_n-y_{n-1}}{h_n}\right)=6f[x_{n-1},x_n,x_n]
+\end{align*}
+将其补充为方程组第一个和最后一个方程, 即可得到三弯矩方程为
+\begin{equation*}
+    \mqty(
+        2&1& & & &\\
+        \lambda_1&2&\mu_1& & &\\
+         &\lambda_2&2&\mu_2& &\\
+         & & &\ddots& &\\
+         & & & \lambda_{n-1}&2&\mu_{n-1}\\
+         & & & &1&2
+    )\mqty(M_0\\M_1\\M_2\\\vdots\\M_{n-1}\\M_n)=\mqty(d_0\\d_1\\d_2\\\vdots\\d_{n-1}\\d_n)
+\end{equation*}
+其中,
+\begin{align*}
+    d_0&=6f[x_0,x_0,x_1]\\
+    d_n&=6f[x_{n-1},x_n,x_n]\\
+    d_i&=6f[x_{i-1},x_i,x_{i+1}],i=1,2,\cdots,n-1
+\end{align*}
+
+对于弯矩边界条件, 给定$M_0=y''_0,M_n=y''_n$, 方程组可整理为
+\begin{equation*}
+    \mqty(
+        2&\mu_1&&&&\\
+        \lambda_2&2&\mu_2&&&\\
+        &\lambda_3&2&\mu_3&&\\
+        &&&\ddots&&\\
+        &&&\lambda_{n-2}&2&\mu_{n-2}\\
+        &&&&\lambda_{n-1}&2
+    )\mqty(M_1\\M_2\\M_3\\\vdots\\M_{n-2}\\M_{n-1})=\mqty(d_1\\d_2\\d_3\\\vdots\\d_{n-2}\\d_{n-1})
+\end{equation*}
+其中, 
+\begin{align*}
+    d_1&=6f[x_0,x_1,x_2]-\lambda_1f''(x_0)\\
+    d_{n-1}&=6f[x_{n-2},x_{n-1},x_n]-\mu_{n-1}f''(x_n)\\
+    d_i&=6f[x_{i-1},x_i,x_{i+1}],i=2,\cdots,n-2
+\end{align*}
+
+将上述方程组当中的$M_n=M_0=0$, 可得自然边界条件, 不再赘述.
+
+对于周期样条, 使用类似的方法, 可得方程组
+\begin{equation*}
+    \mqty(
+        2&\mu_1&&&&\lambda_1\\
+        \lambda_2&2&\mu_2&&&\\
+        &\lambda_3&2&\mu_3&&\\
+        &&&\ddots&&\\
+        &&&\lambda_{n-2}&2&\mu_{n-2}\\
+        \mu_n&&&&\lambda_n&2\\
+    )\mqty(M_1\\M_2\\M_3\\\vdots\\M_{n-1}\\M_n)=\mqty(d_1\\d_2\\d_3\\\vdots\\d_{n-1}\\d_n)
+\end{equation*}
+其中,
+\begin{equation*}
+    d_i=6f[x_{i-1},x_i,x_{i+1}], i=1,2,\cdots,n
+\end{equation*}
+
+可以验证, 上述系数矩阵也满足严格对角占优的定义.
+
+\subsection{三次样条插值函数的收敛性*}
+
+本部分不做证明, 只做介绍.
+
+\begin{definition}[一致范数]
+    设函数$f(x)$是区间$[a,b]$上的连续函数, 则记
+    \begin{equation*}
+        \norm{f}_{\infty}=\max_{a\le x\le b}\abs{f(x)}
+    \end{equation*}
+    为函数$f(x)$的\emph{一致范数}
+\end{definition}
+
+\begin{theorem}
+    设被插值函数$f(x)\in C^4[a,b]$, $S(x)$为满足自然边界条件的三次样条插值函数, 则在插值区间$[a,b]$上成立余项估计式
+    \begin{equation*}
+        \norm{f^{(k)}-S^{(k)}}_\infty\le c_kh^{4-k}\norm{f^{(4)}}_\infty, k=0,1,2
+    \end{equation*}
+    其中,
+    \begin{align*}
+        h&=\max_{0\le i\le n-1}h_i, h_i=x_{i+1}-x_i,\\
+        c_0&=\frac{1}{16}, c_1=c_2=\frac{1}{2}
+    \end{align*}
+\end{theorem}
+
+最后, 通过一个三次样条插值的程序结束这一章. 对于Python程序而言, 我们调用\texttt{CubicSpline()}函数进行样条插值. 函数默认是采用自然边界条件, 即得到图\ref{fig:自然边界条件三次样条插值}所示:
+
+\begin{lstlisting}
+# 三次样条插值演示(自然边界条件) Exercise2-6.py
+
+import numpy as np
+from scipy.interpolate import CubicSpline
+import matplotlib.pyplot as plt
+
+# 创建一些数据点
+x = np.array([0, 1, 2, 3, 4, 5])
+y = np.array([0, 2, 1, 3, 2, 0])
+
+# 使用CubicSpline函数进行样条插值
+cs = CubicSpline(x, y)
+
+# 生成插值点
+x_interp = np.linspace(0, 5, 100)
+y_interp = cs(x_interp)
+
+# 绘制原始数据和插值曲线
+plt.plot(x, y, 'o')
+plt.plot(x_interp, y_interp)
+plt.show()
+\end{lstlisting}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=1\linewidth]{Chapter2/graph/python/Figure2-5.png}
+    \caption{自然边界条件的三次样条插值}
+    \label{fig:自然边界条件三次样条插值}
+\end{figure}
+
+若想采用其他边界条件, 如希望采用固支边界条件, 并令端点一阶导数为0, 则可以在Python当中使用如下代码:
+
+\begin{lstlisting}
+# 三次样条插值演示(固支边界条件) Exercise2-7.py
+
+import numpy as np
+from scipy.interpolate import CubicSpline
+import matplotlib.pyplot as plt
+
+# 创建一些数据点
+x = np.array([0, 1, 2, 3, 4, 5])
+y = np.array([0, 2, 1, 3, 2, 0])
+
+# 使用CubicSpline函数进行样条插值, 且端点一阶导数值为0
+cs = CubicSpline(x, y, bc_type=((1,0),(1,0)))
+
+# 生成插值点
+x_interp = np.linspace(0, 5, 100)
+y_interp = cs(x_interp)
+
+# 绘制原始数据和插值曲线
+plt.plot(x, y, 'o')
+plt.plot(x_interp, y_interp)
+plt.show()
+\end{lstlisting}
+
+所得图像如图\ref{fig:固支边界条件的三次样条插值}所示
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=1\linewidth]{Chapter2/graph/python/Figure2-6.png}
+    \caption{固支边界条件的三次样条插值}
+    \label{fig:固支边界条件的三次样条插值}
+\end{figure}
