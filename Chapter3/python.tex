@@ -1,0 +1,31 @@
+\chapter{函数逼近与计算}
+
+\section{引言}
+
+\subsection{函数逼近的问题的一般提法}
+
+对于函数类$A$中给定的函数$f(x)$, 要求在另一类较简单且便于计算的函数类$B(\subset A)$中寻找一个函数$P(x)$, 使得函数$P(x)$与$f(x)$之差在某种度量意义下最小.
+
+本章所研究的函数类$A$通常为区间$[a,b]$上的连续函数, 记作$C[a,b]$; 函数类$B$通常为\emph{代数多项式}或三角多项式.
+
+\subsection{常用的度量标准}
+
+\subsubsection{最佳一致逼近}
+
+\begin{definition}[最佳一致逼近]
+    若以函数$f(x)$和$P(x)$的最大误差
+    \begin{equation*}
+        \max_{x\in[a,b]}\abs{f(x)-P(x)}=\norm{f(x)-P(x)}_\infty
+    \end{equation*}
+    作为度量误差$f(x)-P(x)$"大小"的标准, 在这种意义下的函数逼近称为\emph{最佳一致逼近}或\emph{均匀逼近}
+\end{definition}
+
+\subsubsection{最佳平方逼近}
+
+\begin{definition}[最佳平方逼近]
+    采用
+    \begin{equation*}
+        \sqrt{\int_a^b\left[f(x)-P(x)\right]^2\dd{x}}=\norm{f(x)-P(x)}_2
+    \end{equation*}
+    作为度量误差"大小"标准的函数逼近称为\emph{最佳平方逼近}或\emph{均方逼近}.
+\end{definition}
