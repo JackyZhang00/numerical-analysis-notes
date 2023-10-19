@@ -435,3 +435,362 @@ $T_n(x)$的最高次项系数为$2^{n-1}, n=1,2,\cdots$
 \begin{equation*}
     x_i=\cos\frac{(2i+1)\pi}{2(n+1)}, i=0,1,\cdots,n
 \end{equation*}
+
+\section{最佳平方逼近}
+
+\subsection{内积空间}
+
+\subsubsection{内积空间定义}
+
+\begin{definition}[内积空间]
+    设$X$为(实)线性空间, 在$X$上定义了内积是指对$X$中每一对元素$x,y$, 都有一实数, 记为$(x,y)$与之对应, 且这个对应满足:
+    \begin{enumerate}
+        \item \begin{equation*}
+            (x,x)\ge0, (x,x)=0\Leftrightarrow x=0
+        \end{equation*};
+        \item \begin{equation*}
+            (x,y)=(y,x),x,y\in X
+        \end{equation*};
+        \item \begin{equation*}
+            (\lambda x,y)=\lambda(x,y), x,y\in X; \lambda\in R
+        \end{equation*};
+        \item \begin{equation*}
+            (x+y,z)=(x,z)+(y,z), x,y,z\in X
+        \end{equation*}
+    \end{enumerate}
+    则称$X$为\emph{内积空间}, 称二元函数$(x,y)$为\emph{内积}
+\end{definition}
+
+\subsubsection{2-范数定义及其性质}
+
+\begin{definition}
+    设$X$为内积空间, 则对任意的$x\in X$, 称
+    \begin{equation*}
+        \norm*{x}_2=\sqrt{(x,x)}
+    \end{equation*}
+    为$x$的\emph{2-范数}或\emph{欧式范数}.
+
+    特别的, 对$f(x)\in C[a,b]$, 称
+    \begin{equation*}
+        \norm*{f}_2=\sqrt{\int_a^b\rho(x)f^2(x)\dd{x}}=\sqrt{(f,f)}
+    \end{equation*}
+    为函数$f(x)$的\emph{Euclid范数}
+\end{definition}
+
+设$X$是一内积空间, 则对任意的$x,y\in X$, 有
+\begin{enumerate}
+    \item Cauchy-Schwarz不等式:
+    \begin{equation*}
+        (x,y)^2\le(x,x)(y,y)
+    \end{equation*}
+    \item 三角不等式:
+    \begin{equation*}
+        \norm*{x+y}_2\le\norm*{x}_2+\norm*{y}_2
+    \end{equation*}
+\end{enumerate}
+
+讨论特殊的两种内积空间, 
+\begin{itemize}
+    \item $n$维欧氏空间$R^n$, 内积就是两向量数量积, 即
+    \begin{equation*}
+        (x,y)=x^Ty=\sum x_iy_i
+    \end{equation*}
+    \item 连续函数空间$C[a,b]$, 内积定义为积分运算或带权函数积分运算, 即
+    \begin{equation*}
+        (f(x),g(x))=\int_a^bf(x)g(x)\dd{x}, f(x),g(x)\in C[a,b]
+    \end{equation*}
+    或者
+    \begin{equation*}
+        (f(x),g(x))=\int_a^b\rho(x)f(x)g(x)\dd{x}, f(x),g(x)\in C[a,b]
+    \end{equation*}
+\end{itemize}
+
+\begin{definition}[权函数]
+    设$\rho(x)$定义在有限或无限区间$[a,b]$上, 如果具有下列性质:
+    \begin{enumerate}
+        \item 对任意$x\in [a,b], \rho(x)\ge 0$;
+        \item 积分$\int_a^b\abs*{x}^n\rho(x)\dd{x}$存在, $n=0,1,2,\cdots$;
+        \item 对非负的连续函数$g(x)$, 若$\int_a^bg(x)\rho(x)\dd{x}=0$, 则在$(a,b)$上有$g(x)\equiv0$
+    \end{enumerate}
+    称满足上述条件的 $\rho(x)$为$[a,b]$上的\emph{权函数}
+\end{definition}
+
+\subsection{相关概念}
+
+\subsubsection{距离}
+
+$R^n$中, 两个向量$x,y$之间的距离定义为
+\begin{equation*}
+    \text{dist}(x,y)=\norm*{x-y}_2=\sqrt{(x-y,x-y)}=\sqrt{\sum_i(x_i-y_i)^2}
+\end{equation*}
+
+连续函数空间$C[a,b]$中, 两个函数$f(x)$与$g(x)$的欧式距离为
+\begin{equation*}
+    \text{dist}(f(x),g(x))=\norm*{f(x)-g(x)}_2=\sqrt{\int_a^b\rho(x)\left[f(x)-g(x)\right]^2\dd{x}}
+\end{equation*}
+
+\subsubsection{正交}
+
+在$R^n$中, 若两个向量$x,y$的内积为零, 即
+\begin{equation*}
+    (x,y)=0
+\end{equation*}
+则称向量$x,y$\emph{正交}.
+
+在连续函数空间$C[a,b]$中, 若函数$f(x)$与$g(x)$满足
+\begin{equation*}
+    (f,g)=\int_a^b\rho(x)f(x)g(x)\dd{x}=0
+\end{equation*}
+则称$f(x)$与$g(x)$在$[a,b]$上\emph{带权$\rho(x)$正交}.
+
+进一步, 设在$C[a,b]$上给定函数系${\varphi_k(x)}$, 若满足条件
+\begin{equation*}
+    (\varphi_j(x),\varphi_k(x))=\begin{cases}
+        0,&j\ne k\\
+        \text{常数}A_k>0,&j=k, j,k=0,1,\cdots
+    \end{cases}
+\end{equation*}
+则称函数系${\varphi_k(x)}$是$[a,b]$上带权$\rho(x)$的正交坐标系.
+
+特别地, 若$A_k=1$, 则该函数系称为\emph{标准正交坐标系}.
+
+若上述定义中函数系为多项式系, 则称之为$C[a,b]$上带权$\rho(x)$的\emph{正交多项式系}, 并称$\varphi_n(x)$为$[a,b]$上带权$\rho(x)$的\emph{$n$次正交多项式}.
+
+\subsection{内积空间上的最佳平方逼近}
+
+\subsubsection{函数系的线性关系}
+
+\begin{definition}
+    设$\varphi_0(x),\varphi_1(x),\cdots,\varphi_n(x)$为区间$[a,b]$上的连续函数, 若关系式
+    \begin{equation*}
+        a_0\varphi_0(x)+a_1\varphi_1(x)+\cdots+a_n\varphi_n(x)=0
+    \end{equation*}
+    当且仅当$a_0=a_1=\cdots=a_n=0$时成立, 则称函数在$[a,b]$上是\emph{线性无关}的, 否则称\emph{线性相关}.
+\end{definition}
+
+\subsubsection{函数系线性无关的判别条件}
+
+\begin{theorem} % 待证明
+    连续函数$\varphi_0(x),\varphi_1(x)\cdots,\varphi_n(x)$在$[a,b]$上线性无关的充分必要条件是它们的Gram行列式
+    \begin{equation*}
+        G_n=
+        \mqty|(\varphi_0,\varphi_0)&(\varphi_0,\varphi_1)&\cdots&(\varphi_0,\varphi_n)\\
+        (\varphi_1,\varphi_0)&(\varphi_1,\varphi_1)&\cdots&(\varphi_1,\varphi_n)\\
+        \vdots&\vdots&\cdots&\vdots\\
+        (\varphi_n,\varphi_0)&(\varphi_n,\varphi_1)&\cdots&(\varphi_n,\varphi_n)|\ne 0
+        \end{equation*}
+\end{theorem}
+
+设$\varphi_0(x),\varphi_1(x),\cdots,\varphi_n(x)$是$[a,b]$上线性无关的连续函数, $a_0,a_1,\cdots,a_n$是任意实数, 则
+\begin{equation*}
+    S(x)=a_0\varphi_0(x)+a_1\varphi_1(x)+\cdots+a_n\varphi_n(x)
+\end{equation*}
+的全体是$C[a,b]$的一个子集, 记作
+\begin{equation*}
+    \Phi=\spn{\varphi_0,\varphi_1,\cdots,\varphi_n}
+\end{equation*}
+并称$\varphi_0(x),\varphi_1(x),\cdots,\varphi_n(x)$是生成集合$\Phi$的一个基底.
+
+\subsubsection{最佳平方逼近元的定义}
+
+设$X$为线性内积空间, $\varphi_0,\varphi_1,\cdots,\varphi_n$为$X$上$n+1$个线性无关元, 即
+\begin{equation*}
+    \Phi=\spn{\varphi_0,\varphi_1,\cdots,\varphi_n}
+\end{equation*}
+
+\begin{definition}[最佳平方逼近元]
+    对任意的$X\in X$, 在$X$的子空间$\Phi$中, 求$g$的在2-范数意义下的最佳逼近元$S^*$, 即求$S^*\in\Phi$, 使得
+    \begin{equation*}
+        \norm*{S^*-g}_2=\min_{S\in\Phi}\norm*{S-g}_2
+    \end{equation*}
+    对任意$S\in\Phi$成立. 若满足上式的$S^*\in\Phi$存在, 则称$S^*$为$g\in X$的\emph{最佳平方逼近元}
+\end{definition}
+
+\subsubsection{最佳平方逼近元的存在性}
+
+\begin{theorem}%待证明
+    设$X$为线性内积空间, 由线性无关组$\varphi_0,\varphi_1,\cdots,\varphi_n$张成的线性空间$\Phi$为$X$的子空间, 则对任意的$g\in X$, 存在$S^*\in \Phi$为$g$的最佳平方逼近元.
+\end{theorem}
+
+\subsubsection{最佳平方逼近元的特征}
+
+\begin{theorem} % 待证明
+    $S^*\in\Phi=\spn{\varphi_0,\varphi_1,\cdots,\varphi_n}$为$g\in X$(线性内积空间)的最佳平方逼近元的充要条件是: $g-S^*$与一切${\varphi_j},j=0,1,\cdots,n$正交. 其中, $\varphi_0,\varphi_1,\cdots,\varphi_n$为$X$的$n+1$个线性无关元.
+\end{theorem}
+
+该定理所说的$g-S^*$与一切$\varphi_j$正交, 指$g-S^*$与一切$\varphi_j$的内积为零, 即
+\begin{equation*}
+    (g-S^*,\varphi_j)=0, j=0,1,\cdots,n
+\end{equation*}
+
+\subsubsection{最佳平方逼近元的唯一性}
+
+\begin{theorem}
+    线性内积空间$X$的子空间$\Phi$中若存在对$g\in X$的最佳平方逼近元, 则唯一.
+\end{theorem}
+
+\subsubsection{最佳平方逼近元的求解}
+
+由最佳平方逼近元充要条件, 若假定
+\begin{equation*}
+    S^*=\sum_{j=0}^nc_j^*\varphi_j(x)
+\end{equation*}
+则可得出
+\begin{equation*}
+    \left(g-\sum_{j=0}^nc_j^*\varphi_j,\varphi_i\right)=0, i=0,1,\cdots,n
+\end{equation*}
+移项变形为
+\begin{equation*}
+    \left(\sum_{j=0}^nc_j^*\varphi_j,\varphi_i\right)=(\varphi_i,g), i=0,1,\cdots,n
+\end{equation*}
+其中, $c_j^*,j=0,1,\cdots,n$为待定系数. 用矩阵表示方程组为:
+\begin{equation*}
+    \mqty(
+        (\varphi_0,\varphi_0)&(\varphi_0,\varphi_1)&\cdots&(\varphi_0,\varphi_n)\\
+        (\varphi_1,\varphi_0)&(\varphi_1,\varphi_1)&\cdots&(\varphi_1,\varphi_n)\\
+        \vdots&\vdots&\cdots&\vdots\\
+        (\varphi_n,\varphi_0)&(\varphi_n,\varphi_1)&\cdots&(\varphi_n,\varphi_n)
+    )\mqty(
+        c_0^*\\c_1^*\\\vdots\\c_n^*
+    )=\mqty(
+        (\varphi_0,g)\\(\varphi_1,g)\\\vdots\\(\varphi_n,g)
+    )
+\end{equation*}
+此方程称为\emph{法方程组}.
+
+若选取的一组基底${\varphi_0(x),\varphi_1(x),\cdots,\varphi_n(x)}$满足
+\begin{equation*}
+    (\varphi_i,\varphi_j)=\begin{cases}
+        0,&i\ne j\\
+        A_i>0,&i=j
+    \end{cases}
+\end{equation*}
+则称其为\emph{正交基}, 此时
+\begin{equation*}
+    c_j^*=\frac{(\varphi_j,g)}{(\varphi_j,\varphi_j)}, j=0,1,\cdots,n
+\end{equation*}
+
+\subsubsection{最佳平方逼近元的误差估计}
+
+设$S^*=\sum_{j=0}^nc_j^*\varphi_j\in\Phi=\spn{\varphi_0,\varphi_1,\cdots,\varphi_n}$为$g\in X$的最佳平方逼近元, 则其平方误差为
+\begin{align*}
+    \norm*{g-S^*}_2^2&=(g-S^*,g-S^*)=(g-S^*,g)-(g-S^*,S^*)\\
+    &=(g-S^*,g)-(g-S^*,\sum_{j=0}^nc_j^*\varphi_j)\\
+    &=(g,g)-(S^*,g)-\sum_{j=0}^nc_j^*(g-S^*,\varphi_j)\\
+    &=(g,g)-(S^*,g)=(g,g)-\sum_{j=1}^nc_j^*(g-\varphi_j)
+\end{align*}
+
+均方误差为
+\begin{equation*}
+    \norm*{g-S^*}_2=\sqrt{(g,g)-\sum_{j=0}^nc_j^*(g,\varphi_j)}
+\end{equation*}
+
+\subsection{连续函数的最佳平方逼近}
+
+对于给定的函数$f(x)\in C[a,b]$, 要求函数
+\begin{equation*}
+    S^*\in\Phi=\spn{\varphi_0,\varphi_1,\cdots,\varphi_n}
+\end{equation*}
+使
+\begin{equation*}
+    \int_a^b\rho(x)\left[f(x)-S^*(x)\right]^2\dd{x}=\min_{S(x)\in\Phi}\int_a^b\rho(x)\left[f(x)-S(x)\right]^2\dd{x}
+\end{equation*}
+
+若这样的$S^*(x)$存在, 则称为$f(x)$在区间$[a,b]$上的\emph{最佳平方逼近函数}.
+
+特别地, 若取$\Phi=H_n=\spn{1,x,\cdots,x^n}$, 则称
+\begin{equation*}
+    S^*(x)=a_0\cdot1+a_1x+\cdots+a_nx^n
+\end{equation*}
+为$f(x)$在$[a,b]$上的\emph{$n$次最佳平方逼近多项式}.
+
+计算$C[a,b]$上函数$f(x)$的$n$次最佳平方逼近多项式. 取
+\begin{equation*}
+    \varphi_0=1, \varphi_1=x,\cdots,\varphi_n=x^n
+\end{equation*}
+设$f(x)$的$n$次最佳平方逼近多项式为
+\begin{equation*}
+    S^*(x)=\sum_{j=0}^na_j\cdot\varphi_j(x)=\sum_{j=0}^na_j\cdot x^j
+\end{equation*}
+构造法方程组:
+\begin{equation*}
+    \mqty(
+        (\varphi_0,\varphi_0)&(\varphi_0,\varphi_1)&\cdots&(\varphi_0,\varphi_n)\\
+        (\varphi_1,\varphi_0)&(\varphi_1,\varphi_1)&\cdots&(\varphi_1,\varphi_n)\\
+        \vdots&\vdots& &\vdots\\
+        (\varphi_n,\varphi_0)&(\varphi_n,\varphi_1)&\cdots&(\varphi_n,\varphi_n)\\
+    )\mqty(
+        a_0\\a_1\\\vdots\\a_n
+    )=\mqty(
+        (f,\varphi_0)\\(f,\varphi_1)\\\vdots\\(f,\varphi_0)
+    )
+\end{equation*}
+其中, 
+\begin{align*}
+    (\varphi_i,\varphi_j)&=\int_a^b\varphi_i\cdot\varphi_j\dd{x}=\int_a^bx^i\cdot x^j\dd{x}\\
+    &=\frac{b^{i+j+1}-a^{i+j+1}}{i+j+1}, i,j=0,1,\cdots,n
+\end{align*}
+\begin{equation*}
+    (f,\varphi_j)=\int_a^bf(x)\cdot\varphi_j\dd{x}=\int_a^bf(x)\cdot x^j\dd{x}, j=0,1,\cdots,n
+\end{equation*}
+由此可得函数$f(x)$在$H_n$中的$n$次最佳平方逼近多项式:
+\begin{equation*}
+    S^*(x)=\sum_{j=0}^na_j^*x^j
+\end{equation*}
+平方误差为:
+\begin{equation*}
+    \norm*{f(x)-S^*(x)}_2^2=(f,f)-\sum_{j=0}^na_j^*(f,\varphi_j)=\int_a^b\left[f(x)\right]^2\dd{x}-\sum_{j=0}^na_j^*(f,\varphi_j)
+\end{equation*}
+
+由于$\varphi_0,\varphi_1,\cdots,\varphi_n$线性无关, 故$G_n\ne 0$, 上述方程组存在唯一解$a_k=a_k^*, k=0,1,\cdots,n$
+
+特别地, 当$a=0,b=1$时, 法方程组系数矩阵为
+\begin{equation*}
+    H=\mqty(
+        1&\frac{1}{2}&\frac{1}{3}&\cdots&\frac{1}{n+1}\\
+        \frac{1}{2}&\frac{1}{3}&\frac{1}{4}&\cdots&\frac{1}{n+2}\\
+        \frac{1}{3}&\frac{1}{4}&\frac{1}{5}&\cdots&\frac{1}{n+3}\\
+        \vdots&\vdots&\vdots& &\vdots\\
+        \frac{1}{n+1}&\frac{1}{n+2}&\frac{1}{n+3}&\cdots&\frac{1}{2n+1}\\
+    )
+\end{equation*}
+该矩阵为Hilbert矩阵, 为病态矩阵.
+
+\begin{example}
+    求$g(x)=\sqrt{x}$在$H_1[0,1]$中的最佳平方逼近元, 并估计误差
+\end{example}
+
+\begin{solution}
+    取$\varphi_0=1,\varphi_1=x, H_1[0,1]=\spn{1,x}$, 记
+    \begin{equation*}
+        S_1^*(x)=a_0+a_1x
+    \end{equation*}
+    由
+    \begin{align*}
+        (\varphi_0,\varphi_0)&=\int_0^11\cdot1\dd{x}=1\\
+        (\varphi_0,\varphi_1)&=\int_0^11\cdot x\dd{x}=\frac{1}{2}\\
+        (\varphi_1,\varphi_1)&=\int_0^1x\cdot x\dd{x}=\frac{1}{3}
+    \end{align*}
+    同样可求得
+    \begin{align*}
+        (\varphi_0,g)&=\int_0^1\sqrt{x}\dd{x}=\frac{2}{3}\\
+        (\varphi_1,g)&=x\cdot\sqrt{x}\dd{x}=\frac{2}{5}
+    \end{align*}
+
+    所以, 关于$a_0,a_1$的法方程组为
+    \begin{equation*}
+        \begin{cases}
+            a_0+\frac{1}{2}a_1=\frac{2}{3}\\
+            \frac{1}{2}a_0+\frac{1}{3}a_1=\frac{2}{5}
+        \end{cases}
+    \end{equation*}
+    解得
+    \begin{equation*}
+        a_0=\frac{4}{15}, a_1=\frac{4}{5}
+    \end{equation*}
+    即$S_1^*(x)=\frac{4}{5}x+\frac{4}{155}$为$H_1[0,1]$对$g(x)$的最佳平方逼近元. 且误差为
+    \begin{align*}
+        \norm*{\delta_n}_2^2&=\norm*{\sqrt{x}-S_1^*(x)}_2^2=\int_0^1\left(\sqrt{X}\right)^2\dd{x}-\sum_{k=0}^1a_k\left(\sqrt{k}.\varphi_k\right)\\
+        &=\frac{1}{2}-\frac{4}{15}\cross\frac{2}{3}-\frac{4}{5}\cross\frac{2}{5}=\frac{1}{255}\approx0.0044
+    \end{align*}
+\end{solution}
