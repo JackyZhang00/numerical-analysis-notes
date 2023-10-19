@@ -29,3 +29,409 @@
     \end{equation*}
     作为度量误差"大小"标准的函数逼近称为\emph{最佳平方逼近}或\emph{均方逼近}.
 \end{definition}
+
+\section{最佳一致逼近}
+
+\subsection{最佳一致逼近概念}
+
+\begin{definition}
+    设函数$f(x)$是区间$[a,b]$上的连续函数, 对于任意给定的$\varepsilon>0$, 如果存在多项式$P(x)$, 使不等式
+    \begin{equation*}
+        \max_{a\le x\le b}\abs{f(x)-P(x)}<\varepsilon
+    \end{equation*}
+    成立, 则称多项式$P(x)$在区间$[a,b]$上\emph{一致逼近}(或\emph{均匀逼近})于函数$f(x)$.
+\end{definition}
+
+\subsection{最佳一致逼近多项式的存在性}
+
+\begin{theorem}[Weierstrass定理]
+    若$f(x)$是区间$[a,b]$上的连续函数, 则对于任意$\varepsilon>0$, 总存在多项式$P(x)$, 使对一切$a\le x\le b$, 有
+    \begin{equation*}
+        \norm{f(x)-P(x)}_\infty<\varepsilon
+    \end{equation*}
+\end{theorem}
+
+定理证明略. % 未证明
+
+可以证明的是, 多项式$P(x)$形式为:
+\begin{equation*}
+    P(x)=\sum_{i=0}^{n(\varepsilon)}f\left(\frac{i}{n}\right)C_n^ix^i(1-x)^{n-i}
+\end{equation*}
+且
+\begin{equation*}
+    \lim\limits_{n\to\infty}P_n(x)\to f(x)
+\end{equation*}
+
+\subsection{$C[a,b]$上最佳一致逼近}
+
+在次数不超过$n$的多项式当中, 找到一个$p_n^*(x)$, 使得
+\begin{equation*}
+    \norm{f(x)-p_n^*(x)}_\infty=\min_{p_n(x)\in H_n}\norm{f(x)-p_n(x)}_\infty
+\end{equation*}
+其中, $H_n$表示由所有次数不超过$n$的代数多项式构成的线性空间. 上述问题为$C[a,b]$空间中最佳一致逼近问题.
+
+下面的定理说明了该最佳一致逼近多项式的存在性.
+
+\begin{theorem}[Borel定理]
+    对任意的$f(x)\in C[a,b]$, 在$H_n$中都存在对$f(x)$的最佳一致逼近多项式, 记为$p_n^*(x)$, 使得
+    \begin{equation*}
+        \norm{f(x)-p_n^*(x)}_\infty=\min_{p_n(x)\in H_n}\norm{f(x)-p_n(x)}_\infty
+    \end{equation*}
+    称$p_n^*(x)$为$f(x)$的\emph{n次最佳一致逼近多项式}. 或简称为\emph{最佳逼近多项式}.
+\end{theorem}
+
+\subsection{相关概念}
+
+\subsubsection{偏差}
+
+\begin{definition}[偏差]
+    若$P_n(x)\in H_n, f(x)\in C[a,b]$, 则称
+    \begin{equation*}
+        \Delta(f,P_n)=\norm*{f-P_n}_\infty=\max_{a\le x\le b}\abs*{f(x)-P_n(x)}
+    \end{equation*}
+    为$f(x)$与$P_n(x)$在$[a,b]$上的\emph{偏差}
+\end{definition}
+
+显然, $\Delta(f,P_n)\le 0$, ${\Delta(f,P_n)}$的全体组成一个集合, 记作$\Delta(f,H_n)$, 下界为0.
+
+\subsubsection{最小偏差}
+
+\begin{definition}
+    若记集合的下确界为
+    \begin{equation*}
+        E_n=\inf_{P_n\in H_n}\left\{\Delta(f,P_n)\right\}=\inf_{P_n\in H_n}\max_{a\le x\le b}\abs*{f(x)-P_n(x)}
+    \end{equation*}
+    则称$E_n$为$f(x)$在$[a,b]$上的\emph{最小偏差}
+\end{definition}
+
+\subsubsection{偏差点}
+
+\begin{definition}[偏差点]
+    设$f(x)\in C[a,b], P(x)\in H_n$, 若在$x=x_0$上有
+    \begin{equation*}
+        \abs*{P(x_0)-f(x_0)}=\max_{a\le x\le b}\abs*{P(x)-f(x)}=\mu
+    \end{equation*}
+    则称$x_0$是$P(x)-f(x)$的\emph{偏差点}.
+
+    若$P(x_0)-f(x_0)=\mu$, 则称$x_0$为\emph{正偏差点};
+
+    若$P(x_0)-f(x_0)=-\mu$, 则称$x_0$为\emph{负偏差点};
+\end{definition}
+
+\subsubsection{交错点组}
+
+\begin{definition}
+    若函数$f(x)$在其定义域内的某一区间$[a,b]$上存在$n$个点${x_k},k=1,2,\cdots,n$, 使得
+    \begin{align*}
+        \abs*{f(x_k)}&=\max\abs*{f(x)}=\norm*{f(x)}_\infty, k=1,2,\cdots,n\\
+        -f(x_k)&=f(x_{k+1}), k=1,2,\cdots,n-1
+    \end{align*}
+    则称点集${x_k},k=1,2,\cdots,n$为函数$f(x)$在区间$[a,b]$上的一个\emph{交错点组}, 点$x_k$为\emph{交错点}.
+\end{definition}
+
+\subsection{$C[a,b]$上的最佳一致逼近特征}
+
+\begin{lemma}
+    设$f(x)$是区间$[a,b]$上的连续函数, $P_n^*(x)$是$f(x)$的$n$次最佳一致逼近多项式, 则$f(x)-P_n^*(x)$在区间$[a,b]$上必同时存在正负偏差点.
+\end{lemma}
+
+\begin{theorem}[Chebyshev定理]
+    设$f(x)$是区间$[a,b]$上的连续函数, 则$P_n^*(x)$是$f(x)$的$n$次最佳一致逼近多项式的充要条件是:$f(x)-P_n^*(x)$在区间$[a,b]$上存在一个至少由$n+2$个点组成的交错点组.
+\end{theorem}
+
+\begin{example}
+    求函数$f(x)=\sin{4x}$在$[0,2\pi]$上的6次最佳一致逼近$P_6^*(x)$
+\end{example}
+
+\begin{solution}
+    令
+    \begin{equation*}
+        R(x)=f(x)-P_6^*(x)
+    \end{equation*}
+    考虑函数$f(x)=\sin{4x}$在区间$[0,2\pi]$存在由8个点组成的交错点组.
+
+    令$R(x)=\sin{4x}$, 则有
+    \begin{equation*}
+        P_6^*(x)=f(x)-R(x)=0
+    \end{equation*}
+\end{solution}
+
+\begin{corollary}
+    在$P_n[a,b]$中, 若存在对函数$f(x)\in C[a,b]$的最佳一致逼近元, 则唯一.
+\end{corollary}
+
+\begin{corollary}
+    设$f(x)$是区间$[a,b]$上的连续函数, 则$f(x)$的$n$次最佳一致逼近多项式是$f(x)$的某个$n$次插值多项式.
+\end{corollary}
+
+\begin{corollary}
+    设$f(x)$是区间$[a,b]$上的连续函数, $P_n^*(x)$是$f(x)$的$n$次最佳一致逼近多项式, 若$f^{(n+1)}(x)$在$(a,b)$内存在且保号, 则$f(x)-P_n^*(x)$在区间$[a,b]$上恰好存在一个由$n+2$个点组成的交错点组, 且两个端点$a,b$都在交错点组中.
+\end{corollary}
+
+\subsection{一次最佳逼近多项式($n=1$)}
+
+\subsubsection{推导过程}
+
+设$f(x)\in C^2[a,b]$, 且$f''(x)$在$(a,b)$内不变号, 要求$f(x)$在$[a,b]$上的一次最佳一致逼近多项式$P_1(x)=a_0+a_1x$. 由上述推论, $f(x)-P_1(x)$在$[a,b]$上恰好由3个点构成的交错点组, 且区间端点$a,b$属于交错点组. 设另一交错点组为$x_2$. 则有
+\begin{equation*}
+    \begin{cases}
+        f'(x_2)-P_1'(x_2)=0\\
+        f(a)-P_1(a)=f(b)-P_1(b)\\
+        f(a)-P_1(a)=-\left[f(x_2)-P_1(x_2)\right]
+    \end{cases}
+\end{equation*}
+即
+\begin{equation*}
+    \begin{cases}
+        f'(x_2)=a_1\\
+        a_0+a_1a-f(a)=f(x_2)-[a_0+a_1x_2]\\
+        a_0+a_1a-f(a)=a_0+a_1b-f(b)
+    \end{cases}
+\end{equation*}
+
+解得
+\begin{align*}
+    a_1&=\frac{f(b)-f(a)}{b-a}=f'(x_2)\\
+    a_0&=\frac{f(a)+f(x_2)}{2}-\frac{f(b)-f(a)}{b-a}\frac{a+x_2}{2}
+\end{align*}
+即
+\begin{equation*}
+    P_1(x)=\frac{f(x_2)+f(a)}{2}+\frac{f(b)-f(a)}{b-a}\left(x-\frac{a+x_2}{2}\right)
+\end{equation*}
+
+\begin{example}
+    求R$f(x)=\sqrt{1+x^2}$在$[0,1]$上的一次最佳一致逼近多项式.
+\end{example}
+\begin{solution}
+    因为
+    \begin{align*}
+        f'(x)&=\frac{x}{\sqrt{1+x^2}}\\
+        f''(x)&=\frac{1}{\sqrt[3]{(1+x^2)^2}}>0
+    \end{align*}
+    设$f(x)$在$[0,1]$上的一次最佳一致逼近多项式为$P_1(x)=a_0+a_1x$, 则由
+    \begin{equation*}
+        a_1=\frac{f(b)-f(a)}{b-a}=f'(x_2)
+    \end{equation*}
+    可得
+    \begin{equation*}
+        a_1=\sqrt{2}-1\approx0.414
+    \end{equation*}
+
+    再由
+    \begin{equation*}
+        f'(x_2)=a_1
+    \end{equation*}
+    可得
+    \begin{equation*}
+        \frac{x_2}{\sqrt{1+x_2^2}}=\sqrt{2}-1
+    \end{equation*}
+    解得
+    \begin{equation*}
+        x_2=\sqrt{\frac{\sqrt{2}-1}{2}}\approx0.4551, f(x_2)=\sqrt{1+x_2^2}\approx1.0986
+    \end{equation*}
+    由
+    \begin{equation*}
+        a_0=\frac{f(a)+f(x_2)}{2}-\frac{f(b)-f(a)}{b-a}\frac{a+x_2}{2}
+    \end{equation*}
+    得
+    \begin{equation*}
+        a_0=\frac{1+\sqrt{1+x_2^2}}{2}-a_1\frac{x_2}{2}\approx0.955
+    \end{equation*}
+    于是得$\sqrt{1+x^2}$得最佳一次逼近多项式为
+    \begin{equation*}
+        P_1(x)=0.955+0.414x
+    \end{equation*}
+
+    最小偏差为
+    \begin{equation*}
+        \norm*{\sqrt{1+x^2}-P_1(x)}_\infty=\max_{0\le x\le1}\abs*{\sqrt{1+x^2}-P_1(x)}=\abs*{\sqrt{1+0^2}-P_1(0)}\le0.045
+    \end{equation*}
+\end{solution}
+
+\subsubsection{$n$次最佳一致逼近多项式(推广)}
+
+设$f(x)\in C^{n+1}[a,b]$, 且$f^{(n+1)}(x)$在$(a,b)$内不变号吗要求$f(x)$在$[a,b]$上得$n$次最佳一致逼近多项式
+\begin{equation*}
+    P_n(x)=a_0+a_1x+\cdots+a_nx^n
+\end{equation*}
+
+由推论可知, $f(x)-P_n(x)$在$[a,b]$上恰好有$n+2$个点构成得交错点组, 且$a,b$属于交错点组. 设另外$n$个交错点为$x_1,x_2,\cdots,x_n$, 则有
+\begin{equation*}
+    \begin{cases}
+        f'(x_i)-P_n'(x_i)=0, i=1,2,\cdots,n\\
+        f(a)-P_n(a)=(-1)^i(f(x_i)-P_n(x_i)), i=1,2,\cdots,n\\
+        f(a)-P_n(a)=(-1)^{n+1}\left[f(b)-P_n(b)\right]
+    \end{cases}
+\end{equation*}
+
+\subsection{Chebyshev多项式及其应用}
+
+\subsubsection{定义}
+
+\begin{definition}[Chebyshev多项式]
+    称
+    \begin{equation*}
+        T_n=\cos(n\arccos{x}), \abs*{x}\le 1
+    \end{equation*}
+    为Chebyshev多项式
+\end{definition}
+
+注: 令$\theta=\arccos{x}$, 则$\cos\theta=x$. 而
+\begin{equation*}
+    \cos{n\theta}=\cos^n{\theta}-C_n^2\cos^{n-2}{\theta}\sin^2\theta+C_n^4\cos^{n-4}\theta\sin^4\theta-\cdots
+\end{equation*}
+故$T_n$是关于$x$得$n$次代数多项式.
+
+\subsubsection{性质}
+
+正交性: 由$T_n(x)$所组成的序列${T_n(x)}$在区间$[-1,1]$上带权$\rho(x)=\frac{1}{\sqrt{1-x^2}}$的正交多项式序列, 且
+\begin{equation*}
+    \int_{-1}^1\frac{1}{\sqrt{1-x^2}}T_m(x)T_n(x)\dd{x}=
+    \begin{cases}
+        0,&m\ne n\\
+        \frac{\pi}{2},&m=n\ne0\\
+        \pi,&m=n=0
+    \end{cases}
+\end{equation*}
+
+递推关系: 相邻的三个Chebyshev多项式具有如下递推关系式:
+\begin{equation*}
+    \begin{cases}
+        T_0(x)=1, T_1(x)=x\\
+        T_{n+1}(x)=2x\cdot T_n(x)-T_{n-1}(x), n=1,2,\cdots
+    \end{cases}
+\end{equation*}
+
+奇偶性: Chebyshev多项式$T_n$, 当$n$为奇数时为奇函数, 当$n$为偶数时为偶函数. 即
+\begin{align*}
+    T_n(-x)&=\cos[n\arccos(-x)]=\cos(n\pi-n\arccos{x})\\
+    &=(-1)^n\cos(n\arccos{x})=(-1)^nT_n(x)
+\end{align*}
+
+$T_n$在区间$[-1,1]$上有$n$个不同的零点
+\begin{equation*}
+    x_k=\cos{\frac{(2k-1)\pi}{2n}}, k=1,2,\cdots,n
+\end{equation*}
+
+$T_n(x)$在$[-1,1]$上有$n+1$个不同的极值点
+\begin{equation*}
+    x_k'=\cos{k\frac{\pi}{n}}, k=0,1,\cdots,n
+\end{equation*}
+使$T_n(x)$轮流取得最大值1和最小值-1.
+
+$T_n(x)$的最高次项系数为$2^{n-1}, n=1,2,\cdots$
+
+在区间$[-1,1]$上, 在所有首项系数为1的$n$次多项式$p_n(x)$中. $\widetilde{T}_n(x)=\frac{1}{2^{n-1}}T_n(x)$与零的偏差最小, 且偏差为$\frac{1}{2^{n-1}}$, 即对于任何$p(x)\in H_n(x)$, 有
+\begin{equation*}
+    \frac{1}{2^{n-1}}=\norm*{\widetilde{T}_n(x)-0}_\infty=\min_{p(x)\in H_n}\norm*{p(x)-0}_\infty
+\end{equation*}
+
+上述性质又被称为Chebyshev多项式的\emph{最小模性质}.
+
+\subsubsection{应用}
+
+设$f(x)=b_0+b_1x+\cdots+b_{n+1}x^{n+1}(b_{n+1}\ne0)$为$[-1,1]$上的$n+1$次多项式, 要求$f(x)$在$[-1,1]$上的$n$次最佳一致逼近$P_n^*(x)$.
+
+由于首项系数为1的$n+1$次Chebyshev多项式$\widetilde{T}_{n+1}(x)$无穷范数最小, 有
+\begin{equation*}
+    \frac{f(x)-P_n^*(x)}{b_{n+1}}=\widetilde{T}_{n+1}(x)=\frac{1}{2^n}T_{n+1}(x)
+\end{equation*}
+于是
+\begin{equation*}
+    P_n^*(x)=f(x)-b_{n+1}\widetilde{T}_{n+1}(x)
+\end{equation*}
+其偏差为
+\begin{equation*}
+    \norm*{f(x)-P_n^*(x)}_\infty=\norm*{\frac{b_{n+1}}{2^n}T_{n+1}(x)}_\infty=\frac{\abs*{b_{n+1}}}{2^n}
+\end{equation*}
+
+\begin{example}
+    设$f(x)=4x^4+2x^3-5x^2+8x-\frac{5}{2}, \abs*{x}\le 1$, 求$f(x)$在$[-1,1]$上的3次最佳一致逼近元$P_3^*(x)$
+\end{example}
+\begin{solution}
+    由$f(x)$的表达式可知$b_4=4$, 首项系数为1的4次Chebyshev多项式为
+    \begin{equation*}
+        \widetilde{T}_4(x)=x^4-x^2+\frac{1}{8}
+    \end{equation*}
+    设$f(x)$在$[-1,1]$上的3次最佳一致逼近多项式为$P_3^*(x)$, 则
+    \begin{equation*}
+        \frac{f(x)-P_3^*(x)}{4}=\widetilde{T}_4(x)
+    \end{equation*}
+    从而
+    \begin{equation*}
+        P_3^*(x)=f(x)-4\widetilde{T}_4(x)=2x^3-x^2+8x-3
+    \end{equation*}
+    其最小偏差为
+    \begin{equation*}
+        \norm*{f(x)-P_3^*(x)}_\infty=\norm*{\frac{b_4}{2^3}T_4(x)}_\infty=\frac{\abs*{4}}{2^3}=\frac{1}{2}
+    \end{equation*}
+\end{solution}
+
+\begin{example}
+    若$f(x)=4x^4-5x^2+8x-\frac{5}{2}, \abs*{x}\le 1$, 重求上题
+\end{example}
+\begin{solution}
+    重复上述步骤, 可得3次最佳一致逼近多项式为
+    \begin{equation*}
+        P_3^*(x)=-x^2+8x-3
+    \end{equation*}
+
+    (注意: 这里的3次多项式是次数不超过3)
+\end{solution}
+
+考虑一般区间$[a,b]$上的多项式降阶. 设$f(x)=b_0+b_1x+\cdots+b_{n+1}x^{n+1}, b_{n+1}\ne 0$为$[a,b]$上的$n+1$次多项式, 要求$f(x)$在$[a,b]$上的$n$次最佳一致逼近$P_n^*(x)$.
+
+首先做区间变换, 令
+\begin{equation*}
+    x=\frac{b-a}{2}t+\frac{b+a}{2}
+\end{equation*}
+其中$t\in[-1,1]$, 则
+\begin{equation*}
+    f(x)=f\left(\frac{b-a}{2}t+\frac{b+a}{2}\right)=g(t)\in C[-1,1]
+\end{equation*}
+
+设$g(t)$在$[-1,1]$的$n$次最佳一致逼近多项式为$P_n(t)$, 则
+\begin{equation*}
+    P_n(t)=g(t)-c_{n+1}\widetilde{T}_{n+1}(t)
+\end{equation*}
+其中, $c_{n+1}$为$g(t)$的最高此项系数.
+\begin{equation*}
+    c_{n+1}=b_{n+1}\left(\frac{b-a}{2}\right)^{n+1}
+\end{equation*}
+于是, $f(x)$在$[a,b]$上的$n$次最佳一致逼近多项式为
+\begin{equation*}
+    P_n^*(x)=P_n\left(\frac{2x-b-a}{b-a}\right)
+\end{equation*}
+最小偏差为
+\begin{equation*}
+    \norm*{f(x)-P_n(x)}_\infty=\norm*{g(t)-P_n(t)}_\infty=\frac{\abs*{c_{n+1}}}{2^n}
+\end{equation*}
+
+下面再考虑插值多项式的情况. 设$f(x)\in C[-1,1]$, 且存在$n+1$阶连续导数$f^{(n+1)}(x)$. 如何在$[-1,1]$上确定互异节点$x_0,x_1,\cdots,x_n$, 使得$f(x)$的$n$次插值多项式的余项最小.
+
+由插值余项定理, 可知$n$次插值多项式$L_n(x)$的余项为
+\begin{equation*}
+    R_n(x)=f(x)-L_n(x)=\frac{f^{(n+1)}(\xi)}{(n+1)!}\omega_{n+1}(x)
+\end{equation*}
+其中, 
+\begin{equation*}
+    \omega_{n+1}(x)=\prod_{i=0}^n(x-x_i), \xi\in(-1,1)
+\end{equation*}
+其误差上界为
+\begin{align*}
+    \abs*{f(x)-L_n(x)}&\le\frac{1}{(n+1)!}\max_{-1\le x\le1}\abs*{f^{(n+1)}(x)}\max_{-1\le x\le1}\abs*{\omega_{n+1}(x)}\\
+    &=\frac{1}{(n+1)!}\norm*{f^{(n+1)}}_\infty\norm*{\omega_{n+1}(x)}_\infty
+\end{align*}
+
+要使余项达到最小, 即令$\norm*{\omega_{n+1}(x)}_\infty$尽可能小. 由于是一个首项系数为1的$n+1$次多项式. 故有Chebyshev多项式, 取
+\begin{equation*}
+    \omega_{n+1}(x)=\widetilde{T}_{n+1}(x)
+\end{equation*}
+同时有
+\begin{equation*}
+    \omega_{n+1}(x)=\prod_{i=0}^n(x-x_i)
+\end{equation*}
+故只需令$x_i,i=0,1,\cdots,n$为$n+1$次Chebyshev多项式的零点, 即
+\begin{equation*}
+    x_i=\cos\frac{(2i+1)\pi}{2(n+1)}, i=0,1,\cdots,n
+\end{equation*}
