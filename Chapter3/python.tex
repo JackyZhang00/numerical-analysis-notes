@@ -976,3 +976,56 @@ ${H_n(x)}$是区间$(-\infty, \infty)$上带权$\rho(x)=e^{-x^2}$的正交多项
         H_{n+1}(x)=2xH_n(x)-2nH_{n-1}(x), n=1,2,\cdots
     \end{cases}
 \end{equation*}
+
+\section{函数按正交多项式展开}
+
+设$\Phi=\spn{\varphi_0,\varphi_1,\cdots,\varphi_n}$, 其中$\varphi_i(i=0,1,\cdots,n)$是$[a,b]$上带权$\rho(x)$的正交多项式系, 给定$f(x)\in C[a,b]$, 若$S_n^*(x)=a_0\varphi_0(x)+\cdots+a_n\varphi_n(x)$为$f(x)$在$[a,b]$上的$n$次最佳平方逼近多项式, 则由正交多项式的性质
+\begin{equation*}
+    a_k=\frac{(f,\varphi_k)}{(\varphi_k,\varphi_k)}, k=0,1,\cdots,n
+\end{equation*}
+于是
+\begin{equation*}
+    S_n^*(x)=\sum_{k=0}^n\frac{(f,\varphi_k)}{(\varphi_k,\varphi_k)}\varphi_k(x)
+\end{equation*}
+其均方误差为
+\begin{equation*}
+    \norm*{\delta_n}_2=\norm*{f(x)-S_n^*(x)}_2=\sqrt{(f,f)-\sum_{k=0}^n a_k^2(\varphi_k,\varphi_k)}
+\end{equation*}
+
+\begin{example}
+    求$f(x)=e^x$在$[-1,1]$上的三次最佳平方逼近多项式.
+\end{example}
+
+\begin{solution}
+    考虑使用Legendre多项式, 计算$(f,P_k),k=0,1,2,3$, 即
+    \begin{align*}
+        (f,P_0)&=\int_{-1}^1e^x\dd{x}=e-\frac{1}{e}\approx2.3504\\
+        (f,P_1)&=\int_{-1}^1xe^x\dd{x}=2e^{-1}\approx0.7358\\
+        (f,P_2)&=\int_{-1}^1\left(\frac{3}{2}x^2-\frac{1}{2}\right)e^x\dd{x}=e-\frac{7}{e}\approx0.1431\\
+        (f,P_3)&=\int_{-1}^1\left(\frac{5}{2}x^3-\frac{3}{2}x\right)e^x\dd{x}=\frac{37}{e}-5e\approx0.2013
+    \end{align*}
+
+    所以得
+    \begin{align*}
+        a_0^*&=\frac{(f,P_0)}{2}=1.1752\\
+        a_1^*&=3\frac{(f,P_1)}{2}=1.1036\\
+        a_2^*&=5\frac{(f,P_2)}{2}=0.3578\\
+        a_3^*&=7\frac{(f,P_3)}{2}=0.07046
+    \end{align*}
+    
+    所以
+    \begin{align*}
+        S_3^*(x)&=1.1752+1.1036x+0.3578\left(\frac{3}{2}x^2-\frac{1}{2}\right)+0.07046\left(\frac{5}{2}x^3-\frac{3}{2}x\right)\\
+        &=0.9963+0.9979x+0.5367x^2+0.1761x^3
+    \end{align*}
+
+    均方误差为
+    \begin{equation*}
+        \norm*{\delta_n}_2=\norm*{e^x-S_3^*(x)}_2=\sqrt{\int_{-1}^1e^{2x}\dd{x}-\sum_{k=0}^3\frac{2}{2k+1}a_k^{*2}}\le0.0084
+    \end{equation*}
+
+    最大误差为
+    \begin{equation*}
+        \norm*{\delta_n}_\infty=\norm*{e^x-S_3^*(x)}_\infty\le0.0112
+    \end{equation*}
+\end{solution}
