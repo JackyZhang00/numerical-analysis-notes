@@ -794,3 +794,185 @@ $R^n$中, 两个向量$x,y$之间的距离定义为
         &=\frac{1}{2}-\frac{4}{15}\cross\frac{2}{3}-\frac{4}{5}\cross\frac{2}{5}=\frac{1}{255}\approx0.0044
     \end{align*}
 \end{solution}
+
+\section{正交多项式}
+
+\subsection{正交化手续}
+
+当权函数$\rho(x)$及区间$[a,b]$给定后, 可由幂函数系${1,x,x^2,\cdots,x^n,\cdots}$利用Schmidt正交化方法构造出和正交多项式系
+\begin{align*}
+    g_0(x)&=1,\\
+    g_k(x)&=x^k-\sum_{i=0}^{k-1}\frac{(x^k,g_i)}{(g_i,g_i)}\cdot g_i, k=1,2,\cdots
+\end{align*}
+
+\subsection{正交多项式的性质}
+
+\begin{enumerate}
+    \item $g_n(x)$是最高次项系数为1的$n$次多项式.
+    \item 任一$n$次多项式 $P_n(x)\in H_n$均可表示为$g_0(x),g_1(x),\cdots,g_n(x)$的线性组合.
+    \item 当$n\ne m$ 时, $(g_n,g_m)=0$, 且$g_n(x)$与任一次数小于$n$的多项式正交.
+    \item 递推性, 
+    \begin{equation*}
+        g_{n+1}(x)=(x-\alpha_n)g_n(x)-\beta_ng_{n-1}(x), n=0,1,\cdots
+    \end{equation*}
+    其中, 
+    \begin{align*}
+        g_0(x)&=1, g_{-1}(x)=0,\\
+        \alpha_n&=\frac{(xg_n,g_n)}{(g_n,g_n)}, n=0,1,\cdots,\\
+        \beta_n&=\frac{(g_n,g_n)}{(g_{n-1},g_{n-1})}, n=1,2,\cdots
+    \end{align*}
+    这里$(xg_n,g_n)=\int_a^bxg_n^2(x)\rho(x)\dd{x}$
+    \item 设$g_0(x),g_1(x),\cdots$是在$[a,b]$上带权$\rho(x)$的正交多项式序列, 则$g_n(x)(n\ge1)$的$n$个根都是单重实根, 且都在区间$(a,b)$内.
+\end{enumerate}
+
+\subsection{常用的正交多项式}
+
+\subsubsection{第一类Chebyshev多项式}
+
+定义:
+\begin{equation*}
+    T_n=\cos\left(n\arccos{x}\right),\abs*{x}\le 1
+\end{equation*}
+
+性质:
+
+\begin{enumerate}
+    \item 递推关系
+    \begin{equation*}
+        \begin{cases}
+            T_0(x)=1, T_1(x)=x\\
+            T_{n+1}(x)=2x\cdot T_n(x)-T_{n-1}(x), n=1,2,\cdots
+        \end{cases}
+    \end{equation*}
+
+    \item 正交性
+    
+    由$T_n(x)$所组成的序列${T_n(x)}$在区间$[-1,1]$上带权$\rho(x)=\frac{1}{\sqrt{1-x^2}}$的正交多项式序列, 且
+    \begin{equation*}
+        (T_m(x),T_n(x))=\int_{-1}^1\frac{1}{\sqrt{1-x^2}}T_m(x)T_n(x)\dd{x}=
+        \begin{cases}
+            0,&m\ne n\\
+            \frac{\pi}{2},&m=n\ne 0\\
+            \pi,&m=n=0
+        \end{cases}
+    \end{equation*}
+\end{enumerate}
+
+\subsubsection{Legendre多项式}
+
+\begin{definition}[$n$次Legendre多项式]
+    多项式
+    \begin{equation*}
+        P_n(x)=\frac{1}{2^n\cdot n!}\dv[n]{x}\left[(x^2-1)^n\right], n=0,1,2,\cdots
+    \end{equation*}
+    称为\emph{$n$次Legendre多项式}
+\end{definition}
+
+正交性: Legendre多项式序列${P_n(x)}$是$[-1,1]$上带权$\rho=1$的正交多项式序列, 且
+\begin{equation*}
+    (P_m(x),P_n(x))=\int_{-1}^1P_m(x)P_n(x)\dd{x}=
+    \begin{cases}
+        0,&m\ne n\\
+        \frac{2}{2n+1},& m=n
+    \end{cases}
+\end{equation*}
+
+相邻的三个Legendre多项式具有如下递推关系:
+\begin{equation*}
+    \begin{cases}
+        P_0(x)=1, P_1(x)=x,
+        P_{n+1}(x)=\frac{2x+1}{n+1}xP_n(x)-\frac{n}{n+1}P_{n-1}(x), n=1,2,\cdots
+    \end{cases}
+\end{equation*}
+
+奇偶性: 当$n$为偶数时, $P_n(x)$为偶函数; 当$n$为奇数时, $P_n(x)$为奇函数.
+
+$P_n(x)$在区间$[-1,1]$内存在$n$个互异实零点. 且最高项系数为$\frac{(2n)!}{2^n(n!)^2}$
+
+在所有首项系数为1的$n$次多项式中, Legendre多项式$\widetilde{P}_n(x)$在$[-1,1]$上与零的平方误差最小. 即对于任何$p(x)\in H_n(x)$, 有
+\begin{equation*}
+    \norm*{\widetilde{P}_n(x)-0}_2=\min_{p(x)\in H_n}\norm*{p(x)-0}_2
+\end{equation*}
+
+\begin{extend}
+    \begin{equation*}
+        \norm*{\widetilde{T}_n(x)-0}_\infty=\min_{p(x)\in H_n}\norm*{p(x)-0}_\infty
+    \end{equation*}
+\end{extend}
+
+\subsubsection{其他常用的正交多项式}
+
+\begin{definition}[第二类Chebyshev多项式]
+    称
+    \begin{equation*}
+        U_n(x)=\frac{\sin\left[(n+1)\arccos{x}\right]}{\sqrt{1-x^2}}
+    \end{equation*}
+    为第二类Chebyshev多项式
+\end{definition}
+
+其中, ${U_n(x)}$是区间$[-1,1]$带权$\rho(x)=\sqrt{1-x^2}$的正交多项式序列,
+\begin{equation*}
+    \int_{-1}^1\sqrt{1-x^2}U_m(x)U_n(x)\dd{x}=
+    \begin{cases}
+        0,&m\ne n\\
+        \frac{\pi}{2},&m=n
+    \end{cases}
+\end{equation*}
+
+且具有如下递推关系式:
+\begin{equation*}
+    \begin{cases}
+        U_0(x)=1, U_1(x)=2x\\
+        U_{n+1}(x)=2xU_n(x)-U_{n-1}(x), n=1,2,\cdots
+    \end{cases}
+\end{equation*}
+
+\begin{definition}[Laguerre多项式]
+    称多项式
+    \begin{equation*}
+        L_n(x)=e^x\dv[n]{x}(x^ne^{-x}), 0\le x<+\infty, n=0,1,2,\cdots
+    \end{equation*}
+    为Laguerre多项式
+\end{definition}
+
+${L_n(x)}$是定义在区间$[0,+\infty)$上带权$\rho(x)=e^{-x}$的正交多项式序列.
+\begin{equation*}
+    \int_0^\infty e^{-x}\cdot L_m(x)L_n(x)\dd{x}=
+    \begin{cases}
+        0,&m\ne n\\
+        (n!)^2,& m=n
+    \end{cases}
+\end{equation*}
+
+递推关系式:
+\begin{equation*}
+    \begin{cases}
+        L_0(x)=1, L_1(x)=1-x\\
+        L_{n+1}(x)=(1+2n-x)L_n(x)-n^2\cdot L_{n-1}(x), n=1,2,\cdots
+    \end{cases}
+\end{equation*}
+
+\begin{definition}[Hermite多项式]
+    称多项式
+    \begin{equation*}
+        H_n(x)=(-1)^n\cdot e^{x^2}\cdot\dv[n]{x}(e^{-x^2}), x\in(-\infty, \infty), n=0,1,2,\cdots
+    \end{equation*}
+    为Hermite多项式
+\end{definition}
+
+${H_n(x)}$是区间$(-\infty, \infty)$上带权$\rho(x)=e^{-x^2}$的正交多项式序列.
+\begin{equation*}
+    \int_{-\infty}^\infty e^{-x^2}H_m(x)\cdot H_n(x)\dd{x}=
+    \begin{cases}
+        0, &m\ne n\\
+        2^n\cdot n!\cdot\sqrt{\pi},& m=n
+    \end{cases}
+\end{equation*}
+
+递推关系式
+\begin{equation*}
+    \begin{cases}
+        H_0(x)=1, H_1(x)=2x\\
+        H_{n+1}(x)=2xH_n(x)-2nH_{n-1}(x), n=1,2,\cdots
+    \end{cases}
+\end{equation*}
