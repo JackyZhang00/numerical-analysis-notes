@@ -1069,3 +1069,291 @@ print("系数:", coefficients)
 \end{lstlisting}
 
 输出结果为:[1.17530022 1.10367036 0.35831431 0.07053157], 与计算结果一致.
+
+\section{曲线拟合的最小二乘法}
+
+\subsection{问题提出}
+
+已知一系列测量数据$(x_i,y_i)$, 要求简单函数$f(x)$使得$\rho_i=y_i-f(x_i)$在总体上尽可能小. 这里$y_i\ne f(x_i)$, 称$\rho_i$为\emph{残差}, 这种构造近似函数的方法称为\emph{曲线拟合}, $f(x)$为\emph{拟合函数}.
+
+通常, 使$\rho_i$尽可能小的度量准则包括:
+
+\begin{itemize}
+    \item 使$\max_{1\le ile m}\abs*{P(x_i)-y_i}$尽可能小;
+    \item 使$\sum_{i=1}^m\abs*{P(x_i)-y_i}$尽可能小;
+    \item 使$\sum_{i=1}^m\abs*{P(x_i)-y_i}^2$尽可能小
+\end{itemize}
+
+\subsection{曲线拟合的步骤}
+
+\begin{enumerate}
+    \item 根据条件画出散点图;
+    \item 观察分布, 选择适当的函数类构造拟合函数;
+    \item 根据某一逼近准则确定拟合函数的未知参数.
+\end{enumerate}
+
+\subsection{2-范数度量下的曲线拟合(最小二乘法)}
+
+给定一组数据$(x_i,y_i), i=1,2,\cdots,m$, 确定拟合函数
+\begin{equation*}
+    f(x)=c_1\varphi_1(x)+c_2\varphi_2(x)+\cdots+c_n\varphi_n(x)
+\end{equation*}
+使得
+\begin{equation*}
+    \norm*{r}_2^2=\sum_{i=1}^m\rho_i^2=\sum_{i=1}^m\left[y_i-f(x_i)\right]^2=\sum+{i-1}^m\left[y_i-\sum_{j=1}^nc_j\varphi_j(x_i)\right]^2
+\end{equation*}
+达到极小, 这里$n\le m$.
+
+若记
+\begin{equation*}
+    E(c_1,c_2,\cdots,c_n)=\sum_{i=1}^m\left[y_i-\sum_{j=1}^nc_j\varphi_j(x_i)\right]^2
+\end{equation*}
+则$E$是$c_1,\cdots,c_n$的多元函数, 于是问题转化为求多元函数$E(c_1,c_2,\cdots,c_n)$的极小值问题.
+
+由多元函数极值必要条件, 在$E$的极值点处, 有
+\begin{equation*}
+    \pdv{E}{c_k}=\sum_{i=1}^m-2\left(y_i-\sum_{j=1}^nc_j\varphi_k(x_i)\right)\varphi_k(x_i)=0, k=1,2,\cdots,n
+\end{equation*}
+即
+\begin{equation*}
+    \sum_{j=1}^nc_j\sum_{i=1}^m\varphi_j(x_i)\varphi_k(x_i)=\sum_{i=1}^my_i\varphi_k(x_i), k=1,2,\cdots,n
+\end{equation*}
+
+若记
+\begin{equation*}
+    \Phi_i=\mqty(
+        \varphi_i(x_1)\\\varphi_i(x_2)\\\vdots\\\varphi_i(x_m)
+    ), i=1,2,\cdots,n,b=\mqty(
+        y_1\\y_2\\\vdots\\y_m
+    )
+\end{equation*}
+则
+\begin{align*}
+    \sum_{i=1}^m\varphi_j(x_i)\varphi_k(x_i)&=(\Phi_j,\Phi_k)
+    \sum_{i=1}^my_i\varphi_k(x_i)=(\Phi_k,b)
+\end{align*}
+于是上式可写为
+\begin{equation*}
+    \sum_{j=1}^nc_j(\Phi_j,\Phi_k)=(\Phi_k,b), k=1,2,\cdots,n
+\end{equation*}
+于是有关于$c_1,c_2,\cdots,c_n$的线性方程组
+\begin{equation*}
+    \mqty(
+        (\Phi_1,\Phi_1)&(\Phi_2,\Phi_1)&\cdots&(\Phi_n,\Phi_1)\\
+        (\Phi_1,\Phi_2)&(\Phi_2,\Phi_2)&\cdots&(\Phi_n,\Phi_2)\\
+        \vdots&\vdots&&\vdots\\
+        (\Phi_1,\Phi_n)&(\Phi_2,\Phi_n)&\cdots&(\Phi_n,\Phi_n)\\
+    )\mqty(
+        c_1\\c_2\\\vdots\\c_n
+    )=\mqty(
+        (\Phi_1,b)\\(\Phi_2,b)\\\vdots\\(\Phi_n,b)
+    )
+\end{equation*}
+或等价写作:
+\begin{equation*}
+    \mqty(
+        \Phi_1^T\Phi_1&\Phi_2^T\Phi_1&\cdots&\Phi_n^T\Phi_1\\
+        \Phi_1^T\Phi_2&\Phi_2^T\Phi_2&\cdots&\Phi_n^T\Phi_2\\
+        \vdots&\vdots& &\vdots\\
+        \Phi_1^T\Phi_n&\Phi_2^T\Phi_n&\cdots&\Phi_n^T\Phi_n
+    )\mqty(
+        c_1\\c_2\\\vdots\\v_n
+    )=\mqty(
+        \Phi_1^T\\\Phi_2^T\\\vdots\\\Phi_n^T
+    )b
+\end{equation*}
+
+若记
+\begin{align*}
+    A&=(\Phi_1,\Phi_2,\cdots,\Phi_n)=\mqty(
+        \varphi_1(x_1)&\varphi_2(x_1)&\cdots&\varphi_n(x_1)\\
+        \varphi_1(x_2)&\varphi_2(x_2)&\cdots&\varphi_n(x_2)\\
+        \vdots&\vdots& &\vdots\\
+        \varphi_1(x_m)&\varphi_2(x_m)&\cdots&\varphi_n(x_m)\\
+    )\\
+    x&=\mqty(
+        c_1\\c_2\\\vdots\\c_n
+    )
+\end{align*}
+则上述方程组可表示为
+\begin{equation*}
+    A^TAx=A^Tb
+\end{equation*}
+由于$A$是列满秩矩阵(列向量线性无关), 故系数矩阵对称正定, 方程组的解存在唯一, 故可得拟合参数$c_1,c_2,\cdots,c_n$
+
+\begin{extend}
+    若矩阵$A\in\mathbb{R}^{m\cross n}$, 则$A^TA\in\mathbb{R}^{n\cross n}, AA^T\in\mathbb{R}^{m\cross m}$, 它们具有如下共同特点:
+    
+    \begin{itemize}
+        \item 对称半正定($\forall x\in\mathbb{R}^n, x^T(A^TA)x\ge 0$);
+        \item 特征值非负;
+        \item $\rank(A^TA)=\rank(AA^T)=\rank(A)$;
+        \item 非零特征值个数相同, 且非零特征值相同;
+        \item $\tr(AA_T)=\tr(A^TA)$
+    \end{itemize}
+\end{extend}
+
+若取$\varphi_0=1,\varphi_1(x)=x,\varphi_2(x)=x^2,\cdots,\varphi_n(x)=x^n$, 则拟合函数
+\begin{equation*}
+    f(x)=c_0+c_1x+c_2x^2+\cdots+c_nx^n
+\end{equation*}
+称为\emph{多项式拟合}, 此时
+\begin{align*}
+    A&=\mqty(
+        1&x_1&x_1^2&\cdots&x_1^n\\
+        1&x_2&x_2^2&\cdots&x_2^n\\
+        \vdots&\vdots&\vdots& &\vdots\\
+        1&x_m&x_m^2&\cdots&x_m^n\\
+    )\\
+    b&=\mqty(y_1\\y_2\\\vdots\\y_m)\\
+    x&=\mqty(c_0\\c_1\\\vdots\\c_n)
+\end{align*}
+于是
+\begin{equation*}
+    A^TAx=A^Tb
+\end{equation*}
+
+一些特殊情况下的非线性拟合, 可通过变量代换, 转换为线性拟合. 例如:
+\begin{enumerate}
+    \item 双曲拟合
+    \begin{equation*}
+        \frac{1}{y}=a+b\frac{1}{x}\Rightarrow u=a+bv(u=\frac{1}{y},v=\frac{1}{x})
+    \end{equation*}
+    \item 对数拟合
+    \begin{equation*}
+        y=a+b\ln{x}\Rightarrow y=a+bu(u=\ln{x})
+    \end{equation*}
+    \item 指数拟合
+    \begin{equation*}
+        y=ae^{bx}\Rightarrow\ln{y}=\ln{a}+bx\Rightarrow u=c+bx(u=\ln{y},c=\ln{a})
+    \end{equation*}
+\end{enumerate}
+
+\subsection{用正交函数作最小二乘拟合}
+
+给定
+\begin{equation*}
+    \begin{cases}
+        x_0,\cdots,x_m\\
+        y_0,\cdots,y_m
+    \end{cases}
+\end{equation*}
+与正交函数系$\varphi_0,\varphi_1,\cdots,\varphi_n$, 则最小二乘拟合系数为:
+\begin{equation*}
+    P_n(x)=a_0\varphi_0(x)+a_1\varphi_1(x)+\cdots+a_n\varphi_n(x)
+\end{equation*}
+其中,
+\begin{equation*}
+    a_k=\frac{(f,\varphi_k)}{(\varphi_k,\varphi_k)}=\frac{\sum_{i=0}^m\rho(x_i)y_i\varphi_k(x_i)}{\sum_{i=1}^m\rho(x_i)\varphi_k^2(x_i)}
+\end{equation*}
+
+最后以一个最小二乘法的例题结束这一章.
+
+\begin{example}
+    给定$(t_i,f_i)$的一组数据
+
+    \begin{tabular}{|c|c|}
+        \hline
+        $t_i$&$f_i$\\
+        \hline
+        0&81.4\\
+        20&77.7\\
+        40&74.2\\
+        60&72.4\\
+        80&70.3\\
+        100&68.8\\
+        \hline
+    \end{tabular}
+
+    求拟合函数$f(x)$
+\end{example}
+
+\begin{solution}
+    作图可知点分布在直线附近, 故使用线性函数拟合. 设
+    \begin{equation*}
+        \varphi_0(t)=1, \varphi_1(t)=t
+    \end{equation*}
+    将数据代入, 可得
+    \begin{equation*}
+        A=\mqty(
+            1&0\\
+            1&20\\
+            1&40\\
+            1&60\\
+            1&80\\
+            1&100
+        ), x=\mqty(c_1\\c_2), b=\mqty(
+            81.4\\77.7\\74.2\\72.4\\70.3\\68.8
+        )
+    \end{equation*}
+    代入公式
+    \begin{equation*}
+        A^TAx=A^Tb
+    \end{equation*}
+    可得拟合函数为
+    \begin{equation*}
+        f(t)=80.3-0.1t
+    \end{equation*}
+\end{solution}
+
+下面的代码实现了上面的计算功能:
+\begin{lstlisting}
+# 演示线性拟合的最小二乘法 Exercise3-2.py
+import numpy as np
+import matplotlib.pyplot as plt
+# 数据
+x = np.array([0,20,40,60,80,100])
+y = np.array([81.4,77.7,74.2,72.4,70.3,68.8])
+# 进行线性拟合
+coefficients = np.polyfit(x, y, 1)
+slope = coefficients[0]
+intercept = coefficients[1]
+# 绘制拟合曲线
+x_fit= np.arange(0,100,0.01)
+y_fit = slope*x_fit+intercept
+plt.scatter(x,y)
+plt.plot(x_fit,y_fit,c="red")
+plt.show()
+# 打印拟合结果
+print(f"表达式为{slope:.1f}t+{intercept:.1f}")
+\end{lstlisting}
+
+拟合结果图像如图\ref{fig:使用线性拟合结果}所示.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=1\linewidth]{Chapter3/graph/python/Figure3-1.png}
+    \caption{使用线性拟合结果}
+    \label{fig:使用线性拟合结果}
+\end{figure}
+
+最后作为扩展演示, 下面是一个使用Legendre多项式进行三次拟合的程序:
+
+\begin{lstlisting}
+# 使用Legendre多项式进行三次拟合 Exercise3-3.py
+import numpy as np
+import matplotlib.pyplot as plt
+from scipy.special import legendre
+# 示例数据
+x = np.array([3.73,5.63,8.67,10.49,13.26,16.74,
+19.55,22.19,25.36,28.31,30.83])
+y = np.array([21.53,21.43,21.43,21.33,21.22,
+20.71,20.20,19.69,18.78,17.76,16.84])
+# 进行Legendre拟合
+coefficients = np.polynomial.legendre.legfit(x, y, 3)
+# 绘制拟合曲线
+x_fit = np.arange(3.73,30.83,0.01)
+y_fit = np.polynomial.legendre.legval(x_fit, coefficients)
+plt.scatter(x,y)
+plt.plot(x_fit,y_fit,c="red")
+plt.show()
+\end{lstlisting}
+
+得到图像如图\ref{fig:使用Legendre多项式进行三次拟合}所示.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=1\linewidth]{Chapter3/graph/python/Figure3-2.png}
+    \caption{使用Legendre多项式对一组数据进行三次拟合}
+    \label{fig:使用Legendre多项式进行三次拟合}
+\end{figure}
