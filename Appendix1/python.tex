@@ -1,0 +1,399 @@
+\chapter{矩阵分析基础}
+
+\section{向量范数}
+
+\subsection{向量范数的定义}
+
+\begin{definition}
+    设$X\in R^n$, $\norm*{X}$表示定义在$R^n$上的一个实函数, 称之为$X$的\emph{范数}, 其具有如下性质:
+    \begin{enumerate}
+        \item 非负性, 即对一切$X\in R^n, X\ne0, \norm*{X}>0$;
+        \item 齐次性, 即对任何实数$a\in R, x\in R^n$, 有$\norm*{aX}=\norm*{a}\cdot\norm*{X}$;
+        \item 三角不等式, 即对任意两个向量$X, Y\in R^n$, 有$\norm*{X+Y}\le\norm*{X}+\norm*{Y}$
+    \end{enumerate}
+\end{definition}
+
+\subsection{常用的向量范数}
+
+设向量$X=(x_1,x_2,\cdots,x_n)^\text{T}\in R^n$, 则定义三种常用范数为
+\begin{align*}
+    \norm*{X}_\infty&=\max_{1\le i\le n}\abs*{x_i}\\
+    \norm*{X}_1&=\sum_{i=1}^n\abs*{x_i}\\
+    \norm*{X}_2&=\left(\sum_{i=1}^n\abs*{x_i}^2\right)^{1/2}
+\end{align*}
+分别称为\emph{$\infty$-范数, 1-范数和2-范数}
+
+\begin{example}
+    计算向量$X=(1,2,-3)^\text{T}$的范数
+\end{example}
+\begin{solution}
+    \begin{align*}
+        \norm*{X}_1&=\sum_{i=1}^n\abs*{x_i}=6\\
+        \norm*{X}_2&=\left(\sum_{i=1}^nx_i^2\right)^{1/2}=\sqrt{14}\\
+        \norm*{X}_\infty&=\max_{1\le i\le n}\abs*{x_i}=3
+    \end{align*}
+\end{solution}
+
+\subsection{向量范数性质}
+
+\begin{definition}
+    如果$R^n$中有两个范数$\norm*{X}_s$与$\norm*{X}_t$, 存在常数$m,M>0$, 使得对任意$n$维向量$X$, 有
+    \begin{equation*}
+        m\norm*{X}_s\le\norm*{X}_t\le M\norm*{X}_s
+    \end{equation*}
+    则称这两个范数\emph{等价}
+\end{definition}
+
+
+可以验证, 向量范数有如下不等式关系:
+\begin{align*}
+    \frac{1}{n}\norm*{X}_1\le\norm*{X}_\infty\le\norm*{X}_1\\
+    \norm*{X}_\infty\le\norm*{X}_1\le n\norm*{X}_\infty\\
+    \norm*{X}_\infty\le\norm*{X}_2\le\sqrt{n}\norm*{X}_\infty
+\end{align*}
+
+\begin{definition}
+    设给定$R^n$中的向量序列${X_k}$, 即
+    \begin{equation*}
+        X_0,X_1,\cdots,X_k,\cdots
+    \end{equation*}
+    若对任何$i(i=1,2,\cdots,n)$都有
+    \begin{equation*}
+        \lim\limits_{k\to\infty}x_i^{(k)}=x_i^*
+    \end{equation*}
+    则向量
+    \begin{equation*}
+        X^*=(x_1^*,x_2^*,\cdots,x_n^*)^\text{T}
+    \end{equation*}
+    称为向量序列${X_k}$的极限, 或者说向量序列${X_k}$依坐标收敛于向量$X^*$, 记为
+    \begin{equation*}
+        \lim\limits_{k\to\infty}X_k=X^*
+    \end{equation*}
+\end{definition}
+
+\begin{theorem}
+    向量序列${X_k}$依坐标收敛于$X^*$的充要条件是
+    \begin{equation*}
+        \lim\limits_{k\to\infty}\norm*{X_k-X^*}=0
+    \end{equation*}
+\end{theorem}
+
+注: 若某向量序列在某一范数意义下收敛时, 根据向量范数的等价性, 则在其他范数意义下也收敛.
+
+\section{矩阵范数}
+
+\subsection{矩阵范数的定义}
+
+\begin{definition}
+    设对任意矩阵$A\in R^{n\cross n}$, 按一定的规则有一实数与之对应, 记作$\norm*{A}$, 若$\norm*{A}$满足
+    \begin{enumerate}
+        \item 正定性: $\norm*{A}\ge0$, 当且仅当$A=0$时有$\norm*{A}=0$;
+        \item 齐次性: $\norm*{cA}=\abs*{c}\norm*{A}, \forall c\in R$;
+        \item 三角不等式: $\norm*{A+B}\le\norm*{A}+\norm*{B}$;
+        \item 相容性: $\norm*{AB}\le\norm*{A}\norm*{B}$
+    \end{enumerate}
+    则称$\norm*{A}$时矩阵$A$的\emph{范数}
+\end{definition}
+
+\begin{definition}[矩阵的算子范数]
+    设$x\in R^n, A\in R^{n\cross n}, \norm*{X}_v$是向量范数$(v=1,2,\infty)$, 则
+    \begin{equation*}
+        \norm*{A}_v=\sup_{X\ne\theta}\frac{\norm*{AX}_v}{\norm*{X}_v}
+    \end{equation*}
+    是矩阵的非负函数, 称为矩阵$A$的\emph{算子范数}
+\end{definition}
+
+注: 
+\begin{equation*}
+    \norm*{A}_v=\sup_{X\ne\theta}\frac{\norm*{AX}_v}{\norm*{X}_v}=\sup_{X\ne\theta}\norm*{A\frac{X}{\norm*{X}}}
+\end{equation*}
+令
+\begin{equation*}
+    y=\frac{X}{\norm*{X}_v}
+\end{equation*}
+则
+\begin{equation*}
+    \norm*{A}_v=\max_{\norm*{y}_v=1}\norm*{Ay}_v
+\end{equation*}
+
+\begin{theorem}
+    设$\norm*{\cdot}_v$是$R^n$中的向量范数, 则$\norm*{A}_v$为$R^{n\cross n}$上的矩阵范数, 且满足
+    \begin{equation*}
+        \norm*{Ax}_v\le\norm*{A}_v\norm*{x}_v
+    \end{equation*}
+\end{theorem}
+
+\subsection{常用的矩阵范数}
+
+\begin{theorem}
+    设$n$阶方阵$A=(a_{ij})_{n\cross n}$, 则
+    \begin{enumerate}
+        \item 与$\norm*{x}_1$相容的矩阵范数是
+        \begin{equation*}
+            \norm*{A}_1=\max_j\sum_{i=1}^n\abs*{a_{ij}}
+        \end{equation*}
+        \item 与$\norm*{x}_\infty$相容的矩阵范数是
+        \begin{equation*}
+            \norm*{A}_\infty=\max_i\sum_{j=1}^n\abs*{a_{ij}}
+        \end{equation*}
+        \item 与$\norm*{x}_2$相容的矩阵范数是
+        \begin{equation*}
+            \norm*{A}_2=\sqrt{\lambda_\text{max}(\transpose{A}A)}
+        \end{equation*}
+        其中$\lambda_\text{max}(\transpose{A}A)$为矩阵$\transpose{A}A$的最大特征值.
+    \end{enumerate}
+\end{theorem}
+
+上述三种范数又分别称为矩阵的\emph{1-范数, $\infty$-范数, 2-范数}. 根据求和方式, 又分别称为\emph{列和范数, 行和范数, 谱范数}
+
+特殊的, 定义Frobenius范数为:
+\begin{equation*}
+    \norm*{A}_F=\sqrt{\sum_{i=1}^n\sum_{j=1}^n\abs*{a_{ij}}^2}
+\end{equation*}
+可将该范数看作对向量范数$\norm*{\cdot}_2$的直接推广.
+
+可以证明, 对于方阵$A\in R^{n\cross n}$和$x\in R^n$, 有
+\begin{equation*}
+    \norm*{Ax}_2\le\norm*{A}_F\cdot\norm*{x}_2
+\end{equation*}
+
+注意, F-范数不是算子范数, 但有如下性质:
+\begin{equation*}
+    \norm*{A}_F=\sqrt{\tr(\transpose{A}A)}=\sqrt{\tr(A\transpose{A})}
+\end{equation*}
+
+\begin{example}
+    计算矩阵
+    \begin{equation*}
+        A=\mqty(
+            1&-2\\
+            -3&4
+        )
+    \end{equation*}
+    的各种范数
+\end{example}
+\begin{solution}
+    \begin{align*}
+        \norm*{A}_\infty&=\max_{1\le i\le n}\sum_{j=1}^n\abs*{a_{ij}}=\max\{1+2,3+4\}=7\\
+        \norm*{A}_1&=\max_{1\le j\le n}\sum_{i=1}^n\abs*{a_{ij}}=\max\{1+3,2+4\}=6\\
+        \norm*{A}_F&=\left(\sum_{i,j=1}^na_{ij}^2\right)^{1/2}=\sqrt{1+2+9+16}\approx5.477
+    \end{align*}
+    下面计算2-范数
+    \begin{equation*}
+        \norm*{A}_2=\sqrt{\lambda_\text{max}(\transpose{A}A)}
+    \end{equation*}
+    \begin{equation*}
+        \transpose{A}A=\mqty(
+            1&-3\\
+            -2&4
+        )\mqty(
+            1&-2\\
+            -3&4
+        )=\mqty(
+            10&-14\\
+            -14&20
+        )
+    \end{equation*}
+    令
+    \begin{equation*}
+        \mqty|
+        \lambda-10&-14\\
+        -14&\lambda-20|=0
+    \end{equation*}
+    解得
+    \begin{equation*}
+        \lambda_{1,2}=15\pm\sqrt{221}
+    \end{equation*}
+    故最大特征值为
+    \begin{equation*}
+        \lambda_\text{max}=15+\sqrt{221}
+    \end{equation*}
+    所以得2-范数
+    \begin{equation*}
+        \norm*{A}_2=\sqrt{\lambda_\text{max}(\transpose{A}A)}=\sqrt{15+\sqrt{221}}
+    \end{equation*}
+\end{solution}
+
+\subsection{矩阵范数与特征值之间的关系}
+
+\begin{definition}
+    矩阵$A$的所有特征值的最大模称为$A$的\emph{谱半径}, 记作
+    \begin{equation*}
+        \rho(A)=\max_{1\le i\le n}\abs*{\lambda_i}
+    \end{equation*}
+\end{definition}
+
+\begin{theorem}
+    矩阵$A$谱半径不超过$A$的任一矩阵范数, 即
+    \begin{equation*}
+        \rho(A)=\max_{1\le i\le n}\abs*{\lambda_i}\le\norm*{A}
+    \end{equation*}
+\end{theorem}
+
+\begin{proof}
+    设$\lambda$是矩阵$A$的任一特征值, $x$为对应特征向量, 则特征方程
+    \begin{equation*}
+        Ax=\lambda x
+    \end{equation*}
+
+    由矩阵范数的相容性可知,
+    \begin{equation*}
+        \abs*{\lambda}\norm*{x}=\norm*{\lambda x}=\norm*{Ax}\le\norm*{A}\norm*{x}
+    \end{equation*}
+    即
+    \begin{equation*}
+        \abs*{\lambda}\le\norm*{A}
+    \end{equation*}
+\end{proof}
+
+\begin{corollary}
+    若$A$为对称矩阵, 则
+    \begin{equation*}
+        \rho(A)=\norm*{A}_2
+    \end{equation*}
+\end{corollary}
+
+注: $R^{n\cross n}$中任意两个矩阵范数也是等价的.
+
+\begin{definition}
+    设$\norm*{\cdot}$为$R^{n\cross n}$上的矩阵范数, $A,B\in R^{n\cross n}$, 称$\norm*{A-B}$为$A$与$B$之间的距离
+\end{definition}
+
+\begin{definition}
+    设给定$R^{n\cross n}$中的矩阵序列${A_k}$, 若
+    \begin{equation*}
+        \lim\limits_{k\to\infty}\norm*{A_k-A}=0
+    \end{equation*}
+    则称矩阵序列${A_k}$收敛于矩阵$A$, 记作
+    \begin{equation*}
+        \lim\limits_{k\to\infty}A_k=A
+    \end{equation*}
+\end{definition}
+
+\begin{theorem}
+    若$\norm*{B}<1$, 则$I\pm B$为非奇异矩阵, 且
+    \begin{equation*}
+        \norm*{\left(I\pm B\right)^{-1}}\le\frac{1}{1-\norm*{B}}
+    \end{equation*}
+    其中, $\norm*{\cdot}$为矩阵的算子范数.
+\end{theorem}
+
+\begin{proof}
+    反证法, 假设$\det{(I\pm B)}=0$, 则线性方程组$(I\pm B)x=0$有非零解, 即存在$x_0\ne 0$使得
+    \begin{equation*}
+        Bx_0=x_0, \frac{\norm*{Bx_0}}{\norm*{x_0}}=1
+    \end{equation*}
+    因此有
+    \begin{equation*}
+        \norm*{B}\ge 1
+    \end{equation*}
+    与假设矛盾.
+
+    又因为
+    \begin{equation*}
+        (I\pm B)(I\pm B)^{-1}=I
+    \end{equation*}
+    有
+    \begin{equation*}
+        (I\pm B)^{-1}=I\mp B(I-B)^{-1}
+    \end{equation*}
+    从而
+    \begin{equation*}
+        \norm*{(I\pm B)^{-1}}\le\norm*{I}+\norm*{B}\norm*{(I\pm B)^{-1}}
+    \end{equation*}
+    即
+    \begin{equation*}
+        \norm*{\left(I\pm B\right)^{-1}}\le\frac{1}{1-\norm*{B}}
+    \end{equation*}
+\end{proof}
+
+\begin{theorem}
+    设$B\in R^{n\cross n}$, 则由$B$的各幂次得到的矩阵序列$B^k, k=0,1,2,\cdots$收敛于零矩阵, 即
+    \begin{equation*}
+        \lim\limits_{k\to\infty}B^k=0
+    \end{equation*}
+    的充要条件是
+    \begin{equation*}
+        \rho(B)<1
+    \end{equation*}
+\end{theorem}
+
+\subsection{矩阵的条件数}
+
+\begin{definition}
+    设矩阵$A$为非奇异矩阵, 则称
+    \begin{equation*}
+        \cond{A}=\norm*{A^{-1}}\norm*{A}
+    \end{equation*}
+    为矩阵$A$的\emph{条件数}, 其中$\norm*{\cdot}$为矩阵的算子范数.
+\end{definition}
+
+对矩阵$A$的任意一个算子范数$\norm*{\cdot}$, 有
+\begin{enumerate}
+    \item $\cond{A}=\norm*{A^{-1}}\norm*{A}\ge\norm*{A^{-1}\cdot A}=\norm*{I}=1$;
+    \item $\cond{kA}=\cond{A}$, $k$为非零常数;
+    \item 若$\norm*{A}=1$, 则$\cond{A}=\norm*{A^{-1}}$
+\end{enumerate}
+
+注: $\cond{A}$与所取范数有关. 常用的条件数有:
+\begin{align*}
+    \cond{A}_1&=\norm*{A^{-1}}_1\norm*{A}_1\\
+    \cond{A}_\infty&=\norm*{A^{-1}}_\infty\norm*{A}_\infty\\
+    \cond{A}_2&=\sqrt{\lambda_\text{max}(\transpose{A}A)/\lambda_\text{min}(\transpose{A}A)}
+\end{align*}
+
+特别地, 当$A$对称时, 则
+\begin{equation*}
+    \cond{A}_2=\frac{\max\abs*{\lambda_i}}{\min\abs*{\lambda_i}}
+\end{equation*}
+
+\section{初等矩阵}
+
+\subsection{初等矩阵}
+
+\begin{definition}
+    设向量$u,v\in R^n, \sigma\in R$, 则形如
+    \begin{equation*}
+        E(u,v,\sigma)=I-\sigma u\transpose{v}
+    \end{equation*}
+    的矩阵叫做\emph{实初等矩阵}, 其中$I$为$n$阶单位矩阵
+\end{definition}
+
+\subsection{初等下三角矩阵}
+
+\begin{definition}
+    令向量$u=l_i=\transpose{(0,\cdots,0,l_{i+1,i},\cdots,l_{ni})}$, 向量$v=e_i, \sigma=1$, 则称矩阵
+    \begin{equation*}
+        L_i=L_i(l_i)=E(l_i,e_i;1)=I-l_i\transpose{e_i}=\mqty(
+            1&&&&&\\
+            &\ddots&&&&\\
+            &&1&&&\\
+            &&-l_{i+1,i}&1&&\\
+            &&\vdots&&\ddots&\\
+            &&-l_{ni}&&&1
+        )
+    \end{equation*}
+    为\emph{初等下三角阵}
+\end{definition}
+
+\begin{theorem}
+    初等下三角阵$L_i$具有如下性质:
+    \begin{enumerate}
+        \item $L_i^{-1}(l_i)=L_i(-l_i), \abs*{L_i}=1$;
+        \item \begin{equation*}
+            L=L_1(l_1)L_2l_2\cdots L_{n-1}(l_{n-1})=\mqty(
+                1&&&\\
+                -l_{21}&1&&\\
+                \vdots&\vdots&\ddots&\\
+                -l_{n1}&-l_{n2}&\cdots&1
+            )
+        \end{equation*}
+        为单位下三角阵;
+        \item 任何一个单位下三角阵$L\in R^n$都可分裂成
+        \begin{equation*}
+            L=I-l_1\transpose{e_1}-l_2\transpose{e_2}-\cdots-l_{n-1}\transpose{e_{n-1}}
+        \end{equation*}
+        因此, 对任一非奇异下三角阵$L$, 都可分裂成一个非奇异对角阵和若干个下三角阵的乘积;
+        \item $L_i$左乘矩阵$A$的结果是从$A$的各行中减去第$i$行乘一个因子.
+    \end{enumerate}
+\end{theorem}

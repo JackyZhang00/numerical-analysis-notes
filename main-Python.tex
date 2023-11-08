@@ -26,8 +26,9 @@
 \newenvironment{extend}{\itshape 扩展: }{}
 \renewcommand{\proofname}{\indent\bf 证明}
 \newcommand{\spn}[1]{\text{span}\{#1\}}
-
+\newcommand{\transpose}[1]{#1^\text{T}}
 \newcommand{\approxstar}[1]{#1^*}
+\newcommand{\cond}[1]{\text{cond}(#1)}
 
 % 代码环境设置
 
@@ -51,8 +52,13 @@
 
 \begin{document}
     \maketitle
+    \frontmatter
     \tableofcontents
+    \include{Chapter0/python}
+    \mainmatter
     \include{Chapter1/python}
     \include{Chapter2/python}
     \include{Chapter3/python}
+    \appendix
+    \include{Appendix1/python}
 \end{document}
