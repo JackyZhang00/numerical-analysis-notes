@@ -1,0 +1,1071 @@
+\chapter{线性方程组的直接解法}
+
+\section{Gauss消去法}
+
+\subsection{三角形方程组回代法}
+
+如:
+\begin{equation*}
+    \begin{cases}
+        a_{11}x_1&=b_1\\
+        a_{21}x_1+a_{22}x_2&=b_2\\
+        \cdots\quad\cdots\quad\cdots\\
+        a_{n1}x_1+a_{n2}x_2+\cdots+a_{nn}x_n&=b_n
+    \end{cases}
+\end{equation*}
+
+或上三角方程组:
+\begin{equation*}
+    \left\{
+    \begin{aligned}
+        a_{11}x_1+a_{12}x_2+\cdots+a_{1n}x_n=b_1\\
+        a_{22}x_2+\cdots+a_{2n}x_n=b_2\\
+        \cdots\qquad\qquad\qquad\\
+        a_{nn}x_n=b_n
+    \end{aligned}
+    \right.
+\end{equation*}
+
+\subsection{顺序Gauss消去法}
+
+对于一般的线性方程组
+\begin{equation*}
+    \begin{cases}
+        a_{11}x_1+a_{12}x_2+a_{13}x_3+\cdots+a_{1n}x_n=a_{1,n+1}\\
+        a_{21}x_1+a_{22}x_2+a_{23}x_3+\cdots+a_{2n}x_n=a_{2,n+1}\\
+        \cdots\\
+        a_{n1}x_1+a_{n2}x_2+a_{n3}x_3+\cdots+a_{nn}x_n=a_{n,n+1}\\
+    \end{cases}
+\end{equation*}
+
+记
+\begin{align*}
+    \overline{A}^{(1)}&=(A,b)\\
+    &=\mqty(
+        a_{11}&a_{12}&\cdots&a_{1n}&a_{1,n+1}\\
+        a_{21}&a_{22}&\cdots&a_{2n}&a_{2,n+1}\\
+        \vdots&\vdots&&\vdots&\vdots\\
+        a_{n1}&a_{n2}&\cdots&a_{nn}&a_{n,n+1}
+    )=\mqty(
+        a_{11}^{(1)}&a_{12}^{(1)}&\cdots&a_{1n}^{(1)}&a_{1,n+1}^{(1)}\\
+        a_{21}^{(1)}&a_{22}^{(1)}&\cdots&a_{2n}^{(1)}&a_{2,n+1}^{(1)}\\
+        \vdots&\vdots&&\vdots&\vdots\\
+        a_{n1}^{(1)}&a_{n2}^{(1)}&\cdots&a_{nn}^{(1)}&a_{n,n+1}^{(1)}
+    )
+\end{align*}
+
+解$n$阶方程组的顺序Gauss消去一般步骤
+
+第一次消元, 设$a_{11}^{(1)}\ne0$, 令
+\begin{equation*}
+    m_{i1}=\frac{a_{i1}^{(1)}}{a_{11}^{(1)}}
+\end{equation*}
+称$m_{i1}$为\emph{消元因子}. 令$a_{ij}^{(2)}=a_{ij}^{(1)}-m_{i1}a_{1j}^{(1)}, i=2,\cdots,n, j=2,\cdots,n+1$, 则得矩阵
+\begin{equation*}
+    \mqty(
+        a_{11}^{(1)}&a_{12}^{(1)}&\cdots&a_{1n}^{(1)}\\
+        0&a_{22}^{(2)}&\cdots&a_{2n}^{(2)}\\
+        \vdots&\vdots&&\vdots\\
+        0&a_{n2}^{(2)}&\cdots&a_{nn}^{(2)}
+    )\mqty(x_1\\x_2\\\vdots\\x_n)=\mqty(a_{1,n+1}^{(1)}\\a_{2,n+1}^{(2)}\\\vdots\\a_{n,n+1}^{(2)})
+\end{equation*}
+即$A^{(2)}x=b^{(2)}$
+
+以此类推, 对于第$k$次消元, 若$a_{kk}^{(k)}\ne0$, 令
+\begin{equation*}
+    m_{ik}=\frac{a_{ik}^{(k)}}{a_{kk}^{(k)}}
+\end{equation*}
+令$a_{ik}^{(k+1)}=a_{ij}^{(k)}-m_{ik}a_{kj}^{(k)}, i=k+1,\cdots,n; j=k+1,\cdots,n+1$
+则
+\begin{equation*}
+    A^{(k)}=\mqty(
+        a_{11}^{(1)}&a_{12}^{(1)}&\cdots&\cdots&\cdots&a_{1n}^{(1)}\\
+        &a_{22}^{(2)}&\cdots&\cdots&\cdots&a_{2n}^{(2)}\\
+        &&\ddots&\vdots&\vdots&\vdots\\
+        &&&a_{kk}^{(k)}&\cdots&a_{kn}^{(k)}\\
+        &&&\vdots&&\vdots\\
+        &&&a_{nk}^{(k)}&\cdots&a_{nn}^{(k)}
+    ), b^{(k)}=\mqty(
+        a_{1,n+1}^{(1)}\\a_{2,n+1}^{(2)}\\\vdots\\a_{k-1,n+1}^{(k-1)}\\a_{k,n+1}^{(k)}\\\vdots\\a_{n,n+1}^{(k)}
+    )
+\end{equation*}
+即$A^{(k)}x=b^{(k)}$
+
+共进行$n-1$步, 即可得到三角方程组
+\begin{equation*}
+    \mqty(
+        a_{11}^{(1)}&a_{12}^{(1)}&\cdots&a_{1n}^{(1)}\\
+        &a_{22}^{(2)}&\cdots&a_{2n}^{(2)}\\
+        &&\ddots&\vdots\\
+        &&&a_{nn}^{(n)}
+    )\mqty(x_1\\x_2\\\vdots\\x_n)=\mqty(a_{1,n+1}^{(1)}\\a_{2,n+1}^{(2)}\\\vdots\\a_{n,n+1}^{(n)})
+\end{equation*}
+得
+\begin{equation*}
+    A^{(n)}x=b^{(n)}
+\end{equation*}
+
+利用回代过程, 求解得
+\begin{align*}
+    x_n=\frac{a_{n,n+1}^{(n)}}{a_{nn}^{(n)}}\\
+    x_k=\frac{a_{k,n+1}^{(k)}-\sum_{j=k+1}^na_{kj}^{(k)}x_j}{a_{kk}^{(k)}}, k=n-1,n-2,\cdots,2,1
+\end{align*}
+称$a_{kk}^{(k)}$为\emph{主元素}(或\emph{主元}).
+
+注: 若第一个主元素为0, 则可把第一列得非零元素调整至第一行, 此时Gauss消去法仍然可用.
+
+一般地, 关于顺序Gauss消去法可执行的前提, 有如下引理:
+
+\begin{lemma}
+    给定线性方程组$Ax=b$, 按顺序Gauss消去法所形成的各主元素$a_{kk}^{(k)}(k=1,2,\cdots,n)$均不为零, 从而Gauss消去法可顺利执行的充要条件是$n$阶方阵$A$的所有顺序主子式都不为零, 即
+    \begin{equation*}
+        D_1=a_{11}\ne0,\cdots, D_k=\mqty|
+        a_{11}&\cdots&a_{1k}\\
+        \vdots&\ddots&\vdots\\
+        a_{k1}&\cdots&a_{kk}|\ne0, k=2,3,\cdots,n
+    \end{equation*}
+\end{lemma}
+
+当线性方程组的系数矩阵为\emph{对称正定}或\emph{严格对角占优}时, 按顺序Gauss消去法计算是稳定的.
+
+\begin{theorem}
+    若矩阵$A$非奇异, 即$\inv{A}$存在, 则可通过逐次消元以及行交换, 将方程组转化为三角形方程组并求出唯一解. 
+\end{theorem}
+
+\begin{theorem}
+    若$A$的所有\emph{顺序主子式}均不为0, 则Gauss消元无需换行即可进行到底并求出唯一解.
+\end{theorem}
+
+\subsection{Gauss主元素消去法}
+
+考虑一个方程组:
+\begin{equation*}
+    \mqty(
+        0.001&2.000&3.000\\
+        -1.000&3.712&4.623\\
+        -2.000&1.072&5.643
+    )\mqty(x_1\\x_2\\x_3)=\mqty(
+        1.000\\2.000\\3.000
+    )
+\end{equation*}
+可以发现, 该方程组在使用四位浮点数运算, 得到的计算解(近似解)为$\transpose{(-0.4000,-0.09980,0.4000)}$, 显然与精确解不符. 出现该问题的原因是, 在消元计算时, 使用了小主元0.001, 从顺序Gauss消去法的角度看, 不为零的主元可以使用, 但从误差的角度看, 使用小主元(做除数)会导致数量级增大, 从而引起舍入误差. 因此, 我们需要通过矩阵变换, 以获得合适的主元. 
+
+\subsubsection{完全主元素法}
+
+考虑在每一次消元过程中, 在增广矩阵中选择绝对值最大的一项作为主元素, 并将其移动至对角主元位置, 然后进行消元. 经过一系列的消元, 可将方程组化为
+\begin{equation*}
+    \mqty(
+        a_{11}&a_{12}&\cdots&a_{1n}\\
+        &a_{22}&\cdots&a_{2n}\\
+        &&\ddots&\vdots\\
+        &&&a_{nn}
+    )\mqty(y_1\\y_2\\\vdots\\y_n)=\mqty(b_1\\b_2\\\vdots\\b_n)
+\end{equation*}
+
+其中, $y_1,y_2,\cdots,y_n$为未知数$x_1,x_2,\cdots,x_n$经过选择主元调换后的次序. 这里未知数次序的调换主要是由于列变换导致的(行变换不会交换未知数的位置)
+
+关于完全主元素法, 有如下特点:
+\begin{enumerate}
+    \item 在选择主元时需要花费较多机器时间;
+    \item 需要实时记录$x$的顺序变化;
+\end{enumerate}
+
+\subsubsection{列主元消去法}
+
+在选择主元时仅考虑按列选取, 然后按行使之变到主元位置上, 再进行消元计算.
+
+为了简单起见, 将通过一个例子实际演示用列主元Gauss消去法求解过程.
+
+\begin{example}
+    使用列主元消去法求解方程组
+    \begin{equation*}
+        \begin{cases}
+            x_1+x_2+x_3=6\\
+            2x_1+2x_2-x_3=3\\
+            3x_1+x_3=6
+        \end{cases}
+    \end{equation*}
+\end{example}
+
+\begin{solution}
+    线性方程组增广矩阵为
+    \begin{equation*}
+        \mqty(
+            1&1&1&6\\
+            2&2&-1&3\\
+            3&0&1&6
+        )
+    \end{equation*}
+
+    对第一列而言, 主元为3, 故将其作为第一行, 作行变换, 得
+    \begin{equation*}
+        \mqty(
+            3&0&1&6\\
+            2&2&-1&3\\
+            1&1&1&6
+        )\to\mqty(
+            3&0&1&6\\
+            0&2&-5/3&-1\\
+            0&1&2/3&4
+        )
+    \end{equation*}
+
+    对第二列而言, 2为主元, 故保持不变, 得
+    \begin{equation*}
+        \mqty(
+            3&0&1&6\\
+            0&2&-5/3&-1\\
+            0&1&2/3&4
+        )\to\mqty(
+            3&0&1&6\\
+            0&2&-5/3&-1\\
+            0&0&9/6&9/2
+        )
+    \end{equation*}
+    利用回代法, 得方程组解为$\transpose{(1,2,3)}$
+\end{solution}
+
+上述解答用程序语言可以实现如下:
+
+\begin{lstlisting}
+# 使用列主元Gauss消去法求解方程组 Exercise5-1.py
+
+import numpy as np
+
+#使用列主元Gauss消去法求解方程组
+def gauss_elimination(A, b):
+    n = A.shape[0]
+    # 消元
+    for j in range(n):
+        # 选择最大值作为主元
+        max_idx = j + np.argmax(np.abs(A[j:, j]))
+        if j != max_idx:
+            A[[j, max_idx]] = A[[max_idx, j]]
+            b[[j, max_idx]] = b[[max_idx, j]]
+        # 计算主元下面的元素
+        pivot = A[j, j]
+        for i in range(j+1, n):
+            factor = A[i, j] / pivot
+            A[i, :] -= factor * A[j, :]
+            b[i] -= factor * b[j]
+    # 回代
+    x = np.zeros(n)
+    for j in range(n-1, -1, -1):
+        x[j] = (b[j] - np.dot(A[j, j+1:], x[j+1:])) / A[j, j]
+    return x
+
+# 计算方程组
+A = np.array([[1,1,1],[2,2,-1],[3,0,1]], dtype=float)
+b = np.array([6,3,6], dtype=float)
+x = gauss_elimination(A, b)
+print("x=", x)
+\end{lstlisting}
+程序计算结果与我们计算结果是一致的.
+
+\subsubsection{Gauss-Jordan消去法}
+
+基本思想: 同时消去对角线上方和下方的元素.
+
+特点:
+\begin{enumerate}
+    \item 消元和回代同时进行;
+    \item 乘除法次数比Gauss消去法大
+\end{enumerate}
+
+下面以一个线性方程组为例, 介绍如何实现Gauss-Jordan消去法:
+
+\begin{example}
+    使用Gauss-Jordan消去法求解方程组
+    \begin{equation*}
+        \begin{cases}
+            x_1+x_2+x_3=6\\
+            2x_1+x_2-x_3=1\\
+            3x_1+x_3=6
+        \end{cases}
+    \end{equation*}
+\end{example}
+
+\begin{solution}
+    对于Gauss-Jordan消去法, 我们不考虑主元. 增广矩阵为
+    \begin{equation*}
+        \mqty(
+            1&1&1&6\\
+            2&1&-1&1\\
+            3&0&1&6
+        )
+    \end{equation*}
+    首先进行第一次消元, 得到结果为
+    \begin{equation*}
+        \mqty(
+            1&1&1&6\\
+            2&1&-1&1\\
+            3&0&1&6
+        )\to\mqty(
+            1&1&1&6\\
+            0&-1&-3&-11\\
+            0&-3&-2&-12
+        )
+    \end{equation*}
+    对第二行进行消元, 对于Gauss-Jordan消去法, 我们需要同时考虑对角线上下的元素. 因此, 消元后结果如下:
+    \begin{equation*}
+        \mqty(
+            1&1&1&6\\
+            0&-1&-3&-11\\
+            0&-3&-2&-12
+        )\to\mqty(
+            1&0&-2&-5\\
+            0&1&3&11\\
+            0&0&7&21
+        )
+    \end{equation*}
+    可以看到, 经过第二步消元后, 第二列除主元素外所有元素都为0. 同理, 第三步消元得到结果为
+    \begin{equation*}
+        \mqty(
+            1&0&-2&-5\\
+            0&1&3&11\\
+            0&0&7&21
+        )\to\mqty(
+            1&0&0&1\\
+            0&1&0&2\\
+            0&0&1&3
+        )
+    \end{equation*}
+    因此解得方程组解为$\transpose{(1,2,3)}$
+\end{solution}
+
+\subsubsection{列主元Gauss-Jordan消去法}
+
+与列主元Gauss消去法类似, 列主元Gauss-Jordan消去法步骤为:
+
+第一步, 选择第一列的主元, 并将其换至第一行, 将第一个方程的系数变为1, 同时从其余$n-1$个方程中消去$x_1$;
+
+第二步, 再第二列后$n-1$个元素中选择主元, 将第二个方程$x_2$系数变为1, 并从其他$n-1$个方程中消去$x_2$
+
+$\cdots$
+
+第$k$步, 在第$k$列后$n-k$个元素中选主元并换行, 将第$k$个方程的$x_k$系数变为1, 并从其他$n-1$个方程中消去变量$x_k$
+
+消元公式为
+\begin{equation*}
+    \begin{cases}
+        a_{kj}^{(k)}=\frac{a_{kj}^{(k-1)}}{a_{kk}^{(k-1)}}, j=k,k+1, \cdots,n+1\\
+        a_{ij}^{(k)}=a_{ij}^{(k-1)}-a_{ik}^{(k-1)}a_{kj}^{(k)}\\
+        j=k,k+1,\cdots,n+1\\
+        i=1,2,\cdots,k-1,k+1,\cdots,n
+    \end{cases}
+\end{equation*}
+
+对$k=1,2,\cdots$进行上述步骤至第$n$步后, 方程组可变为
+\begin{equation*}
+    \begin{cases}
+        x_1=a_{1,n+1}^{(n)}\\
+        x_2=a_{2,n+1}^{(n)}\\
+        \vdots\\
+        x_n=a_{n,n+1}^{(n)}
+    \end{cases}
+\end{equation*}
+即为所求的解.
+
+\subsubsection{Gauss-Jordan消去法应用}
+
+对于线性方程组系, 如
+\begin{equation*}
+    AX=b_1,AX=b_2,\cdots,AX=b_m
+\end{equation*}
+其中,
+\begin{equation*}
+    A=\mqty(
+        a_{11}&\cdots&a_{1n}\\
+        \vdots&\ddots&\vdots\\
+        a_{n1}&\cdots&a_{nn}
+    ), X=\mqty(x_1\\\vdots\\x_n), b_i=\mqty(a_{1,n+1}^{(i)}\\a_{2,n+1}^{(i)}\\\vdots\\a_{n,n+1}^{(i)}), i=1,2,\cdots,n
+\end{equation*}
+因此上述方程组系可写作
+\begin{equation*}
+    AX=B=(b_1,\cdots,b_n)
+\end{equation*}
+其解为
+\begin{equation*}
+    X=\inv{A}B
+\end{equation*}
+
+特殊的, 设$A=(a_{ij})_{n\cross n}$是非奇异矩阵, $\abs*{A}\ne0$, 令
+\begin{equation*}
+    X=\inv{A}=(x_{ij})_{n\cross n}
+\end{equation*}
+由于$A\inv{A}=AX=I$, 因此求解$X$的过程等价于当$m=n, B=I$的方程组求解, 此时得到$X=\inv{A}$
+
+\begin{example}
+    用Gauss-Jordan消去法求解方程组$Ax=b$, 并求出$\inv{A}$, 其中,
+    \begin{equation*}
+        A=\mqty(
+            1&3&1\\
+            1&2&4\\
+            5&1&2
+        ), b=\mqty(10\\17\\13)
+    \end{equation*}
+\end{example}
+
+\begin{solution}
+    将系数矩阵, 单位矩阵和$b$组成增广矩阵, 并对其进行Gauss-Jordan消元过程, 可得过程为
+    \begin{align*}
+        &\mqty(
+            1&3&1&1&&&10\\
+            1&2&4&&1&&17\\
+            5&1&2&&&1&13
+        )\to\mqty(
+            1&3&1&1&&&10\\
+            0&-1&3&-1&1&&7\\
+            0&-14&-3&-5&&1&-37
+        )\\
+        \to&\mqty(
+            1&&10&-2&3&&31\\
+            &1&-3&1&-1&0&-7\\
+            &&-45&9&-14&1&-135
+        )\to\mqty(
+            1&&&0&-0.11&0.22&1\\
+            &1&&0.4&-0.07&-0.07&2\\
+            &&1&-0.2&0.31&-0.02&3
+        )
+    \end{align*}
+    故方程组的解为$\transpose{(1,2,3)}$, 系数矩阵的逆为
+    \begin{equation*}
+        \inv{A}=\mqty(
+            0&-0.11&0.22\\
+            0.4&-0.07&-0.07\\
+            -0.2&0.31&-0.02
+        )
+    \end{equation*}
+\end{solution}
+
+\section{解三对角方程组的追赶法}
+
+求解线性方程组
+\begin{equation*}
+    \mqty(
+        b_1&c_1&&&\\
+        a_2&b_2&c_2&&\\
+        &\ddots&\ddots&\ddots&\\
+        &&a_{n-1}&b_{n-1}&c_{n-1}\\
+        &&&a_n&b_n
+    )\mqty(x_1\\x_2\\\vdots\\x_{n-1}\\x_n)=\mqty(d_1\\d_2\\\vdots\\d_{n-1}\\d_n)
+\end{equation*}
+且满足:
+\begin{equation*}
+    \begin{cases}
+        \abs*{b_1}>\abs*{c_1}\\
+        \abs*{b_i}\ge\abs*{a_i}+\abs*{c_i}, i=2,\cdots,n-1\\
+        \abs*{b_n}>\abs*{a_n}
+    \end{cases}
+\end{equation*}
+
+消元公式为
+\begin{equation*}
+    \begin{cases}
+        r_1=\frac{c_1}{b_1}, y_1=\frac{d_1}{b_1}&\\
+        r_k=\frac{c_k}{b_k-r_{k-1}a_k},&k=2,3,\cdots,n-1\\
+        y_k=\frac{d_k-y_{k-1}a_k}{b_k-r_{k-1}a_k},&k=2,3,\cdots,n
+    \end{cases}
+\end{equation*}
+
+回代公式
+\begin{equation*}
+    \begin{cases}
+        x_n=y_n&\\
+        x_k=y_k-r_kx_{k+1},&k=n-1,n-2,\cdots,1
+    \end{cases}
+\end{equation*}
+
+\section{矩阵的三角分解法}
+
+\subsection{Gauss消元法矩阵形式}
+
+对于Gauss消元法, 每一步消元过程相当于左乘下三角矩阵$L_k$
+
+记
+\begin{equation*}
+    A^{(2)}=L_1^{-1}A^{(1)}, b^{(2)}=L_1^{-1}b^{(1)}
+\end{equation*}
+其中, 
+\begin{equation*}
+    L_1^{-1}=\mqty(
+        1&&&&\\
+        -l_{21}&1&&&\\
+        -l_{31}&0&1&&\\
+        \vdots&\vdots&\vdots&\ddots&\\
+        -l_{n1}&0&0&\cdots&1
+    ), l_{i1}=\frac{a_{i1}^{(1)}}{a_{11}^{(1)}}, i=2,3,\cdots,n
+\end{equation*}
+
+同理, 有
+\begin{equation*}
+    A^{(3)}=L_2^{-1}A^{(2)}=L_2^{-1}L_1^{-1}A^{(1)}, b^{(3)}=L_2^{-1}L_1^{-1}b^{(1)}
+\end{equation*}
+其中,
+\begin{equation*}
+    L_2^{-1}=\mqty(
+        1&&&&\\
+        0&1&&&\\
+        0&-l_{32}&1&&\\
+        \vdots&\vdots&\vdots&\ddots&\\
+        0&-l_{n2}&0&\cdots&1
+    ), l_{i2}=\frac{a_{i2}^{(2)}}{a_{22}^{(2)}}, i=3,4,\cdots,n
+\end{equation*}
+
+一般地, 对$i=1,2,\cdots,n-1$, 令
+\begin{equation*}
+    L_i^{-1}=\mqty(
+        1&&&&&\\
+        0&1&&&&\\
+        \vdots&&1&&&\\
+        0&\cdots&-l_{i+1,i}&1&&\\
+        \vdots&&\vdots&\vdots&\ddots&\\
+        0&&-l_{ni}&&&1
+    ), L_i=\mqty(
+        1&&&&&&\\
+        0&1&&&&&\\
+        \vdots&&\ddots&&&&\\
+        \vdots&&&1&&&\\
+        0&&&l_{i+1,i}&1&&\\
+        \vdots&&&\vdots&&\ddots&\\
+        0&&&l_{ni}&&&1
+    )
+\end{equation*}
+\begin{equation*}
+    l_{ki}=\frac{a_{ki}^{(i)}}{a_{ii}^{(i)}}, k=i+1,\cdots,n
+\end{equation*}
+则
+\begin{align*}
+    A^{(n)}&=L_{n-1}^{-1}L_{n-2}^{-1}\cdots L_1^{-1}A^{(1)}\\
+    b^{(n)}=L_{n-1}^{-1}L_{n-2}^{-1}\cdots L_1^{-1}b^{(1)}
+\end{align*}
+于是有
+\begin{equation*}
+    A^{(1)}=L_1L_2\cdots L_{n-1}A^{(n)}=LA^{(n)}=LU
+\end{equation*}
+将上式分解方式, 称为矩阵$A$的\emph{LU分解}.
+
+\subsection{矩阵三角分解的定义}
+\begin{definition}
+    设$A$是$n\cross n$实矩阵, 如果存在下三角矩阵$L$与上三角矩阵$U$, 使得$A=LU$, 则称为矩阵$A$的\emph{三角分解}, 若存在单位下三角矩阵$L$, 对角矩阵$D$以及单位上三角矩阵$R$, 使得$A=LDR$, 则称为矩阵$A$的\emph{LDR分解}.
+\end{definition}
+
+若$L$为单位下三角矩阵而$U$是一般上三角矩阵, 则称该分解为\emph{Doolittle分解}; 若$L$为一般下三角矩阵而$U$是单位上三角矩阵, 则称该分解为\emph{Crout分解}.
+
+\subsection{矩阵三角分解的存在性}
+
+\begin{theorem}
+    设$A$为$n\cross n$实矩阵, 若求解$AX=b$用顺序Gauss消去法能够完成, 即$a_{kk}^{(k)}\ne 0, k=1,2,\cdots,n$, 则矩阵$A$可分解为单位下三角矩阵$L$与上三角矩阵$U$的乘积, 即
+    \begin{equation*}
+        A=LU
+    \end{equation*}
+    且这种分解唯一.
+\end{theorem}
+
+若$A$已经实现了LU分解, 则将方程组$Ax=b$转化为$(LU)x=b$, 从而计算得
+\begin{align*}
+    Ly&=b\\
+    Ux&=y
+\end{align*}
+
+若直接从矩阵$A$的元素得到计算$L,U$的递推公式, 而不需要中间步骤, 则称这种分解方法为\emph{直接三角分解法}
+
+\subsubsection{直接三角分解法}
+\begin{example}
+    使用三角分解法解方程组
+    \begin{equation*}
+        \begin{cases}
+            x_1+x_2+x_3=6\\
+            4x_2-x_3=5\\
+            2x_1-2x_2+x_3=1
+        \end{cases}
+    \end{equation*}
+\end{example}
+
+\begin{solution}
+    系数矩阵为
+    \begin{equation*}
+        A=\mqty(
+            1&1&1\\
+            0&4&-1\\
+            2&-2&1
+        )
+    \end{equation*}
+    计算消元因子, 有
+    \begin{align*}
+        m_{21}&=0/1=0\\
+        m_{31}&=2/1=2
+    \end{align*}
+    得行变换后矩阵为
+    \begin{equation*}
+        A\to\mqty(
+            1&1&1\\
+            0&4&-1\\
+            0&-4&-1
+        )
+    \end{equation*}
+    类似地, 消元因子
+    \begin{equation*}
+        m_{32}=-4/4=-1
+    \end{equation*}
+    矩阵变换
+    \begin{equation*}
+        \mqty(
+            1&1&1\\
+            0&4&-1\\
+            0&0&-2
+        )
+    \end{equation*}
+
+    因此, 由Gauss消去法得矩阵分解
+    \begin{equation*}
+        A=\mqty(
+            1&0&0\\
+            0&1&0\\
+            2&-1&1
+        )\mqty(
+            1&1&1\\
+            0&4&-1\\
+            0&0&-2
+        )
+    \end{equation*}
+    解方程组
+    \begin{align*}
+        \mqty(
+            1&0&0\\
+            0&1&0\\
+            2&-1&1
+        )\mqty(y_1\\y_2\\y_3)&=\mqty(6\\5\\1)\\
+        \mqty(
+            1&1&1\\
+            0&4&-1\\
+            0&0&-2 
+        )\mqty(x_1\\x_2\\x_3)&=\mqty(y_1\\y_2\\y_3)
+    \end{align*}
+    解得
+    \begin{equation*}
+        \mqty(x_1\\x_2\\x_3)=\mqty(1\\2\\3)
+    \end{equation*}
+\end{solution}
+
+\subsubsection{Doolittle三角分解法}
+对于矩阵三角分解, 也可以直接使用\emph{待定系数法}, 称为Doolittle分解法.
+
+\begin{example}
+    利用Doolittle三角分解法重解上题
+\end{example}
+
+\begin{solution}
+    待定系数法, 设
+    \begin{equation*}
+        L=\mqty(
+            1&0&0\\
+            l_{21}&1&0\\
+            l_{31}&l_{32}&1
+        ), U=\mqty(
+            u_{11}&u_{12}&u_{13}\\
+            0&u_{22}&u_{23}\\
+            0&0&u_{33}
+        )
+    \end{equation*}
+
+    利用矩阵分解表达式, 有
+    \begin{equation*}
+        \mqty(
+            1&1&1\\
+            0&4&-1\\
+            2&-2&1
+        )=\mqty(
+            1&0&0\\
+            l_{21}&1&0\\
+            l_{31}&l_{32}&1
+        )\mqty(
+            u_{11}&u_{12}&u_{13}\\
+            0&u_{22}&u_{23}\\
+            0&0&u_{33}
+        )
+    \end{equation*}
+    得
+    \begin{align*}
+        u_{11}&=1, u_{12}=1, u_{13}=1\\
+        l_{21}&=0, u_{22}=4, u_{23}=-1\\
+        l_{31}&=2, l_{32}=-1, u_{33}=-2
+    \end{align*}
+    故将矩阵分解为
+    \begin{equation*}
+        A=\mqty(
+            1&0&0\\
+            0&1&0\\
+            2&-1&1
+        )\mqty(
+            1&1&1\\
+            0&4&-1\\
+            0&0&-2
+        )
+    \end{equation*}
+\end{solution}
+
+\begin{example}
+    用矩阵三角分解法求解方程组
+    \begin{equation*}
+        \mqty(
+            1&2&3\\
+            2&5&2\\
+            3&1&5
+        )\mqty(x_1\\x_2\\x_3)=\mqty(14\\18\\20)
+    \end{equation*}
+\end{example}
+\begin{solution}
+    待定系数法, 
+    \begin{equation*}
+        \mqty(
+            1&2&3\\
+            2&5&2\\
+            3&1&5
+        )=\mqty(
+            1&0&0\\
+            l_{21}&1&0\\
+            l_{31}&l_{32}&1
+        )\mqty(
+            u_{11}&u_{12}&u_{13}\\
+            0&u_{22}&u_{23}\\
+            0&0&u_{33}
+        )
+    \end{equation*}
+    解得
+    \begin{align*}
+        u_{11}&=1, u_{12}=2, u_{13}=3\\
+        l_{21}&=2, u_{22}=1, u_{23}=-4\\
+        l_{31}&=3, l_{32}=-5, u_{33}=-24
+    \end{align*}
+    即
+    \begin{equation*}
+        L=\mqty(
+            1&0&0\\
+            2&1&0\\
+            3&-5&1
+        ), U=\mqty(
+            1&2&3\\
+            0&1&-4\\
+            0&0&-24
+        )
+    \end{equation*}
+
+    解方程组
+    \begin{align*}
+        Ly&=b\\
+        Ux&=y
+    \end{align*}
+    可得
+    \begin{equation*}
+        x=\transpose{(1,2,3)}
+    \end{equation*}
+\end{solution}
+
+\subsubsection{紧凑格式的Doolittle三角分解法}
+
+考虑增广矩阵$(A;b)$, 将消元因子作为矩阵变换过程中的元素, 从而在变换过程中一次性得到$L,U,y$, 将这种过程称为\emph{紧凑格式的Doolittle三角分解法}.
+
+\begin{example}
+    使用紧凑格式的Doolittle三角分解法重解上题
+\end{example}
+
+\begin{solution}
+    考虑增广矩阵
+    \begin{equation*}
+        \mqty(
+            1&2&3&14\\
+            2&5&2&18\\
+            3&1&5&20
+        )
+    \end{equation*}
+    消元因子$m_{21}=2, m_{31}=3$, 变换得
+    \begin{equation*}
+        \mqty(
+            1&2&3&14\\
+            2&1&-4&-10\\
+            3&-5&-4&-22
+        )
+    \end{equation*}
+    类似地, 消元因子$m_{32}=-5$, 故得变换后矩阵为
+    \begin{equation*}
+        \mqty(
+            1&2&3&14\\
+            2&1&-4&-10\\
+            3&-5&-24&-72
+        )
+    \end{equation*}
+    因此直接解得
+    \begin{equation*}
+        L=\mqty(
+            1&0&0\\
+            2&1&0\\
+            3&-5&1
+        ), U=\mqty(
+            1&2&3\\
+            0&1&-4\\
+            0&0&-24
+        ), y=\mqty(14\\-10\\-72)
+    \end{equation*}
+
+    解方程组$Ux=y$, 可得
+    \begin{equation*}
+        x=\transpose{(1,2,3)}
+    \end{equation*}
+\end{solution}
+
+上述例题可使用下述程序代码求解:
+\begin{lstlisting}
+# 使用紧凑格式的Doolittle三角分解法求解线性方程组 Exercise5-2.py
+
+import numpy as np
+
+def doolittle_triangular_decomposition(A):
+    """
+    Doolittle三角分解法
+    """
+    n = A.shape[0]
+    L = np.zeros((n, n))
+    U = np.zeros((n, n)) 
+    for i in range(n):
+        L[i, i] = 1
+        for j in range(i, n):
+            U[i, j] = A[i, j] - sum(L[i, k] * U[k, j] for k in range(i))
+            if i != j:
+                L[j, i] = (A[j, i] - sum(L[j, k] * U[k, i] for k in range(i))) / U[i, i]
+    return L, U
+
+def forward_substitution(L, b):
+    """
+    前向替代
+    """
+    n = L.shape[0]
+    x = np.zeros(n) 
+    for i in range(n):
+        x[i] = b[i] / L[i, i]
+        for j in range(i):
+            x[i] -= x[j] * L[i, j] / L[i, i]
+    return x
+
+def backward_substitution(U, b):
+    """
+    回代
+    """
+    n = U.shape[0]
+    x = np.zeros(n)
+    for i in reversed(range(n)):
+        x[i] = (b[i] - sum(U[i, j] * x[j] for j in range(i+1, n))) / U[i, i]
+    return x
+
+def doolittle_solver(A, b):
+    """
+    使用Doolittle三角分解法求解线性方程组
+    """
+    L, U = doolittle_triangular_decomposition(A)
+    y = forward_substitution(L, b)
+    x = backward_substitution(U, y)
+    return x
+
+A = np.array([[1,2,3],[2,5,2],[3,1,5]], dtype=float)
+b = np.array([14,18,20], dtype=float)
+x = doolittle_solver(A, b)
+print("x=", x)
+\end{lstlisting}
+
+类似地, 还有紧凑格式的列主元Doolittle三角分解法, 不做详细说明. 需要特别注意的是, 在变换矩阵过程中所得到的消元因子, \emph{不参与行变换的计算, 但需要参与行交换}. 
+
+\section{Gauss消去法变形}
+
+\subsection{矩阵LDR分解}
+
+\begin{theorem}
+    若$n$阶矩阵$A$的所有顺序主子式均不为0, 则矩阵$A$存在唯一分解式$A=LDR$, 其中$L, R$分别为$n$阶单位下三角矩阵和单位上三角矩阵, $D$为对角元素不为0的$n$阶对角矩阵. 上述分解方法称为$A$的LDR分解.
+\end{theorem}
+
+\begin{corollary}
+    设$A$为$n$阶对称矩阵, 且$A$的所有顺序主子式均不为0, 则$A$可唯一分解为
+    \begin{equation*}
+        A+LD\transpose{L}
+    \end{equation*}
+    其中, $L$为单位下三角矩阵, $D$为对角矩阵
+\end{corollary}
+
+特殊地, 考虑对称正定矩阵, 其定义为
+\begin{definition}
+    设$A\in R^{n\cross n}$, 若$A$满足
+    \begin{enumerate}
+        \item \begin{equation*}
+            \transpose{A}=A
+        \end{equation*}
+
+        \item $\forall x\in R^n$, 且$x\ne 0$, 有
+        \begin{equation*}
+            \transpose{x}Ax>0
+        \end{equation*}
+    \end{enumerate}
+    则称$A$为\emph{对称正定矩阵}.
+\end{definition}
+
+关于对称正定矩阵, 有如下性质
+\begin{enumerate}
+    \item $A$是非奇异矩阵, 且$\inv{A}$是对称正定矩阵;
+    \item $A$地顺序主子式均大于0, 即
+    \begin{equation*}
+        \det(A_k)>0, k=1,2,\cdots,n
+    \end{equation*}
+    \item $A$的特征值
+    \begin{equation*}
+        \lambda_i(A)>0, i=1,2,\cdots,n
+    \end{equation*}
+\end{enumerate}
+
+对于对称正定矩阵, 矩阵有特殊的分解, 即\emph{平方根法}
+
+\subsection{平方根法}
+
+\begin{theorem}
+    若$A$为对称正定矩阵, 则存在一个实的非奇异下三角矩阵, 使得$A=L\transpose{L}$, 且当限定的对角元素为正时, 这种分解是唯一的, 称为矩阵$A$的Cholesky分解.
+\end{theorem}
+
+对于平方根法, 其数值是稳定的, 即在计算过程中不需要选择主元, 但在计算过程中会引入平方根计算, 因此计算难度会较大(但计算量较一般的LU分解小)
+
+\subsection{改进平方根法}
+
+为避免开方运算, 我们改进平方根法, 即考虑将矩阵$A$分解为$LD\transpose{L}$, 其中$L$为单位下三角矩阵, $D$为对角矩阵.
+
+通过分解, 将方程组转换为$LD\transpose{L}x=b$, 求解下列方程组
+\begin{align*}
+    Ly&=b
+    \transpose{L}x=\inv{D}y
+\end{align*}
+
+下面将通过一个例子实际演示使用改进的平方根法求解方程组
+\begin{example}
+    用改进平方根法求解方程组
+    \begin{equation*}
+        \mqty(
+            1&2&1\\
+            2&3&1\\
+            1&1&2
+        )\mqty(x_1\\x_2\\x_3)=\mqty(4\\6\\4)
+    \end{equation*}
+\end{example}
+
+\begin{solution}
+    系数矩阵为对称矩阵, 则可以将其分解为
+    \begin{equation*}
+        \mqty(
+            1&2&1\\
+            2&3&1\\
+            1&1&2
+        )=\mqty(
+            1&0&0\\
+            l_{21}&1&0\\
+            l_{31}&l_{32}&1
+        )\mqty(
+            d_1&&\\
+            &d_2&\\
+            &&d_3
+        )\mqty(
+            1&l_{21}&l_{31}\\
+            0&1&l_{32}\\
+            0&0&1
+        )
+    \end{equation*}
+
+    解得
+    \begin{equation*}
+        L=\mqty(
+            1&0&0\\
+            2&1&0\\
+            1&1&1
+        ), D=\mqty(
+            1&&\\
+            &-1&\\
+            &&2
+        )
+    \end{equation*}
+
+    解方程
+    \begin{equation*}
+        Ly=b
+    \end{equation*}
+    得
+    \begin{equation*}
+        y=\transpose{(4,-2,2)}
+    \end{equation*}
+    
+    解方程
+    \begin{equation*}
+        \transpose{L}x=\inv{D}y
+    \end{equation*}
+    其中
+    \begin{equation*}
+        \inv{D}=\mqty(
+            1&&\\
+            &-1&\\
+            &&\frac{1}{2}
+        )
+    \end{equation*}
+    得
+    \begin{equation*}
+        x=\transpose{(1,1,1)}
+    \end{equation*}
+\end{solution}
+
+使用改进平方根法有如下优点:
+\begin{enumerate}
+    \item 计算量小, 是目前计算对称正定矩阵方程组得有效方法;
+    \item 计算简单, 没有开方计算;
+    \item 精度较高;
+    \item 可以推广至非正定方程组的求解
+\end{enumerate}
+
+\section{线性方程组的性态和解的误差估计}
+
+在求解线性方程$Ax=b$时, 系数$A$和$b$的误差对解$x$有影响. 
+
+当$A$精确时, 设$b$有误差$\delta b$, 设得到的解为$x+\delta x$, 即
+\begin{equation*}
+    A(x+\delta x)=b+\delta b
+\end{equation*}
+有
+\begin{equation*}
+    \delta x=\inv{A}\delta b
+\end{equation*}
+由范数的性质可知,
+\begin{equation*}
+    \norm*{\delta x}\le\norm*{\inv{A}}\norm*{\delta b}
+\end{equation*}
+又因为
+\begin{equation*}
+    \norm*{b}=\norm*{Ax}\le\norm*{A}\norm*{x}\Rightarrow\frac{1}{\norm*{x}}\le\frac{\norm*{A}}{\norm*{b}}
+\end{equation*}
+即
+\begin{equation*}
+    \frac{\norm*{\delta x}}{\norm*{x}}\le\norm*{A}\norm*{\inv{A}}\frac{\norm*{\delta b}}{\norm*{b}}
+\end{equation*}
+
+同理, 设$b$精确, $A$有误差$\delta A$, 解为$x+\delta x$, 即
+\begin{equation*}
+    (A+\delta A)(x+\delta x)=b
+\end{equation*}
+
+可得
+\begin{equation*}
+    \frac{\norm*{\delta x}}{\norm*{x}}\le\frac{\norm*{A}\norm*{\inv{A}}\frac{\norm*{\delta A}}{\norm*{A}}}{1-\norm*{A}\norm*{\inv{A}}\frac{\norm*{\delta A}}{\norm*{A}}}
+\end{equation*}
+
+可以发现, $\norm*{A}\norm*{\inv{A}}$是衡量误差放大的重要因素, 称为\emph{条件数}, 记作$\cond{A}$.
+
+\begin{definition}
+    设线性方程组的系数矩阵是非奇异的, 若$\cond{A}$越大, 则称这个方程组\emph{越病态}, 反之, 若$\cond{A}$越小, 则称方程组\emph{越良态}.
+\end{definition}
+
+通常来说, 判断一个矩阵是否病态, 可采用如下方法:
+\begin{enumerate}
+    \item 行列式很大或很小;
+    \item 元素之间相差较大数量级;
+    \item 主元消去过程中出现小主元;
+    \item 特征值相差较大数量级
+\end{enumerate}
