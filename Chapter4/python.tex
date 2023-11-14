@@ -1,0 +1,739 @@
+\chapter{数值积分与数值微分}
+
+\section{引言}
+
+\subsection{数值积分的必要性}
+本章主要讨论如下形式的一元函数积分
+\begin{equation*}
+    I(f) = \int_{a}^{b}f(x)dx
+\end{equation*}
+在微积分里，按Newton-Leibniz公式求定积分
+\begin{equation*}
+    I(f) = \int_{a}^{b}f(x)dx = F(b)-F(a)
+\end{equation*}
+
+要求$f(x)$的原函数$F(x)$:
+\begin{itemize}
+    \item 有解析表达式;
+    \item 为初等函数.
+\end{itemize}
+
+实际上，
+\begin{enumerate}
+    \item $f(x)$的原函数$F(x)$不能用初等函数表示，如$sinx^2,cosx^2,\frac{sinx}{x},\frac{1}{lnx}$等；
+    \item 被积函数的原函数可以用初等函数表示，但其表达式相当复杂，计算极不方便，如$x^2\sqrt{2x^2+3}$；
+    \item $f(x)$没有表达式，只有数表形式。
+\end{enumerate}
+这时就需要积分的数值方法来帮忙了。
+
+\subsection{数值积分的基本思想}
+\subsubsection{数值积分的理论依据}
+依据积分中值定理，对于连续函数$f(x)$，在$[a,b]$内存在一点$\xi $，使得
+    \begin{equation}
+       I(f) = \int_{a}^{b}f(x)\,dx = (b-a)f(\xi )
+    \end{equation}
+称$f(\xi )$为$f(x)$在区间$[a,b]$上的平均高度。
+
+\subsubsection{求积公式的构造}
+
+ 若简单选取区间端点或重点的函数值作为平均高度，则可求一点求积公式如下：
+    \begin{equation*}\label{eqn:左矩形公式}
+        I(f)\approx f(a)(b-a)
+    \end{equation*}
+    \begin{equation*}\label{eqn:中矩形公式}
+        I(f)\approx f(\frac{a+b}{2})(b-a)
+    \end{equation*}
+    \begin{equation*}\label{eqn:右矩形公式}
+        I(f)\approx f(b)(b-a)
+    \end{equation*}
+
+\begin{definition}[两点求积公式]
+    若取$a,b$两点，并令$f(\xi ) = \frac{f(a)+f(b)}{2}$，则可得到梯形公式（两点求积公式）
+    \begin{equation*}
+        I(f)\approx \frac{f(a)+f(b)}{2}(b-a)
+    \end{equation*}
+\end{definition}
+
+\begin{definition}[三点求积公式/Simpson公式]
+    若取三点,$a,b,c = \frac{a+b}{2}$并令$f(\xi ) = \frac{[f(a)+4f(c)+f(b)]}{6}$，则可得Simpson公式（三点求积公式）
+    \begin{equation*}
+        I(f)\approx (b-a)\frac{[f(a)+4f(c)+f(b)]}{6}
+    \end{equation*}  
+\end{definition}
+
+\begin{definition}[机械求积]
+    一般地，取区间$[a,b]$内$n+1$个点${x_i},(i=0,1,2,\cdots,n)$处的高度${f(x_i)},(i=0,1,2,\cdots,n)$，通过加权平均的方法近似地得出平均高度$f(\xi )$。这类求积方法称为机械求积。
+    \begin{equation*}
+        \int_{a}^{b}f(x)dx \approx (b-a)\sum_{i=0}^{n}\lambda_if(x_i)
+    \end{equation*}
+    或写成：
+    \begin{equation*}[数值积分公式]
+        \int_{a}^{b}f(x)dx \approx \sum_{k=0}^{n}A_kf(x_k)
+    \end{equation*}
+    其中$A_k$称为求积系数，$x_k$称为求积节点。
+\end{definition}
+
+记：
+
+数值求积公式：
+\begin{equation}\label{eqn:(1)}
+     i_n(f) = \sum_{k=0}^{n}A_kf(x_k)   
+\end{equation}
+
+求积公式余项（误差）：
+\begin{equation}\label{eqn:(2)}
+    R(f) = I(f)-I_n(f) = \int_{a}^{b}f(x)dx-\sum_{k=0}^{n} A_kf(x_k)
+\end{equation}
+
+构造或确定一个求积公式，要解决的问题包括：
+(i)确定求积系数$A_k$和求积节点$x_k$；
+(ii)确定衡量求积公式好坏的标准；
+(iii)求积公式的误差估计和收敛性分析。
+
+\subsection{求积公式的代数精度}
+
+\begin{definition}
+    称求积公式$I_n(f)=\sum_{k=0}^{n}A_kf(x_k)$具有$m$次代数精度，如果它满足如下两个条件：
+    (i)对所有$$次的多项式$$，有
+    \begin{equation*}
+        R(P_m) = I(P_m)-I_n(P_m) = 0
+    \end{equation*}
+    (ii)存在$m+1$次多项式$P_{m+1}(x)$，使得
+    \begin{equation*}
+        R(P_{m+1}) = I(P_{m+1})-I_n(P_{m+1}) \neq 0
+    \end{equation*}
+    上述定义中的条件(i),(ii)等价于：
+    \begin{equation*}
+         R(x^k) = I(x^k)-I_n(x^k) = 0,(0\leq k\leq m)
+         R(x_{m+1})\neq 0
+    \end{equation*}
+    \begin{remark}
+        梯形公式与中矩形公式都只具有1次代数精度。
+    \end{remark}
+\end{definition}
+
+
+
+一般的，若要使求积公式(1)具有m次代数精度，则只要使求积公式对$f(x) = 1,x,x^2,\cdots,x^m$都准确成立，即
+\begin{equation*}
+    \begin{cases}
+        \sum_{k=0}^{n}A_k = b-a
+        \sum_{k=0}^{n}A_kx_k = \frac{1}{2}(b^2-a^2)
+        \sum_{k=0}^{n}A_kx^m_k = \frac{1}{m+1}(b^{m+1}-a^{m+1})
+    \end{cases}
+\end{equation*}
+
+\section{插值型求积公式}
+
+\subsection{定义}
+
+\begin{definition}[拉格朗日插值公式]
+    在积分区间$[a,b]$上，取$n+1$个节点$x_i,i=0,1,2,\cdots,n$作$f(x)$的$n$次代数插值多项式（拉格朗日插值公式）：
+    \begin{equation*}
+        L_n(x) = \sum_{k=0}^{n}l_k(x)f(x_k)
+    \end{equation*}
+    则有$f(x) = L_n(x)+R_n(x)$
+    其中，$R_n(x) = \frac{f^{(n+1)}(\xi)}{(n+1)!}w_{n+1}(x)$为插值余项。
+    $w_{n+1}(x) = \prod_{j=0}^{n}(x-x_j)$
+\end{definition}
+
+于是有：
+\begin{equation*}
+    \int_{a}^{b}f(x)dx = \int_{a}^{b}L_n(x)dx+\int_{a}^{b}R_n(x)dx = \sum_{j=0}^{n}[int_{a}^{b}l_j(x)dx]f(x_j)+\int_{a}^{b}R_n(x)dx
+\end{equation*}
+取
+\begin{equation*}
+    \int_{a}^{b}f(x)dx \approx \sum_{j=0}^{n}f(x_j)\int_{a}^{b}l_i(x)dx
+\end{equation*}
+其中$\int_{a}^{b} l_j(x)dx$为$A_j$。
+
+$A_j = \int_{a}^{b} \prod_{i=0,i\neq j}^{n}\frac{(x-x_i)}{(x_j-x_i)}dx$由节点决定，与$f(x)$无关。
+
+
+\subsection{截断误差与代数精度}
+
+\subsubsection{截断误差}
+\begin{equation*}
+    R(f) = \int_{a}^{b}f(x)dx - \sum_{k=0}^{n}A_kf(x_k) = \int_{a}^{b}[f(x)-L_n(x)]dx = \int_{a}^{b}\frac{f^{n+1}(\xi_x)}{(n+1)!}\prod_{k=0}^{n}(x-x_k)dx
+\end{equation*}
+
+\subsubsection{代数精度}
+\begin{theorem}
+    形如$\sum_{k=0}^{n}A_kf(x)$的求积公式至少有$n$次代数精度$\Leftrightarrow $该公式为插值型（即：$A_k = \int_{a}^{b}l_k(x)dx$）
+    \begin{corollary}[theorem]
+        求积系数$A_k$满足：
+        \begin{equation*}
+            \sum_{k=0}^{n}A_k = b-a
+        \end{equation*}
+    \end{corollary}[theorem]
+\end{theorem}
+
+\section{Newton-Cotes公式}
+
+\subsection{Cotes系数}
+取节点为等距分布：$x_i=a+ih, h=\frac{b-a}{n}, i=0,1,\cdots,n$
+由此构造的插值型求积公式称为Newton-Cotes公式，此时
+求积系数：
+\begin{align*}%令$x=a+th$
+    A_i &= \int_{x_0}^{x_n}\prod_{j\neq i}\frac{(x-x_j)}{x_i-x_j}dx \\
+    &=\int_{0}^{n}\prod_{i\neq j}\frac{(t-j)h}{(i-j)h}\times hdt \\
+    &= \frac{(b-a)(-1)^{n-i}}{ni!(n-i)!}\int_{0}^{n}\prod_{j\neq i}(t-j)dt\\
+    &= C_i^{(n)}(b-a)
+\end{align*}
+其中，$C_i^{(n)}$为Cotes系数。
+
+\subsection{Newton-Cotes公式}
+
+\subsubsection{定义}
+
+\begin{definition}[n阶闭型Newton-Cotes求积公式]
+    记：
+    \begin{equation*}
+        C_i^(n) = \frac{(-1)^{n-i}}{i!(n-i)!n}\int_{0}^{n}[\prod_{k=0,k\neq i}^{n}(t-k)]dt
+    \end{equation*}
+    则$A_i = (b-a)C_i^{(n)},i=0,1,2,\cdots,n$
+    求积公式变为
+    \begin{equation*}
+        \int_{a}^{b}f(x)dx \approx (b-a)\sum_{i=0}^{n}C_i^{(n)}f(x_i)
+    \end{equation*}
+    称上式为n阶闭型Newton-Cotes求积公式。
+\end{definition}
+
+\begin{remark}
+    由式$C_i^{(n)} = \frac{(-1)^{n-i}}{i!(n-i)!n}\int_{0}^{n}[\prod_{k=0,k\neq i}^{n}(t-k)]dt$确定的Cotes系数只与$i$和$n$有关，与$f(x)$和积分区间$[a,b]$无关，且满足：
+    (1)$C_i^{(n)} = C_{n-i}^{(n)}$
+    (2)$\sum_{k=0}^{n}C_i^{(n)} = 1$
+\end{remark}
+
+\subsubsection{截断误差}
+Newton-Cotes公式的截断误差为：
+\begin{equation*}
+    R(f) = \int_{a}^{b}\frac{f^{(n+1)}(\xi)}{(n+1)!}w_{(n+1)}(x)dx = \frac{h^{n+2}}{(n+1)!}\int_{0}^{n}f^{(n+1)}(\xi)[\prod_{j=0}^{n}(t-j)]dt,\xi \in (a,b)
+\end{equation*}
+
+\subsubsection{代数精度}
+\begin{theorem}
+    当阶数$n$为偶数时，Newton-Cotes公式至少具有$n+1$次代数精度。
+\end{theorem}
+
+\begin{proof}
+    只需验证当$n$为偶数时，Newton-Cotes公式对$f(x) = x^{n+1}$的余项为零。
+    由于$f(x) = x^{n+1}$，所以$f^{(n+1)}(x) = (n+1)!$ 
+    即得$R(f) = h^{n+2}\int_{0}^{n}\prod_{j=0}^{n}(t-j)dt$
+    引进变换$t = u+\frac{n}{2}$，因为$n$为偶数，故$\frac{n}{2}$为整数，
+    于是有
+    \begin{equation*}
+        R(f) = h^{n+2}\int_{-\frac{n}{2}}^{\\frac{n}{2}}\prod_{j=0}^{n}(u+\frac{n}{2}-j)du
+    \end{equation*}
+    据此可得$R(f)=0$，因为上述被积函数是个奇函数。
+\end{proof}
+
+\subsubsection{数值稳定性}
+
+现在讨论舍入误差对计算结果产生的影响。
+设用公式
+\begin{equation*}
+    I_n(f) = (b-a)\sum_{j=0}^{n}C_j^{(n)}f(x_j)
+\end{equation*}
+近似计算积分
+\begin{equation*}
+    I(f) = \int_{a}^{b}f(x)dx
+\end{equation*}
+时，其中函数值$f(x_j)$有误差$\varepsilon_j(j = 0,1,2,\cdots,n)$，而计算$C_j^{(n)}$没有误差，中间计算过程中的舍入误差也不考虑，
+则在$I_n(f)$的计算中，由$\varepsilon_j$引起的误差为：
+\begin{equation*}
+    e_n = (b-a)\sum_{j=0}^{n}C_j^{(n)}f(x_i)-(b-a)\sum_{j=0}^{n}C_j^{(n)}(f(x_j)+\varepsilon_j) =-(b-a)\sum_{j=0}^{n}C_j^{(n)}\varepsilon_j
+\end{equation*}
+如果$C_j^{(n)}$都是正数，并设$\varepsilon = \max_{0\leq j\leq n}|\varepsilon_j|$
+则有
+\begin{equation*}
+    |e_n|\leq \varepsilon(b-a)\sum_{j=0}^{n}|C_j^{(n)}| = \varepsilon(b-a)
+\end{equation*}
+故$e_n$是有界的，即由$\varepsilon_j$引起的受到控制，不超过$\varepsilon$的$(b-a)$倍，保证了数值计算的稳定性。而当$n>7$时，$C_j^{(n)}$将出现负数，$\sum_{j=0}^{n}|C_j^{(n)}|$将随$n$增大，因而不能保证数值稳定性。
+故高阶公式不宜采用，有实用价值的仅仅是几种低阶的求积公式。
+
+\subsection{几种常见的低阶求积公式}
+ 
+梯形公式：(代数精度=1)
+\begin{equation*}
+    n=1:
+    C_0^{(1)} = \frac{1}{2},C_1^{(1)} = \frac{1}{2}
+    \int_{a}^{b}f(x)dx\approx \frac{b-a}{2}[f(a)+f(b)]
+    R[f] = \int_{a}^{b}\frac{f''(\xi_x )}{2!}(x-a)(x-b)dx = -\frac{(b-a)^3}{12}f''(\xi ),\xi \in [a,b]
+\end{equation*}
+
+Simpson公式:(代数精度=3)
+\begin{equation*}
+    n=2:
+    C_0^{(2)} = \frac{1}{6},C_1^{(2)} = \frac{2}{3},C_2^{(2)} = \frac{1}{6}
+    \int_{a}^{b}f(x)dx\approx \frac{b-a}{6}[f(a)+4f(\frac{a+b}{2})+f(b)]
+    R[f] = -\frac{(b-a)^5}{2880}f^{(4)}(\xi ),\xi \in (a,b)
+\end{equation*}
+
+Cotes公式:(代数精度=5 )
+\begin{equation*}
+    n=4:
+    \int_{a}^{b}f(x)dx\approx \frac{b-a}{90}[7f(x_0)+32f(x_1)+12f(x_2)+32f(x_3)+7f(x_4)]
+    x_k = a+kh,h = \frac{b-a}{4},k = 0,1,2,3,4
+    R[f] = -\frac{8}{945}(\frac{b-a}{4})^7f^{(6)}(\xi ) = -\frac{2(b-a)}{945}(\frac{b-a}{4})^6f^{(6)}(\xi ),\xi \in [a,b]
+\end{equation*}
+
+\subsection{复化求积公式}
+
+\begin{definition}[复化梯形公式]
+    $h = \frac{b-a}{h},x_k=a+kh(k=0,\cdots,n)$
+    在每个$[x_k,x_k+1]$上用梯形公式：
+    \begin{equation*}
+        \int_{x_k}^{x_{k+1}}f(x)dx\approx \frac{x_{k+1}-x_k}{2}[f(x_k)+f(x_{k+1})],k=0,\cdots,n-1
+        \int_{a}^{b}f(x)dx\approx \sum_{k=0}^{n-1}\frac{h}{2}[f(x_k)+f(x_{k+1})] = \frac{h}{2}[f(a)+2\sum_{k=1}^{n-1}f(x_k)+f(b)] = T_n
+        R[f] = \sum_{k=0}^{n-1}[-\frac{h^3}{12}f''(\eta_k)] = -\frac{h^2}{12}(b-a)\frac{\sum_{k=0}^{n-1}f''(\eta_k)}{n} = -\frac{h^2}{12}(b-a)f''(\eta),\eta \in (a,b)
+    \end{equation*}
+\end{definition}
+
+\begin{definition}[复化Simpson公式]
+    $h = \frac{b-a}{n},x_k = a+kh(k=0,\cdots,n)$
+    在每个$[x_k,x_k+1]$上使用Simpson公式：
+    \begin{equation*}
+        \int_{x_k}^{x_{k+1}}f(x)dx\approx \frac{h}{6}[f(x_k)+4f(x_{k+\frac{1}{2}})+f(x_{k+1})]
+        \int_{a}^{b}f(x)dx\approx \sum_{k=0}^{n-1}\int_{x_k}^{x_{k+1}}f(x)dx \approx \frac{h}{6}[f(a)+4\sum_{k=0}^{n-1}f(x_{k+\frac{1}{2}})+2\sum_{k=1}^{n-1}f(x_k)+f(b)] = S_n
+        R[f] = -\frac{b-a}{2880}h^4f^{(4)}(\xi ) = -\frac{b-a}{180}(\frac{h}{2})^4f^{(4)}(\xi ),\xi \in (a,b)
+    \end{equation*}
+\end{definition}
+
+\begin{definition}[复化Cotes公式]
+    $h = \frac{b-a}{n},x_k = a+kh(k=0,\cdots,n)$
+    \begin{equation*}
+        \int_{x_k}^{x_{k+1}}f(x)dx\approx \frac{h}{90}[7f(x_k)+32f(x_{k+\frac{1}{4}})+12f(x_{k+\frac{1}{2}})+32f(_{k+\frac{3}{4}})+7f(x_{k+1})]
+        \int_{a}^{b}f(x)dx\approx \sum_{k=0}^{n-1}[7f(x_k)+32f(x_{k+\frac{1}{4}})+12f(x_{k+\frac{1}{2}})+32f(_{k+\frac{3}{4}})+7f(x_{k+1})] = C_n
+        R[f] = -\frac{2(b-a)}{945}(\frac{h}{4})^6f^{(6)}(\xi ),\xi \in (a,b)
+    \end{equation*}
+\end{definition}
+
+\begin{example}
+    利用数据表
+\end{example}
+
+\subsubsection{复化梯形公式的误差估计}
+
+误差先验估计式:
+给定精度$\varepsilon $，如何求$n$?
+\begin{example}
+     要求$|I-T_n|<\varepsilon$，如何判断$n=$?
+    由\begin{equation*}
+        R[f] = I(f)-T_n(f) = -\frac{h^2}{12}(b-a)f''(\xi )
+    \end{equation*}
+    若记$M_2 = \max_{a\leq x\leq b}|f''(x)|$
+    则可令
+    \begin{equation*}
+        |\frac{h^2}{12}(b-a)f''(\xi )|\leq \frac{h^2}{12}(b-a)M_2 \leq \varepsilon
+    \end{equation*}
+    其中，$h=\frac{b-a}{n}$，于是，$n\geq \sqrt{\frac{(b-a)^3M_2}{12\varepsilon}} $
+    \begin{equation*}
+        R[f] = -\frac{h^2}{12}(b-a)f''(\varepsilon) = -\frac{h^2}{12}\sum_{k=1}^{n}[f''(\xi_k)\cdot h] \approx -\frac{h^2}{12}\int_{a}^{b}f''(x)dx = -\frac{h^2}{12}[f'(b)-f'(a)]
+    \end{equation*}
+\end{example}
+上例中若要求$|I-T_n|<10^{-6}$，则
+\begin{equation*}
+    |R_n[f]| \approx \frac{h^2}{12}|f'(1)-f'(0)| = \frac{h^2}{6}<10^{-6}
+    \Rightarrow h<0.00244949 
+\end{equation*}
+即取$n=409$
+通常采取将区间不断对分的方法，即取$n = 2^k$
+上例中$2^k \geq 409 \Rightarrow k=9$时，$T_512=3.141592502$
+
+误差后验估计式:
+注意到区间再次对分时
+\begin{equation*}
+    R_2n[f]\approx -\frac{1}{12}[f'(b)-f'(a)](\frac{h}{2})^2 \approx \frac{1}{4}R_n[f] \Rightarrow \frac{I-T_{2n}}{I-T_n} \approx \frac{1}{4} \Rightarrow I-T_{2n} \approx \frac{1}{3}(T_{2n}-T_n) = \frac{1}{4-1}(T_{2n}-T_n) 
+\end{equation*}
+可用来判断迭代是否停止。
+
+\subsubsection{复化Simpson公式的误差估计}
+
+误差先验估计式:
+\begin{equation*}
+    R[f] = I-S_n = -\frac{b-a}{180}(\frac{h}{4})^4f^{(4)}(\xi ) \approx -\frac{1}{180}[f^{(3)}(b)-f^{(3)}(a)](\frac{h}{2})^4
+\end{equation*}
+
+误差后验估计式:
+\begin{equation*}
+    I-S_{2n} \approx \frac{1}{15}(S_{2n}-S_n) = \frac{1}{4^2-1}(S_{2n}-S_n)
+\end{equation*}
+
+\subsubsection{复化Cotes公式的误差估计}
+
+误差先验估计式:
+\begin{equation*}
+    R[f] = I-C_n = -\frac{2(b-a)}{945}(\frac{h}{4})^6f^{(6)}(\xi ),\xi \in (a,b) \approx -\frac{2}{945}[f^{(5)}(b)-f^{(5)}(a)](\frac{h}{4})^6
+\end{equation*}
+
+误差后验估计式:
+\begin{equation*}
+    I-C_{2n} \approx \frac{1}{63}(C_{2n}-C_n) = \frac{1}{4^3-1}(C_{2n}-C_n)
+\end{equation*}
+
+\subsubsection{复化求积公式的收敛速度(阶)}
+\begin{definition}[$p$阶收敛]
+    若一个复化求积公式的误差满足$\lim_{h\rightarrow 0}\frac{R[f]}{h^p} = C<\infty $且$C\neq 0$，则称该公式是$p$阶收敛的。
+\end{definition}
+\begin{remark}
+    根据上述定义不难验证
+    \begin{equation}
+        T_n\sim O(h^2),S_n\sim O(h^4),C_n\sim O(h^6)
+    \end{equation}
+\end{remark}
+
+\section{Romberg算法}
+
+\subsection{龙贝格求积公式}
+
+\begin{example}
+    计算
+    \begin{equation*}
+    \pi = \int_{0}^{1}\frac{4}{1+x^2}dx    
+    \end{equation*}
+    若取$\varepsilon = 10^{-6}$，则利用复化求积公式进行计算时，须将区间对分9次，得到$T_{512} = 3.141592502$
+\end{example}
+
+考察$\frac{I-T_{2n}}{I-T_n} \approx \frac{1}{4}$，若由$I \approx \frac{4T_{2n}-T_n}{4-1} = \frac{4}{3}T_{2n}-\frac{1}{3}T_n$来计算$I$效果是否好些？
+\begin{equation*}
+    \frac{4}{3}T_8-\frac{1}{3}T_4 = 3.141592502 = S_4
+\end{equation*}
+一般有：
+\begin{itemize}
+    \item $\frac{4T_{2n}}{4-1} = S_n$
+    \item $\frac{4^2S_{2n}-S_n}{4^2-1} = C_n$
+    \item $\frac{4^3C_{2n}-C_n}{4^3-1} = R_n$(Romberg求积公式)
+\end{itemize}
+
+\subsection{理查德森外推加速法}
+
+利用低阶公式产生高精度的结果。
+设对于某一$h \neq 0$，有公式$T_0(h)$近似计算某一未知值$I$。
+由Taylor展开得到：
+\begin{equation*}
+    T_0(h)-I = \alpha_1h+\alpha_2h^2+\alpha_3h^3+\cdots
+\end{equation*}
+现将$h$对分，得：
+\begin{equation*}
+    T_0(\frac{h}{2})-I = \alpha_1(\frac{h}{2})+\alpha_2(\frac{h}{2})^2+\alpha_3(\frac{h}{2})^3+\cdots
+\end{equation*}
+
+如何将公式精度由$O(h)$提高到$O(h^2)$？
+\begin{equation*}
+    \frac{2T_0(\frac{h}{2})-T_0(h)}{2-1}-I = -\frac{1}{2}\alpha_2h^2-\frac{3}{4}\alpha_3h^3-\cdots
+\end{equation*}
+即：
+\begin{equation*}
+    T_1(h) = \frac{2T_0(\frac{h}{2})-T_0(h)}{2-1} = I+\beta_1h^2+\beta_2h^3+\cdots
+    T_2(h) = \frac{2^2T_1(\frac{h}{2})-T_1(h)}{2^2-1} = I+\gamma_1h^3+\gamma_2h^4+\cdots
+    \Rightarrow T_m(h) = \frac{2^mT_{m-1}(\frac{h}{2})-T_{m-1}(h)}{2^m-1} = I+\sigma_1h^{m+1}+\sigma_2h^{m+2}+\cdots
+\end{equation*}
+
+
+\subsection{复化梯形公式的渐进展开式}
+\begin{theorem}
+    设$f(x)\in C^{\infty}[a,b]$，则成立
+    \begin{equation*}
+        T_n(f) = I+a_1h^2+a_2h^4+\cdots +a_kh^{2k}+\cdots 
+    \end{equation*}
+    其中，$h=\frac{b-a}{h}$，系数$a_k(k=1,2,\cdots)$与$h$无关。
+\end{theorem}
+
+
+加速公式：
+\begin{equation*}
+    T_m^{(k)} = \frac{4^mT_{m-1}^{(k+1)}-T_{m-1}^{(k)}}{4^m-1},k = 1,2,\cdots; m = 1,2,\cdots
+\end{equation*}
+
+\begin{example}
+    求形如$\int_{-1}^{1}f(x)dx \approx A_0f(x_0)+A_1f(x_1)$的两点求积公式。
+    (1)求梯形公式（即以$x_0 = -1,x_1 = 1$为节点的插值型求积公式）立即可得。
+    \begin{equation*}
+        \int_{-1}^{1}f(x)dx \approx f(-1)+f(1)
+    \end{equation*}
+    （只具有1次代数精度）
+    (2)若对求积公式中的四个待定系数$A_0,A_1,x_0,x_1$适当选取，使求积公式对$f(x) = 1,x,x^2,x^3$都准确成立，则$A_0,A_1,x_0,x_1$需满足如下方程组：
+    \begin{equation*}
+        \begin{cases}
+            A_0 + A_1 = b-a
+            A_0x_0 + A_1x_1 = \frac{1}{2}(b^2-a^2)
+            A_0x_0^2 + A_1x_1^2 = \frac{1}{3}(b^3-a^3)
+            A_0x_0^3 + A_1x_1^3 = \frac{1}{4}(b^4-a^4)
+        \end{cases}
+    \end{equation*}
+\end{example}
+
+
+\section{高斯型求积公式}
+
+\begin{definition}[Gauss型求积公式]
+    具有$2n+1$次代数精度的插值型求积公式
+    \begin{equation*}
+        \int_{a}^{b}\rho(x)f(x)dx\approx \sum_{k=0}{n}A_kf(x_k)
+    \end{equation*}
+    称为Gauss型求积公式。
+\end{definition}
+
+\begin{remark}
+    Gauss型求积公式是代数精度最高的插值型求积公式。
+\end{remark}
+
+事实上，对于插值型求积公式
+\begin{equation*}
+    \int_{a}^{b}\rho(x)f(x)dx\approx \sum_{k=0}{n}A_kf(x_k)
+\end{equation*}
+其代数精度最高可达$2n+1$次(Gauss型求积公式)。
+考虑$2n+2$次多项式$w_{n+1}^2(x)$，其中$w_{n+1}(x) = \prod_{j=0}^{n}(x-x_j)$
+\begin{equation*}
+    \int_{a}^{b}\rho(x)w_{n+1}^2(x)dx > 0
+\end{equation*}
+而$\sum_{k=0}^{n}A_kw^2_{n+1}(x_k) = 0$
+故
+\begin{equation*}
+    \int_{a}^{b}\rho(x)w_{n+1}^2(x)dx \neq \sum_{k=0}^{n}A_kw^2_{n+1}(x_k) = 0
+\end{equation*}
+
+\subsection{高斯型求积公式的构造}
+
+1.待定系数法
+将节点$x_0,\cdots,x_n$以及系数$A_0,\cdots,A_n$都作为待定系数。并令求积公式对$f(x) = 1,x,x_2,\cdots,x^{2n-1}$精确成立可得非线性方程组：
+\begin{equation*}
+    \begin{cases}
+        \sum_{k=0}^{n}A_k = b-a
+        \sum_{k=0}^{n}A_kx_k = \frac{1}{2(b^2-a^2)}
+        \vdots 
+        \sum_{k=0}^{n}A_kx_k^{2n+1} = \frac{1}{2n+2}(b^{2n+2}-a^{2n+2})
+    \end{cases}
+\end{equation*}
+
+求解该方程组即可得相应的求积节点与求积系数。
+\begin{example}
+    求$\int_{0}^{1}\sqrt{x}f(x)dx$的2点Gauss公式。
+    解：设$\int_{0}^{1}\sqrt{x}f(x)dx \approx A_0f(x_0)+A_1f(x_1)$，应有3次代数精度。令上述公式$f(x) = 1,x,x^2,x^3$精确成立可得
+    \begin{equation*}
+        \begin{cases}
+            \frac{2}{3} = A_0 + A_1
+            \frac{2}{5} = A_0x_0 + A_1x_1
+            \frac{2}{7} = A_0x_0^2 + A_1x_1^2
+            \frac{2}{9} = A_0x_0^3 + A_1x_1^3
+        \end{cases}
+    \end{equation*}
+    
+    (不是线性方程组，不易求解。)
+    解得：
+    \begin{equation*}
+        \begin{cases}
+            x_0 \approx 0.8212
+            x_1 \approx 0.2899
+            A_0 \approx 0.3891
+            A_1 \approx 0.2776
+        \end{cases}
+    \end{equation*}
+    
+\end{example}
+
+2.正交多项式法
+\begin{theorem}
+    $x_0,\cdots,x_n$为Gauss点$\Leftrightarrow w(x) = \prod_{k=0}^{n}(x-x_k)$与任意次数不大于n的多项式$P(x)$（带权）正交。
+\end{theorem}
+\begin{proof}
+    "$\Rightarrow$":
+    $x_0,\cdots,x_n$为Gauss点，则公式$\int_{a}^{b}\rho(x)f(x)dx\approx \sum_{k=0}^{n}A_kf(x_k)$具有2n+1次代数精度。
+    对任意次数不大于$n$的多项式$P_n(x)$，$P_n(x)w(x)$的次数不大于2n+1，则代入公式应精确成立：
+    \begin{equation*}
+        \int_{a}^{b}\rho(x)P_m(x)w(x)dx = \sum_{k=0}^{n}A_kP_m(x_k)w(x_k) = 0
+    \end{equation*}
+    "$\Leftarrow$":
+    要证明$x_0,\cdots,x_n$为Gauss点，即要证公式对任意次数不大于2n+1的多项式$P_{2n+1}(x)$精确成立，即证明：
+    \begin{equation*}
+        \int_{a}^{b}\rho(x)P_m(x)dx = \sum_{k=0}^{n}A_kP_m(x_k)
+    \end{equation*}
+    设$P_{2n+1}(x) = w(x)q(x)+r(x)$
+    \begin{equation*}
+        \int_{a}^{b}\rho(x)P_m(x)dx = \int_{a}^{b}\rho(x)w(x)q(x)dx + \int_{a}^{b}\rho(x)r(x)dx = \sum_{k=0}^{n}A_kr(x_k) = \sum_{k=0}^{n}A_kP_m(x_k)
+    \end{equation*}
+\end{proof}
+
+正交多项式族${\varphi_0,\varphi_1,\cdots,\varphi_n,\cdots}$有性质：任意次数不大于$n$的多项式$P(x)$必与$\varphi_{n+1}$正交。
+$\Rightarrow$若取$w(x)$为其中的$\varphi_{n+1}$，则$\varphi_{n+1}$的根就是Gauss点。
+
+\begin{example}
+    再解上例：$\int_{0}^{1}\sqrt{x}f(x)dx \approx A_0f(x_0)+A_1f(x_1)$
+    Step1:构造正交多项式$\varphi_2$
+    设$\varphi_0(x) = 1,\varphi_1(x) = x+a,\varphi_2(x) = x^2+bx+c$
+    \begin{enumerate}
+        \item $(\varphi_0,\varphi_1) = 0 \Rightarrow \int_{0}^{1}\sqrt{x}(x+a)dx = 0 \Rightarrow a=-\frac{3}{5}$
+        \item $(\varphi_0,\varphi_2) = 0 \Rightarrow \int_{0}^{1}\sqrt{x}(x^2+bx+c)dx = 0 \Rightarrow b = -\frac{10}{9}$
+        \item $(\varphi_1,\varphi_2) = 0 \Rightarrow \int_{0}^{1}\sqrt{x}(x-\frac{3}{5})(x+bx+c)dx = 0 \Rightarrow c = \frac{5}{21}$
+    \end{enumerate}
+    即$\varphi_2(x) = x^2-\frac{10}{9}x+\frac{5}{21}$
+    Step2:求$\varphi_2 = 0$的2个根，即为Gauss点$x_o,x_1$
+    \begin{equation*}
+        x_{0;1} = \frac{\frac{10}{9}\pm \sqrt{(\frac{10}{9})^2-\frac{20}{21}}}{2}
+    \end{equation*}
+    Step3:代入$f(x) = 1,x$以求解$A_0,A_1$
+    结果与前一方法相同：$x_0 \approx 0.8212,x_1 \approx 0.2899,A_0 \approx 0.3891,A_1 \approx 0.2776$
+    利用此公式计算$\int_{0}^{1}\sqrt{x}e^xdx$的值
+    \begin{equation*}
+        \int_{0}^{1}\sqrt{x}e^xdx \approx A_0e^{x_0} + A_1e^{x_1} = 0.3891 \times e^{0.8212} + 0.2776 \times e^{0.2899} \approx 1.2555
+    \end{equation*}
+    \begin{remark}
+        构造正交多项式也可以利用$L-S$拟合中介绍过的递推式进行。
+    \end{remark}
+\end{example}
+
+\subsection{几种常见的Gauss型求积公式}
+
+\subsubsection{Gauss-Legendre求积公式}
+
+Legendre多项式：
+定义在$[-1,1]$，上$\rho(x)\equiv 1$
+\begin{equation*}
+    P_k(x) = \frac{1}{2^kk!}\frac{d^k}{dx^k}(x^2-1)^k
+\end{equation*}
+满足：
+\[ (P_k,P_l) = 
+\begin{cases}
+    0& k\neq l \\
+    \frac{2}{2k+1}& k=l\\
+\end{cases}\]
+$P_0 = 1,P_1 = x$,递推公式：$(k+1)P_{k+1} = (2k+1)xP_k-kP_{k-1}$
+
+Gauss-Legendre求积公式：
+\begin{equation}
+    \int_{-1}^{1}f(x)dx \approx \sum_{k=0}^{n}A_kf(x_k)
+\end{equation}
+其中，求积节点为$P_{n+1}$的根（求积系数通过解线性方程组得到）。
+
+区间$[a,b]$上的Gauss-Legendre公式：
+\begin{equation}
+    \int_{a}^{b}f(x)dx = \int_{-1}^{1}f(\frac{b-a}{2}t+\frac{b+a}{2})\cdot \frac{b-a}{2}dt\\
+    \\\approx\sum_{k=0}^{n}A_k\frac{b-a}{2}f(\frac{b-a}{2}t_k+\frac{b+a}{2})
+\end{equation}
+其中，$t_k$为n+1次Legendre多项式$P_{n+1}$的根。
+
+\subsubsection{Gauss-Chebyshev求积公式：}
+
+Chebyshev多项式:
+定义在$[-1,1]$上，$\rho(x) = \frac{1}{\sqrt{1-x^2}}$
+\begin{equation*}
+    T_k(x) = cos(k \times arccos\ x)
+\end{equation*}
+$T_{n+1}$的根为：
+\begin{equation*}
+    x_k = cos(\frac{2k+1}{2n+2}\pi ), k = 0,\cdots, n
+\end{equation*}
+以此为节点构造公式
+\begin{equation*}
+    \int_{-1}^{1}\frac{f(x)}{\sqrt{1-x^2}}dx \approx \sum_{k=0}^{n}A_kf(x_k) = \frac{\pi}{n+1}\sum_{k=0}^{n}f(x_l)
+\end{equation*}
+称为Gauss-Chebyshev多项式。
+\begin{remark}
+    到积分端点$\pm $可能是积分的奇点，用普通Newton-Cotes公式在端点会出问题。
+    而Gauss公式可能避免此问题的发生。
+\end{remark}
+
+\subsubsection{第二类Gauss-Chebyshev求积公式}
+
+第二类Chebyshev多项式：
+区间$[-1,1]$上，带权$\rho(x) = \sqrt{1-x^2}$
+\begin{equation*}
+    U_n(x) = \frac{sin[(n+1)arccosx]}{\sqrt{1-x^2}}\    (n=0,1,2,\cdots)
+\end{equation*}
+以$U_{n+1}$的零点作为求积节点构造的公式
+\begin{equation*}
+    \int_{-1}^{1}\sqrt{1-x^2}f(x)dx \approx \sum_{k=0}^{n}A_kf(x_k) = \frac{\pi}{n+1}\sum_{k=0}^{n}sin^2\frac{k\pi}{n+1}f(cos\frac{k\pi}{n+1})
+\end{equation*}
+称为第二类Gauss-Chebyshev公式。
+
+\subsubsection{Gauss-Laguerre求积公式}
+Laguerre多项式：
+\begin{equation*}
+    L_n(x) = e^x\frac{d^n}{dx^n}(x^ne^{-x}),\  x \in [0,+\infty]\\
+    \\(n=0,1,2,\cdots)
+    \\\rho(x) = e^{-x}
+\end{equation*}
+以$n+1$次Laguerre多项式的零点为求积节点构造的公式
+\begin{equation*}
+    \int_{0}^{+\infty}e^{-x}f(x)dx \approx \sum_{k=0}^{n}A_kf(x_k)
+\end{equation*}
+称为Gauss-Laguerre求积公式。
+
+\subsubsection{Gauss-Hermite求积公式}
+Hermite多项式：
+\begin{equation*}
+    H_n(x) = (-1)^n\cdot e^{x^2}\cdot \frac{d^n}{dx^n}(e^{-x^2}),x \in (-\infty ,+\infty)
+    \\(n = 0,1,2,\cdots)
+    \\\rho(x) = e^{-x^2}
+\end{equation*}
+以$n+1$次Hermite多项式的零点为求积节点构造的公式
+\begin{equation*}
+    \int_{-\infty}^{+\infty}e^{-x^2}f(x)dx \approx \sum_{k=0}^{n}A_kf(x_k)
+\end{equation*}
+称为Gauss-Hermite求积公式。
+
+\subsection{Gauss公式的余项}
+\begin{equation*}
+    R[f] = \int_{a}^{b}f(x)dx -\sum_{k=0}^{n}A_kf(x_k) =\int_{a}^{b}f(x)dx -\sum_{k=0}^{n}A_kP(x_k) = \int_{a}^{b}f(x)dx - \int_{a}^{b}P(x)dx = \int_{a}^{b}[f(x)-P(x)]dx
+\end{equation*}
+
+\subsection{Hermite多项式的余项}
+Hermite多项式的插值条件为：$H(x_k) = f(x_k),H'(x_k) = f'(x_k)$
+Hermite插值余项为
+\begin{equation*}
+    R(x) = f(x) - H(x) = \frac{f^{(2n+2)}(\xi_x)}{(2n+2)!}\omega^2(x)
+\end{equation*}
+其中，$\omega(x) = (x-x_0)\cdots (x-x_n)$，$\xi_x$与$x$有关。
+\begin{equation*}
+    \Rightarrow R[f] = \int_{a}^{b}R(x)dx = \int_{a}^{b}\frac{f^{(2n+2)}(\xi_x)}{(2n+2)!}\omega^2(x)dx = \frac{f^{(2n+2)}(\xi_x)}{(2n+2)!}\int_{a}^{b}\omega^2(x)dx,\xi \in (a,b)
+\end{equation*}
+
+\subsection{Gauss型求积公式的收敛性}
+
+\begin{theorem}
+    若$f(x) \in C[a,b]$，则Gauss型求积公式所求积分值序列${I_n(f) = \sum_{k=1}^{n}A_kf(x_k)}$收敛于积分值$I(f)$，即
+    \begin{equation*}
+        \lim_{n\rightarrow \infty}\sum_{k=1}^{n}A_kf(x_k) = \int_{a}^{b}\rho(x)f(x)dx
+    \end{equation*}
+\end{theorem}
+
+\subsection{Gauss型求积公式的数值稳定性}
+
+\begin{theorem}
+    Gauss型求积公式的求积系数都大于零，从而Gauss型求积公式是数值稳定的。
+\end{theorem}
+
+\subsubsection{复化Gauss-Legender求积公式}
+
+$h = \frac{b-a}{n},x_k = a+kh \   (k=0,\cdots ,n)$
+\begin{equation*}
+    \int_{x_k}^{x_{k+1}}f(x)dx = \frac{h}{2}\int_{-1}^{1}f(\frac{h}{2}t+a+(k+\frac{1}{2})h)dt \approx \frac{h}{2}\sum_{k=0}^{n}A_kf(\frac{h}{2}t_k+a+(k+\frac{1}{2})h)
+\end{equation*}
+其中，$t_k$为$n+1$次Legendre多项式$P_{n+1}$的根。从而
+\begin{equation*}
+    \int_{a}^{b}f(x)dx \approx \frac{b-a}{2n}\sum_{k=0}^{n-1}[\sum_{j=0}^{n}A_j^{(k)}f(\frac{h}{2}t_j^{(k)}+a+(k+\frac{1}{2})h)]
+\end{equation*}
+
+\subsection{复化两点Gauss-Legender求积公式}
+\begin{equation*}
+    \int_{a}^{b}f(x)dx \approx \frac{b-a}{2n}\sum_{k=0}^{n-1}[F_k(-\frac{1}{\sqrt{3}})+F_k(\frac{1}{\sqrt{3}})]
+\end{equation*}
+其中，$F_k(t) = f(\frac{h}{2}t+a+(k+\frac{1}{2})h)$
+
+\subsection{复化三点Gauss-Legender求积公式}
+\begin{equation*}
+    \int_{a}^{b}f(x)dx \approx \frac{b-a}{2n}\sum_{k=0}^{n-1}[\frac{5}{9}F_k(-\sqrt{\frac{3}{5}})+\frac{8}{9}F_k(0)+\frac{5}{9}F_k(\sqrt{\frac{3}{5}})]
+\end{equation*}
+
+
+\section{第四章小结}
+重点：
+\begin{enumerate}
+    \item 代数精度的定义（数值求积公式的构造及代数精度的差别）
+    \item 插值型求积公式的定义及其代数精度的判别
+    \item Newton-Cotes求积公式的定义及几种常见的低阶公式（梯形公式、Simpson公式）的截断误差与代数精度
+    \item 复化梯形公式、复化Simpson公式应用及误差估计（先验与后验误差）
+    \item 龙贝格算法
+    \item Gauss型求积公式的定义及构造
+\end{enumerate}
