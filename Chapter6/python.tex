@@ -1,0 +1,483 @@
+\chapter{线性方程组的迭代解法}
+\section{一般迭代法}
+
+将线性方程组$Ax=b$改写为等价形式$x=Bx+g$, 建立某一种迭代格式
+\begin{equation*}
+    x_{k+1}=BX_k+g
+\end{equation*}
+从而从初始值$x_0$出发, 得到序列${x_k}$
+
+\subsection{迭代格式构造}
+
+将矩阵$A$分裂为
+\begin{equation*}
+    A=Q-C, \abs*{Q}\ne 0
+\end{equation*}
+则
+\begin{align*}
+    Ax=b&\Leftrightarrow(Q-C)x=b\\
+    &\Leftrightarrow(I-\inv{Q}C)x=\inv{Q}b\\
+    &\Leftrightarrow x=Bx+g
+\end{align*}
+其中,
+\begin{align*}
+    B&=\inv{Q}C\\
+    g&=\inv{Q}b
+\end{align*}
+
+将上式改写为迭代过程
+\begin{equation*}
+    x_{k+1}=BX_k+g
+\end{equation*}
+称这种迭代过程为\emph{逐次逼近法}, $B$为\emph{迭代矩阵}. 对于给定的初值$x_0$, 可得到向量序列
+\begin{equation*}
+    x_0,x_1,\cdots,x_n,\cdots
+\end{equation*}
+
+\begin{definition}
+    若
+    \begin{equation*}
+        \lim\limits_{n\to\infty}x_n=x^*
+    \end{equation*}
+    则称逐次逼近法\emph{收敛}, 否则称逐次逼近法\emph{不收敛}或\emph{发散}
+\end{definition}
+
+下面的定理保证了, 收敛值$x^*$为方程组的解
+\begin{theorem}
+    对于任意给定的初始向量$x_0$, 如果经过逐次逼近法产生的向量序列收敛于向量$x^*$, 则$x^*$是方程组$x=Bx+g$的解
+\end{theorem}
+
+\begin{proof}
+    \begin{equation*}
+        \lim\limits_{k\to\infty}x_{k+1}=\lim\limits_{k\to\infty}(Bx_k+g)
+    \end{equation*}
+    由极限的收敛性可知,
+    \begin{equation*}
+        x^*=Bx^*+g
+    \end{equation*}
+\end{proof}
+
+\subsection{迭代法收敛条件}
+
+\begin{lemma}
+    当$k\to\infty$时, $B^k\to0$的充要条件是:
+    \begin{equation*}
+        \rho(B)<1
+    \end{equation*}
+\end{lemma}
+
+\begin{theorem}
+    设线性方程组$x=Bx+g$有唯一解, 那么逐次逼近法对任意初始向量$x_0$收敛的充要条件是迭代矩阵$B$的谱半径$\rho(B)<1$
+\end{theorem}
+
+\begin{proof}
+    \begin{align*}
+        &\begin{cases}
+            x^*=Bx^*+g\\
+            x_{k+1}=Bx_k+g
+        \end{cases}\\
+        &\Rightarrow x_{k+1}-x^*=B(x_k-x^*)=\cdots=B^{k+1}(x_0-x^*)
+    \end{align*}
+    因此, 
+    \begin{equation*}
+        \lim\limits_{k\to\infty}(x_{k+1}-x^*)=0\Leftrightarrow\lim\limits_{k\to\infty}B^{k+1}=0
+    \end{equation*}
+    由上述引理可知, 其充要条件为$\rho(B)<1$
+\end{proof}
+
+事实上, 在实际验证收敛性的时候, 我们可以使用谱半径, 但更简单的, 可以使用下面的定理(这个定理是充分条件而不是充要条件)
+
+\begin{theorem}
+    若逐次逼近法的迭代矩阵满足$\norm*{B}<1$, 则逐次逼近法收敛. 其中, $\norm*{\cdot}$为矩阵$B$的某种范数.
+\end{theorem}
+
+由于我们在计算范数的时候, 矩阵的1-范数与$\infty$-范数都可以直接用矩阵元素计算, 因此更容易判断收敛性.
+
+\subsection{迭代法的误差估计}
+
+\begin{theorem}
+    若存在一个矩阵范数使得$\norm*{B}<1$, 则迭代收敛, 且有误差估计
+    \begin{align*}
+        \norm*{x^*-{x_k+1}}&\le\frac{\norm*{B}^{k+1}}{1-\norm*{B}}\norm*{x_1-x_0}\\
+        \norm*{x^*-x_{k+1}}&\le\frac{\norm*{B}}{1-\norm*{B}}\norm*{x_{k+1}-x_k}
+    \end{align*}
+
+    其中, 第一个式子用于判断误差表达式与收敛速度, 第二个式子用于判断终止条件(即\emph{停机准则}).
+\end{theorem}
+
+\section{Jacobi迭代法}
+
+设有$n$阶方程组
+\begin{equation*}
+    \begin{cases}
+        a_{11}x_1+a_{12}x_2+\cdots+a_{1n}x_n=b_1\\
+        a_{21}x_1+a_{22}x_2+\cdots+a_{2n}x_n=b_2\\
+        \vdots\\
+        a_{n1}x_1+a_{n2}x_2+\cdots+a_{nn}x_n=b_n
+    \end{cases}
+\end{equation*}
+若系数矩阵非奇异, 且$a_{ii}\ne0(i=1,2,\cdots,n)$, 将方程组改写为
+\begin{equation*}
+    \begin{cases}
+        x_1=\frac{1}{a_{11}}(b_1-a_{12}x_2-a_{13}x_3-\cdots-a_{1n}x_n)\\
+        x_2=\frac{1}{a_{22}}(b_2-a_{21}x_1-a_{23}x_3-\cdots-a_{2n}x_n)\\
+        \vdots\\
+        x_n=\frac{1}{a_{nn}}(b_n-a_{n1}x_1-a_{n2}x_2-\cdots-a_{n,n-1}x_{n-1})
+    \end{cases}
+\end{equation*}
+
+写成迭代格式
+\begin{equation*}
+    \begin{cases}
+        x_1^{(k+1)}=\frac{1}{a_{11}}(b_1-a_{12}x_2^{(k)}-a_{13}x_3^{(k)}-\cdots-a_{1n}x_n^{(k)})\\
+        x_2^{(k+1)}=\frac{1}{a_{22}}(b_2-a_{21}x_1^{(k)}-a_{23}x_3^{(k)}-\cdots-a_{2n}x_n^{(k)})\\
+        \vdots\\
+        x_n^{(k+1)}=\frac{1}{a_{nn}}(b_n-a_{n1}x_1^{(k)}-a_{n2}x_2^{(k)}-\cdots-a_{n,n-1}x_{n-1}^{(k)})
+    \end{cases}
+\end{equation*}
+也可以简单写作
+\begin{equation*}
+    x_i^{(k+1)}=\frac{1}{a_{ii}}\left(b_i-\sum_{j=1\atop j\ne i}^na_{ij}x_j^{(k)}\right), i=1,2,\cdots,n
+\end{equation*}
+
+写成矩阵形式, 
+\begin{align*}
+    Ax=b&\Leftrightarrow(D-L-U)x=b\\
+    &\Leftrightarrow Dx=(L+U)x+b\\
+    &\Leftrightarrow x=\inv{D}(L+U)x+\inv{D}b
+\end{align*}
+定义
+\begin{equation*}
+    B_J=\inv{D}(L+U), f=\inv{D}b
+\end{equation*}
+其中$B_J$为Jacobi迭代阵, 则迭代格式可以写作
+\begin{equation*}
+    x^{(k+1)}=B_Jx^{(k)}+f
+\end{equation*}
+
+\begin{notice}
+    矩阵$D$是对角矩阵, $L$和$U$分别为严格下三角矩阵和严格上三角矩阵, 且$L$和$U$的元素为$A$的相反数
+\end{notice}
+
+不难验证, $B_J$满足下面的形式
+\begin{equation*}
+    B_J=\mqty(
+        0&-\frac{a_{12}}{a_{11}}&-\frac{a_{13}}{a_{11}}&\cdots&-\frac{a_{1n}}{a_{11}}\\
+        -\frac{a_{21}}{a_{22}}&0&-\frac{a_{23}}{a_{22}}&\cdots&-\frac{a_{2n}}{a_{22}}\\
+        -\frac{a_{31}}{a_{33}}&-\frac{a_{32}}{a_{33}}&0&\cdots&-\frac{a_{3n}}{a_{33}}\\
+        \vdots&\vdots&\vdots&\ddots&\vdots\\
+        -\frac{a_{n1}}{a_{nn}}&-\frac{a_{n2}}{a_{nn}}&-\frac{a_{n3}}{a_{nn}}&\cdots&0
+    )
+\end{equation*}
+
+\begin{enumerate}
+    \item 在迭代过程中, 矩阵$A$的元素不会改变, 故可以事先调整好$A$的值, 使得对角元素$a_{ii}\ne0$, 否则$A$不可逆;
+    \item 在计算的时候, 需要计算完$x^{(k)}$之后才能继续计算$x^{(k+1)}$, 因此需要两组向量存储. 从计算机的角度看, 占用了内存空间.
+\end{enumerate}
+
+为了解决空间占用问题, 需要给出另一种迭代方法
+
+\section{Gauss-Seidel迭代法}
+
+若使用下面的形式计算
+\begin{align*}
+    x_1^{(k+1)}&=\frac{1}{a_{11}}(-a_{12}x_2^{(k)}-a_{13}x_3^{(k)}-a_{14}x_4^{(k)}-\cdots-a_{1n}x_n^{(k)}+b_1)\\
+    x_2^{(k+1)}&=\frac{1}{a_{22}}(-a_{21}x_1^{(k+1)}-a_{23}x_3^{(k)}-a_{24}x_4^{(k)}-\cdots-a_{2n}x_n^{(k)}+b_2)\\
+    x_3^{(k+1)}&=\frac{1}{a_{33}}(-a_{31}x_1^{(k+1)}-a_{32}x_2^{(k+1)}-a_{34}x_4^{(k)}-\cdots-a_{3n}x_n^{(k)}+b_3)\\
+    &\vdots\\
+    x_n^{(k+1)}&=\frac{1}{a_{nn}}(-a_{n1}x_1^{(k+1)}-a_{n2}x_2^{(k+1)}-a_{n3}x_3^{(k+1)}-\cdots-a_{n,n-1}x_{n-1}^{(k+1)}+b_n)
+\end{align*}
+
+用矩阵形式写作
+\begin{align*}
+    &x^{(k+1)}=\inv{D}(Lx^{(k+1)}+Ux^{(k)})+\inv{D}b\\
+    &\Leftrightarrow (D-L)x^{(k+1)}=Ux^{(k)}+b\\
+    &\Leftrightarrow x^{(k+1)}=\inv{(D-L)}Ux^{(k)}+\inv{(D-L)}b
+\end{align*}
+
+定义
+\begin{equation*}
+    B_{G-S}=\inv{(D-L)}U, g=\inv{(D-L)}
+\end{equation*}
+称$B_{G-S}$为Gauss-Seidel迭代阵.
+
+上式可以理解为将系数矩阵$A$作另一个分裂
+\begin{equation*}
+    A=(D-L)-U
+\end{equation*}
+此时有
+\begin{align*}
+    Ax=b&\Leftrightarrow ((D-L)-U)x=b\\
+    &\Leftrightarrow (D-L)x=Ux+b\\
+    &\Leftrightarrow x=\inv{(D-L)}Ux+\inv{(D-L)}b\\
+    &\Leftrightarrow x_{k+1}=\inv{(D-L)}Ux_k+\inv{(D-L)}b\\
+    &\Leftrightarrow x_{k+1}=B_{G-S}x_k+g
+\end{align*}
+
+\section{Jacobi迭代法和Gauss-Seidel迭代法收敛性}
+
+\begin{theorem}
+    $n$阶矩阵$A$是按行严格对角占优矩阵的充分必要条件是Jacobi迭代法的迭代矩阵满足$\norm*{B_J}_\infty<1$
+\end{theorem}
+
+按行严格对角占优矩阵, 指的是对于矩阵$A=(a_{ij})_{n\cross n}$, 有
+\begin{equation*}
+    \abs*{a_{ii}}>\sum_{j=1,j\ne i}^n\abs*{a_{ij}}
+\end{equation*}
+
+\begin{theorem}
+    如果$A$是严格对角占优矩阵, 则Jacobi和Gauss-Seidel迭代法都收敛
+\end{theorem}
+
+\begin{theorem}
+    若$A$是不可约对角占优矩阵, 则Jacobi迭代法与Gauss-Seidel迭代法都收敛
+\end{theorem}
+
+\begin{definition}[可约矩阵与不可约矩阵]
+    设$A=(a_{ij})_{n\cross n}$, 当$n\ge2$时, 如果存在$n$阶置换阵$P$, 使得
+    \begin{equation*}
+        \transpose{P}AP=\mqty(
+            A_{11}&A_{12}\\
+            0&A_{22}
+        )
+    \end{equation*}
+    其中$A_{11}$为$r$阶子矩阵, $A_{22}$为$n-r$阶子矩阵, 且$1\le r\le n$, 则称矩阵$A$为\emph{可约矩阵}, 否则, 若不存在置换阵$P$使上式成立, 则称矩阵$A$为\emph{不可约矩阵}.
+\end{definition}
+
+\begin{theorem}
+    若$A$使$n$阶正定矩阵, 则Gauss-Seidel迭代法收敛.
+\end{theorem}
+
+\begin{theorem}
+    若$A$使有正对角元的$n$阶对称矩阵, 则Jacobi迭代法收敛的充要条件使$A$和$2D-A$同为正定矩阵
+\end{theorem}
+
+对于Jacobi迭代, 其特征方程为
+\begin{align*}
+    \abs*{\lambda I-B_J}=0&\Leftrightarrow \abs*{\lambda I-\inv{D}(L+U)}=0\\
+    &\Leftrightarrow\abs*{\lambda D-(L+U)}=0\\
+    &\Leftrightarrow\mqty|
+    \lambda a_{11} & a_{12}&\cdots&a_{1n}\\
+    a_{21}&\lambda a_{22}&\cdots&a_{2n}\\
+    \vdots&\vdots&\ddots&\vdots\\
+    a_{n1}&a_{n2}&\cdots&\lambda a_{nn}|=0
+\end{align*}
+
+同理, 对于Gauss-Seidel迭代
+\begin{align*}
+    \abs*{\lambda I-B_{G-S}}=0&\Leftrightarrow\abs*{\lambda I-\inv{(D-L)}U}=0\\
+    &\Leftrightarrow\abs*{\lambda(D-L)-U}=0\\
+    &\Leftrightarrow\mqty|
+    \lambda a_{11}&a_{12}&\cdots&a_{1n}\\
+    \lambda a_{21}&\lambda a_{22}&\cdots&a_{2n}\\
+    \vdots&\vdots&\ddots&\vdots\\
+    \lambda a_{n1}&\lambda a_{n2}&\cdots&\lambda a_{nn}
+    |=0
+\end{align*}
+
+\begin{example}
+    分析线性方程组
+    \begin{equation*}
+        \begin{cases}
+            2x_1-x_2+x_3=1\\
+            x_1+x_2+x_3=1\\
+            x_1+x_2-2x_3=1
+        \end{cases}
+    \end{equation*}
+    使用Jacobi迭代和Gauss-Seidel迭代的收敛性
+\end{example}
+
+\begin{solution}
+    对于Jacobi迭代, 其特征方程为
+    \begin{equation*}
+        \mqty|
+        2\lambda&-1&1\\
+        1&\lambda&1\\
+        1&1&-2\lambda|=0
+    \end{equation*}
+    解得其特征值为$0,\pm\frac{\sqrt{5}}{2}i$, 因此谱半径大于1, Jacobi迭代法不收敛.
+
+    对于Gauss-Seidel迭代, 特征方程为
+    \begin{equation*}
+        \mqty|
+        2\lambda&-1&1\\
+        \lambda&\lambda&1\\
+        \lambda&\lambda&-2\lambda|=0
+    \end{equation*}
+    其特征值为$0,-\frac{1}{2}$, 因此谱半径小于1, Gauss-Seidel迭代法收敛.
+\end{solution}
+
+\begin{example}
+    分析线性方程组
+    \begin{equation*}
+        \begin{cases}
+            x_1+x_2=1\\
+            x_1+2x_2-2x_3=1\\
+            -2x_2+5x_3=1
+        \end{cases}
+    \end{equation*}
+    的Jacobi迭代和Gauss-Seidel迭代收敛性
+\end{example}
+
+\begin{solution}
+    系数矩阵$A$是正定矩阵, 因此Gauss-Seidel迭代法收敛. 又因为矩阵
+    \begin{equation*}
+        2D-A=\mqty(
+            1&-1&0\\
+            -1&2&2\\
+            0&2&5
+        )
+    \end{equation*}
+    也是正定矩阵, 因此Jacobi迭代法也收敛.
+\end{solution}
+
+\begin{example}
+    分析线性方程组
+    \begin{equation*}
+        \begin{cases}
+            10x_1+x_3-5x_4=-7\\
+            x_1+8x_2-3x_3=11\\
+            3x_1+2x_2-8x_3+x_4=23\\
+            x_1-2x_2+2x_3+7x_4=17
+        \end{cases}
+    \end{equation*}
+    的Jacobi迭代和Gauss-Seidel迭代的收敛性
+\end{example}
+
+\begin{solution}
+    方程系数矩阵为
+    \begin{equation*}
+        A=\mqty(
+            10&0&1&-5\\
+            1&8&-3&0\\
+            3&2&-8&1\\
+            1&-2&2&7
+        )
+    \end{equation*}
+    为严格对角占优矩阵, 因此Jacobi迭代和Gauss-Seidel迭代均收敛.
+\end{solution}
+
+\section{超松弛法}
+
+对于超松弛法而言, 每一次迭代分为如下两个步骤:
+\begin{enumerate}
+    \item 迭代, 即
+    \begin{equation*}
+        \widetilde{x_i}^{(k+1)}=\frac{1}{a_{ii}}\left(b_i-\sum_{j=1}^{i-1}a_{ij}x_j^{(k+1)}-\sum_{j=i+1}^na_{ij}x_j^{(k)}\right)
+    \end{equation*}
+    \item 加速, 令 
+    \begin{equation*}
+        x_i^{(k+1)}=(1-\omega)x_i^{(k)}+\omega\widetilde{x}_i^{k+1}, i=1,2,\cdots,n
+    \end{equation*}
+    即
+    \begin{equation*}
+        x_i^{(k+1)}=(1-\omega)x_i^{(k)}+\frac{\omega}{a_{ii}}\left(b_i-\sum_{j=1}^{i-1}a_{ij}x_j^{(k+1)}-\sum_{j=i+1}^na_{ij}x_j^{(k)}\right)
+    \end{equation*}
+\end{enumerate}
+
+用矩阵形式表示为
+\begin{align*}
+    &x^{(k+1)}=(1-\omega)x^{(k)}+\omega\inv{D}\left(b-Lx^{(k+1)}+Ux^{(k)}\right)\\
+    \Leftrightarrow&(D-\omega L)x^{(k+1)}=[(1-\omega)D+\omega U]x^{(k)}+\omega b\\
+    \Leftrightarrow&x^{(k+1)}=\inv{(D-\omega L)}[(1-\omega)D+\omega U]x^{(k)}+\omega\inv{(D-\omega L)}b
+\end{align*}
+
+对于超松弛法, 其收敛的充要条件为$\rho(L_\omega)<1$, 其中,
+\begin{equation*}
+    L_\omega=\inv{(D-\omega L)}[(1-\omega)D+\omega U]
+\end{equation*}
+
+\begin{theorem}
+    超松弛法收敛的必要条件是松弛因子
+    \begin{equation*}
+        0<\omega<2
+    \end{equation*}
+\end{theorem}
+
+\begin{theorem}
+    给定线性方程组$Ax=b$, 如果$A$是对称正定矩阵, 且$0<\omega<2$, 则超松弛法收敛.
+\end{theorem}
+
+其中, 当$\omega=1$时, 超松弛法过渡为Gauss-Seidel迭代.
+
+最后以课本的一道课后练习题结束
+
+\begin{example}
+    设方程组
+    \begin{equation*}
+        \begin{cases}
+            x_1-\frac{1}{4}x_2-\frac{1}{4}x_4=\frac{1}{2}\\
+            x_2-\frac{1}{4}x_3-\frac{1}{4}x_4=\frac{1}{2}\\
+            -\frac{1}{4}x_1-\frac{1}{4}x_2+x_3=\frac{1}{2}\\
+            -\frac{1}{4}x_1-\frac{1}{4}x_2+x_4=\frac{1}{2}
+        \end{cases}
+    \end{equation*}
+    求解该方程组对Jacobi迭代和Gauss-Seidel迭代法的迭代矩阵谱半径, 并判断其收敛性.
+\end{example}
+
+\begin{solution}
+    由题意可知, 其系数矩阵为
+    \begin{equation*}
+        A=\mqty(
+            1&0&-\frac{1}{4}&-\frac{1}{4}\\
+            0&1&-\frac{1}{4}&-\frac{1}{4}\\
+            -\frac{1}{4}&-\frac{1}{4}&1&0\\
+            -\frac{1}{4}&-\frac{1}{4}&0&1
+        )
+    \end{equation*}
+    将其分解为对角矩阵$D$, 严格下三角矩阵$L$和严格上三角矩阵$U$, 使其满足$A=D-L-U$, 得
+    \begin{align*}
+        D&=\mqty(
+            1&&&\\
+            &1&&\\
+            &&1&\\
+            &&&1
+        )\\
+        L&=\mqty(
+            0&&&\\
+            0&0&&\\
+            \frac{1}{4}&\frac{1}{4}&0&\\
+            \frac{1}{4}&\frac{1}{4}&0&0
+        )\\
+        U&=\mqty(
+            0&0&\frac{1}{4}&\frac{1}{4}\\
+            &0&\frac{1}{4}&\frac{1}{4}\\
+            &&0&0\\
+            &&&0
+        )
+    \end{align*}
+
+    对于Jacobi迭代, 其迭代矩阵为
+    \begin{equation*}
+        B_J=\inv{D}(L+U)=\mqty(
+            0&0&\frac{1}{4}&\frac{1}{4}\\
+            0&0&\frac{1}{4}&\frac{1}{4}\\
+            \frac{1}{4}&\frac{1}{4}&0&0\\
+            \frac{1}{4}&\frac{1}{4}&0&0
+        )
+    \end{equation*}
+    其谱半径为特征值模得最大值, 计算可得
+    \begin{equation*}
+        \rho(B_J)=0.5
+    \end{equation*}
+
+    同理, 对于Gauss-Seidel迭代, 其迭代矩阵为
+    \begin{equation*}
+        B_{G-S}=\inv{(D-L)}U=\mqty(
+            0&0&\frac{1}{4}&\frac{1}{4}\\
+            0&0&\frac{1}{4}&\frac{1}{4}\\
+            0&0&\frac{1}{8}&\frac{1}{8}\\
+            0&0&\frac{1}{8}&\frac{1}{8}
+        )
+    \end{equation*}
+    谱半径
+    \begin{equation*}
+        \rho(B_{G-S})=0.25
+    \end{equation*}
+
+    由于其谱半径均小于1, 因此Jacobi迭代和Gauss-Seidel迭代法均收敛.
+\end{solution}
+
+关于收敛性, 也可以使用系数矩阵的正定性来判断, 即由于系数矩阵$A$为正定矩阵, 则Gauss-Seidel迭代法收敛. 又由于系数矩阵为对称矩阵, 且$2D-A$为正定矩阵, 因此Jacobi迭代法收敛.
+
+可以发现, 使用两种方法得到的收敛性结果是一致的.
