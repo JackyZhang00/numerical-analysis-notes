@@ -55,11 +55,18 @@ Jiaqi Z.
   - Jacobi迭代法和Gauss-Seidel迭代法收敛性
   - 超松弛法
 - [ ] 第七章 非线性方程组求根
-- [ ] 第八章 矩阵的特征值与特征向量计算
+- [X] 第八章 常微分方程数值解法
+  - 引言
+  - Euler方法
+  - Runge-Kutta方法
 - [X] 附录A 矩阵分析基础
   - 向量范数
   - 矩阵范数
   - 初等矩阵
+- [X] 附录B 常见RUnge-Kutta公式
+  - 二阶Runge-Kutta方法
+  - 三阶Runge-Kutta方法
+  - 四阶Runge-Kutta方法
 
 ## 关于程序语言
 

@@ -1,0 +1,413 @@
+\chapter{常微分方程数值解法}
+
+\section{引言}
+
+常微分方程的数值解法分为
+\begin{enumerate}
+    \item 初值问题的数值解法
+    \item 边值问题的数值解法
+\end{enumerate}
+
+\subsection{初值问题的数值解法}
+
+\subsubsection{一阶常微分方程初值问题一般形式}
+一阶常微分方程初值问题的一般形式为
+\begin{equation*}
+    \begin{cases}
+        y'(x)=f(x,y(x)), a\le x\le b\\
+        y(a)=y_0
+    \end{cases}
+\end{equation*}
+
+求解方法主要是\emph{构造迭代格式}, 即将连续的微分方程及初值条件离散化, 并使用不同的数值方法进行求解. 常见的构造方法为\emph{离散点函数值的集合+线性组合结构=近似公式}. 
+
+进行微分方程数值解法时, 主要解决如下问题:
+\begin{enumerate}
+    \item 如何将方程离散化, 并建立迭代公式;
+    \item 如何估计迭代公式局部截断误差与整体误差;
+    \item 如何保证迭代公式稳定性与收敛性.
+\end{enumerate}
+
+\subsubsection{相关定义}
+
+记
+\begin{equation*}
+    D={(x,y)|a\le x\le b, y(x)-\delta\le y\le y(x)+\delta}
+\end{equation*}
+为$f(x,y)$在$D$上对$y$满足Lipschitz条件指: 存在$L>0$, 使得对于任意的$x\in[a,b], y_1,y_2\in[y(x)-\delta,y(x)+\delta]$, 有
+\begin{equation*}
+    \abs*{f(x,y_1)-f(x,y_2)}\le L\abs*{y_1-y_2}
+\end{equation*}
+
+\subsection{初值问题解存在唯一性}
+
+对于一阶常微分方程初值问题
+\begin{equation*}
+    \begin{cases}
+        \dv{y}{x}=f(x,y), x\in[a,b]\\
+        y(a)=y_0
+    \end{cases}
+\end{equation*}
+只要$f(x,y)$在$[a,b]\times R^1$上连续, 且关于$y$满足Lipschitz条件, 即存在与$x,y$无关常数$L$, 使得
+\begin{equation*}
+    \abs*{f(x,y_1)-f(x,y_2)}\le L\abs*{y_1-y_2}
+\end{equation*}
+对任意定义在$[a,b]$上的$y_1(x),y_2(x)$成立, 则上述微分方程初值问题存在唯一解.
+
+求函数$y(x)$在一系列节点处的近似值
+\begin{equation*}
+    y_i\approx y(x_i), i=1,2,\cdots,n
+\end{equation*}
+的方法称为微分方程的\emph{数值解法}, $y_1,\cdots,y_n$为微分方程的\emph{数值解}.
+
+称节点间距$h_i=x_{i+1}-x_i, i=0,1,\cdots,n-1$为步长, 通常采用等距节点, 即$h_i=h=\text{常数}$
+
+\subsection{初值问题的离散化方法}
+
+按照某一递推公式, 按节点从左至右顺序依次求出$y(x_i)$的近似值$y_i,i=1,2,\cdots,n$, 取$y_0=\eta$, 若计算$y_{i+1}$只用到前一步的值$y_i$, 则称该方法为\emph{单步方法}; 若用到前$r$步的值$y_i,y_{i-1},\cdots,y_{i-r+1}$, 则称该方法为\emph{$r$步方法}.
+
+\section{Euler方法}
+
+\subsection{Euler公式}
+
+采用向前差商
+\begin{equation*}
+    y'(x_0)\approx\frac{y(x_1)-y(x_0)}{h}
+\end{equation*}
+近似导数, 则
+\begin{equation*}
+    y(x_1)\approx y(x_0)+hy'(x_0)=y_0+hf(x_0,y_0)
+\end{equation*}
+并将该结果记为$y_1$
+
+类似地, 可以推导得到迭代格式为
+\begin{equation*}
+    y_{i+1}=y_i+hf(x_i,y_i), i=0,1,\cdots,n-1
+\end{equation*}
+
+\begin{definition}[局部截断误差]
+    在假设$y_i=y(x_i)$, 即第$i$步计算精确前提下, 考虑的截断误差
+    \begin{equation*}
+        R_i=y(x_{i+1})-y_{i+1}
+    \end{equation*}
+    称为\emph{局部截断误差}
+\end{definition}
+
+\begin{definition}
+    若某算法局部截断误差为$O(h^{p+1})$, 则称该算法有\emph{$p$阶精度}.
+\end{definition}
+
+对于Euler法, 可以分析
+\begin{align*}
+    R_i&=y(x_{i+1})-y_{i+1}\\
+    &=\left[y(x_i)+hy'(x_i)+\frac{h^2}{2}y''(x_i)+O(h^3)\right]-[y_i+hf(x_i,y_i)]\\
+    &=\frac{h^2}{2}y''(x_i)+O(h^3)\\
+    &=O(h^2)
+\end{align*}
+称
+\begin{equation*}
+    \frac{h^2}{2}y''(x_i)
+\end{equation*}
+为$R_i$的\emph{主项}. 由定义可知, Euler法具有\emph{一阶精度}.
+
+\begin{example}
+    用Euler公式求解初值问题
+    \begin{equation*}
+        \begin{cases}
+            y'=-2xy^2, 0\le x\le1.2\\
+            y(0)=1
+        \end{cases}
+    \end{equation*}
+    要求取步长为$h=0.1$
+\end{example}
+
+\begin{solution}
+    应用Euler公式
+    \begin{equation*}
+        \begin{cases}
+            y_{i+1}=y_i-2hx_iy_i^2, i=0,1,\cdots,11\\
+            y(0)=1
+        \end{cases}
+    \end{equation*}
+    其中$x_i=0.1i$, 可直接进行迭代计算. 在此不再赘述.
+\end{solution}
+
+\subsection{隐式Euler法(向后Euler法)}
+
+使用向后差商近似导数, 即
+\begin{equation*}
+    y'(x_1)\approx\frac{y(x_1)-y(x_0)}{h}
+\end{equation*}
+有
+\begin{equation*}
+    y(x_1)\approx y_0+hf(x_1,y(x_1))
+\end{equation*}
+
+以此可得迭代格式为
+\begin{equation*}
+    y_{i+1}=y_i+hf(x_{i+1},y_{i+1}), i=0,1,\cdots,n-1
+\end{equation*}
+注意到未知数$y_{i+1}$同时出现在等式两边, 因此在实际应用时不能直接得到, 称为\emph{隐式Euler公式}.
+
+与显式Euler公式类似, 隐式Euler公式的局部截断误差为
+\begin{equation*}
+    R_i=y(x_{i+1})-y_{i+1}=-\frac{h^2}{2}y''(x_i)+O(h^3)
+\end{equation*}
+即具有1阶精度.
+
+\subsection{梯形公式}
+
+计算显式Euler公式和隐式Euler公式的平均值, 可得
+\begin{equation*}
+    y_{i+1}=y_i+\frac{h}{2}[f(x_i,y_i)+f(x_{i+1},y_{i+1})], i=0,1,\cdots,n-1
+\end{equation*}
+
+\begin{notice}
+    梯形公式的局部截断误差为
+    \begin{equation*}
+        R_i=O(h^3)
+    \end{equation*}
+    即具有\emph{2阶精度}. 但该公式仍然为隐式公式.
+\end{notice}
+
+\subsection{中点Euler公式}
+
+使用中心差商近似导数
+\begin{equation*}
+    y'(x_1)\approx\frac{y(x_2)-y(x_0)}{2h}
+\end{equation*}
+即
+\begin{equation*}
+    y(x_2)\approx y(x_0)+2hf(x_1,y(x_1))
+\end{equation*}
+可得迭代格式为
+\begin{equation*}
+    y_{i+1}=y_{i-1}+2hf(x_i,y_i), i=1,2,\cdots,n-1
+\end{equation*}
+
+假设$y_{i-1}=y(x_{i-1}), y_i=y(x_i)$, 则可以导出
+\begin{equation*}
+    R_i=O(h^3)
+\end{equation*}
+即中点Euler公式具有\emph{2阶精度}
+
+\begin{notice}
+    中点Euler公式是显式公式, 且精度相较显式Euler公式有所提高. 但中点Euler公式多一个初值, 可能在此影响精度.
+\end{notice}
+
+为解决上述问题, 我们尝试\emph{改进梯形公式}, 给出下面的方法
+
+\subsection{预测校正法}
+
+先使用显式Euler公式进行预测, 算出
+\begin{equation*}
+    \overline{y_{i+1}}=y_i+hf(x_i,y_i)
+\end{equation*}
+并将预测值$\overline{y_{i+1}}$代入梯形公式右侧进行校正, 使得
+\begin{equation*}
+    y_{i+1}=y_i+\frac{h}{2}\left[f(x_i,y_i)+f\left(x_{i+1},\overline{y_{i+1}}\right)\right]
+\end{equation*}
+
+迭代格式为
+\begin{equation*}
+    y_{i+1}=y_i+\frac{h}{2}\left[f(x_i,y_i)+f(x_{i+1},y_i+hf(x_i,y_i))\right], i=0,1,\cdots,n-1
+\end{equation*}
+
+可以验证的是, 该算法具有\emph{2阶精度}. 且是单步递推, 求解过程较简单.
+
+\begin{notice}
+    实际计算中, 可先计算向前Euler公式, 再将计算结果代入向后Euler公式, 再将两个结果取算术平均值.
+\end{notice}
+
+\begin{example}
+    用改进Euler公式重解上述初值问题, 步长$h=0.1$
+\end{example}
+
+\begin{solution}
+    其迭代形式为
+    \begin{align*}
+        &y_0=1\\
+        &\begin{cases}
+            y_{i+1}^{(p)}=y_i+2hx_iy_i^2\\
+            y_{i+1}^{(c)}=y_i-2hx_{i+1}(y_{i+1}^{(p)})^2\\
+            y_{i+1}=\frac{1}{2}\left(y_{i+1}^{(p)}+y_{i+1}^{(c)}\right)
+        \end{cases}
+    \end{align*}
+\end{solution}
+
+\section{Runge-Kutta 方法}
+
+对于改进的Euler法, 将其改写为
+\begin{equation*}
+    \begin{cases}
+        y_{i+1}=y_i+h\left[\frac{1}{2}K_1+\frac{1}{2}K_2\right]\\
+        K_1=f(x_i,y_i)\\
+        K_2=f(x_i+h,y_i+hK_1)
+    \end{cases}
+\end{equation*}
+考察上式中$K_1, K_2$的系数和步长$h$, 试着调整它们的值, 将改进Euler法进行推广:
+\begin{equation*}
+    \begin{cases}
+        y_{i+1}=y_i+h[\lambda K_1+\lambda_2K_2]\\
+        K_1=f(x_i,y_i)\\
+        K_2=f(x_i+ph,y_i+phK_1)
+    \end{cases}
+\end{equation*}
+
+首先考虑确定系数$\lambda_1,\lambda_2,p$使其具有2阶精度, 即
+\begin{equation*}
+    R_i=y(x_{i+1})-y_{i+1}=O(h^3)
+\end{equation*}
+
+将$K_2$在$(x_i,y_i)$处作Taylor展开
+\begin{align*}
+    K_2&=f(x_i+ph,y_i+phK_1)\\
+    &=f(x_i,y_i)+phf_x(x_i,y_i)+phK_1f_y(x_i,y_i)+O(h^2)\\
+    &=y'(x_i)+phy''(x_i)+O(h^2)
+\end{align*}
+将其代入推广Euler法公式, 得
+\begin{align*}
+    y_{i+1}&=y_i+h\left\{\lambda_1y'(x_i)+\lambda_2[y'(x_i)+phy''(x_i)+O(h^2)]\right\}\\
+    &=y_i+(\lambda_1+\lambda_2)hy'(x_i)+\lambda_2ph^2y''(x_i)+O(h^3)
+\end{align*}
+将二者进行比较, 若要求$R_i=O(h^3)$, 则必有
+\begin{align*}
+    \lambda_1+\lambda_2&=1\\
+    \lambda_2p&=\frac{1}{2}
+\end{align*}
+上式存在无穷多解, 所有满足上式得格式统称为\emph{2阶Runge-Kutta格式}. 特别地, 当$p=1,\lambda_1=\lambda_2=1/2$时, 上式化为改进的Euler法.
+
+除此之外, 还有若干方法(如二阶中点方法, 二阶Heun方法等), 在此不赘述.
+
+\subsection{二阶Runge-Kutta格式精度}
+
+令
+\begin{align*}
+    F&=f_x+f_yf\\
+    G&=f_{xx}+2f_{xy}f+f_{yy}f^2
+\end{align*}
+则
+\begin{equation*}
+    k_2=f+phF+\frac{1}{2}p^2h^2G+O(h^3)
+\end{equation*}
+即
+\begin{align*}
+    y_{i+1}&=y_i+(\lambda_1+\lambda_2)hf+\lambda_2ph^2F+\frac{1}{2}\lambda_2p^2h^3G+O(h^4)\\
+    &=y_i+hf+\frac{1}{2}h^2F+\frac{1}{4}ph^3G+O(h^4)
+\end{align*}
+同时得
+\begin{align*}
+    y(x_{i+1})&=y(x_i)+hy'(x_i)+\frac{h^2}{2!}y''(x_i)+\frac{h^3}{3!}y'''(x_i)+O(h^4)\\
+    &=y_i+hf+\frac{h^2}{2}F+\frac{h^3}{6}(G+f_yF)+O(h^4)
+\end{align*}
+因此对于二阶Runge-Kutta方法而言, 其精度不超过二阶.
+
+对于高精度而言, 可以取更多的点, 即做如下推广:
+\begin{equation*}
+    \begin{cases}
+        y_{i+1}=y_i+h[\lambda_1K_1+\lambda_2K_2+\cdots+\lambda_mK_m]\\
+        K_1=f(x_i,y_i)\\
+        K_2=f(x_i+\alpha_2h,y_i+\beta_{21}hK_1)\\
+        \vdots\\
+        K_m=f(x_i+\alpha_mh,y+\beta_{m1}hK_1+\beta_{m2}hK_2+\cdots+\beta_{m,m-1}hK_{m-1})
+    \end{cases}
+\end{equation*}
+其中$\lambda_i(i=1,2,\cdots,m),\alpha_i(i=2,\cdots,m),\beta_{ij}(i=1,2,\cdots,m;j=1,2,\cdots,i-1)$均为待定系数.
+
+对于n阶显式Runge-Kutta公式:
+\begin{equation*}
+    \begin{cases}
+        y_{i+1}=y_i+h\sum_{j=1}^n\lambda_jk_j\\
+        k_1=f(x_i,y_i)\\
+        k_j=f\left(x_i+c_jh,y_i+h\sum_{m=1}^{j-1}a_{jm}k_m\right), j=2,3,\cdots,n
+    \end{cases}
+\end{equation*}
+其中
+\begin{equation*}
+    \sum_{m=1}^{j-1}a_{jm}=c_j
+\end{equation*}
+
+当$n=3$时, 得
+\begin{equation*}
+    \begin{cases}
+        y_{i+1}=y_i+h(\lambda_1k_1+\lambda_2k_2+\lambda_3k_3)\\
+        k_1=f(x_i,y_i)\\
+        k_2=f(x_i+c_2h,y_i+c_2hk_1)\\
+        k_3=f(x_i+c_3h,y_i+a_{31}hk_1+a_{32}hk_2)\\
+        c_3=a_{31}+a_{32}
+    \end{cases}
+\end{equation*}
+
+记
+\begin{equation*}
+    F=f_x+f_yx, G=f_{xx}+2ff_{xy}+f^2f_{yy}
+\end{equation*}
+则可得
+\begin{align*}
+    &a_{31}k_1+a_{32}k_2\\
+    =&c_3f+c_2a_{32}hF+\frac{1}{2}c_2^2a_{32}h^2G+O(h^3)\\
+    &k_3=f+c_3hF+h^2(c_2a_{32}Ff_y+\frac{1}{2}c_3^2G)+O(h^3)
+\end{align*}
+
+整理, 若要使局部截断误差为$O(h^4)$, 则必须有
+\begin{equation*}
+    \begin{cases}
+        \lambda_1+\lambda_2+\lambda_3=1\\
+        \lambda_2c_2+\lambda_3c_3=\frac{1}{2}\\
+        \lambda_2c_2^2+\lambda_3c_3^2=\frac{1}{3}\\
+        \lambda_3c_2a_{32}=\frac{1}{6}
+    \end{cases}
+\end{equation*}
+
+对于不同的取值得到不同的方法. 具体公式详见书后附录.
+
+类似地, 也可以得到四阶Runge-Kutta方法, 这里以四阶经典Runge-Kutta方法为例(公式见书后附录), 演示一道例题.
+
+\begin{example}
+    用四阶Runge-Kutta方法求初值问题
+    \begin{equation*}
+        f(x,y)=-\frac{1}{2+y}, y(0)=1
+    \end{equation*}
+
+    取步长$h=1$, 求$y(1)$的值
+\end{example}
+
+\begin{solution}
+    取$x_0=0,y_0=1,x_1=x_0+h=1$, 计算$k_1,k_2,k_3,k_4$有
+    \begin{equation*}
+        \begin{cases}
+            k_1=f(x_n,y_n)\\
+            k_2=f(x_n+\frac{h}{2},y_n+\frac{h}{2}k_1)\\
+            k_3=f(x_n+\frac{h}{2},y_n+\frac{h}{2}k_2)\\
+            k_4=f(x_n+h,y_n+hk_3)
+        \end{cases}
+    \end{equation*}
+    将其代入
+    \begin{equation*}
+        y_{n+1}=y_n+\frac{h}{6}(k_1+2k_2+2k_3+k_4)
+    \end{equation*}
+    得
+    \begin{equation*}
+        y_1=1+\frac{1}{6}\times(-0.3333-2\times0.3529-2\times0.3542-0.3780)\approx0.645744444
+    \end{equation*}
+    即使用四阶Runge-Kutta方法在$x=1$处得估计值为0.645744444.
+\end{solution}
+
+对于上例而言, 不难验证该问题有精确解析解
+\begin{equation*}
+    y(x)=\sqrt{9-2x}-2
+\end{equation*}
+即对于$x=1$而言, 可得其精确值为
+\begin{equation*}
+    y(1)=\sqrt{7}-2\approx0.645751311
+\end{equation*}
+截断误差为
+\begin{equation*}
+    R_1=y(1)-y_1=0.0000068666
+\end{equation*}
+
+\begin{notice}
+    对于二阶Runge-Kutta方法, 其局部截断误差为$O(h^3)$, 对于三阶Runge-Kutta方法, 局部截断误差为$O(h^4)$, 对于四阶Runge-Kutta方法, 局部截断误差为$O(h^5)$.
+
+    可以看出, 随着计算$K_i$的值越多, 其精度越高. 但根据Butcher给出得计算量与可达最高精度阶数关系, 当$K_i$的个数达到$n(n\ge8)$时, 可达到最高精度反而降低至$O(h^{n-2})$. 因此在实际应用时, 常采用低阶算法而将步长$h$取小.
+\end{notice}
