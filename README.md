@@ -54,7 +54,10 @@ Jiaqi Z.
   - Gauss-Seidel迭代法
   - Jacobi迭代法和Gauss-Seidel迭代法收敛性
   - 超松弛法
-- [ ] 第七章 非线性方程组求根
+- [X] 第七章 非线性方程求根
+  - 二分法
+  - 迭代法
+  - Newton法
 - [X] 第八章 常微分方程数值解法
   - 引言
   - Euler方法
