@@ -1,0 +1,124 @@
+\chapter{复习题}
+
+\section*{插值法}
+1. 给出$f(x)=\ln x$的数值表
+
+\begin{table}[h!]
+    \begin{tabular}{c|ccccc}
+        \hline
+        $x$&0.4&0.5&0.6&0.7&0.8\\
+        \hline
+        $\ln x$&-0.916291&-0.693147&-0.510826&-0.357765&-0.223144\\
+        \hline
+    \end{tabular}
+\end{table}
+
+分别使用Lagrange插值法和Newton插值法, 构造线性插值和二次插值, 计算$\ln0.54$的近似值. 并估计其误差
+
+2. 给定下面数值表
+\begin{table}[h!]
+    \begin{tabular}{c|ccccc}
+        \hline
+        $x$&1&-1&2\\
+        \hline
+        $f(x)$&0&3&4\\
+        \hline
+    \end{tabular}
+\end{table}
+
+2.1. 使用Newton插值法, 构造满足上述条件的插值多项式($P_2(x)$)
+
+2.2. 在满足上面数值表的前提下, 若同时满足$f'(1)=1$, 试通过构造重节点差商表, 构造插值多项式($P_4(x)$)
+
+\section*{函数逼近与拟合}
+
+1. 对于函数$f(x)=e^x$, 
+
+1.1. 求其在$[-1,1]$上最佳一次逼近多项式, 并估计其误差
+
+1.2. 求其在$[-1,1]$上在$\spn{1,x}$上的最佳平方逼近多项式, 并估计其误差
+
+1.3. 使用Legendre多项式做正交多项式, 求其在$[-1,1]$上的最佳平方逼近多项式, 并估计其误差
+
+2. 设$f(x)=x^4+3x^3-1$, 通过Chebyshev多项式, 在$[0,1]$区间构造其三次最佳逼近多项式, 并估计其误差限.
+
+3. 对于下面的数据
+
+\begin{table}[h!]
+    \begin{tabular}{c|ccccc}
+        \hline
+        $x_i$&19&25&31&38&44\\
+        \hline
+        $y_i$&19.0&32.3&49.0&73.3&97.8\\
+        \hline
+    \end{tabular}
+\end{table}
+
+使用最小二乘法, 完成下面的拟合
+
+3.1. 使用$y=ax$的形式
+
+3.2. 使用$y=a+bx^2$的形式
+
+3.3. 使用$y=a+bx+cx^2$的形式
+
+\section*{矩阵分析基础}
+
+设矩阵
+\begin{equation*}
+    A=\mqty(
+        6&5\\
+        3&1
+    )
+\end{equation*}
+
+1. 计算$A$行范数, 列范数, 2范数和F范数
+
+2. 计算矩阵$A$的谱半径
+
+3. 计算矩阵$A$的1-条件数,2-条件数和谱条件数
+
+\section*{线性方程组的直接解法}
+
+1. 用Gauss-Jordan方法求矩阵$A$的逆. 其中
+\begin{equation*}
+    A=\mqty(2&1&-3&-1\\
+    3&1&0&7\\
+    -1&2&4&-2\\
+    1&0&-1&5)
+\end{equation*}
+
+2. 对线性方程组
+\begin{equation*}
+    \begin{cases}
+        2x_1-x_2+x_3=4\\
+        -x_1-2x_2+3x_3=5\\
+        x_1+3x_2+x_3=6
+    \end{cases}
+\end{equation*}
+
+使用下列方法求解方程组:
+
+2.1. Gauss消去法
+
+2.2. 列主元Gauss消去法
+
+2.3. LU三角分解法
+
+2.4. 紧凑格式列主元Doolittle三角分解法
+
+2.5. 改进平方根法
+
+\section*{线性方程组的迭代解法}
+
+设方程组
+\begin{equation*}
+    \begin{cases}
+        x_1-\frac{1}{4}x_3-\frac{1}{4}x_4=\frac{1}{2}\\
+        x_2-\frac{1}{4}x_3-\frac{1}{4}x_4=\frac{1}{2}\\
+        -\frac{1}{4}x_1-\frac{1}{4}x_2+x_3=\frac{1}{2}\\
+        -\frac{1}{4}x_1-\frac{1}{4}x_2+x_4=\frac{1}{2}
+    \end{cases}
+\end{equation*}
+
+求解该方程组的Jacobi迭代矩阵和Gauss-Seidel迭代矩阵, 并判断其收敛性.
