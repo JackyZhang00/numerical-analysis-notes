@@ -1,0 +1,749 @@
+\chapter{非线性方程求根}
+
+\section*{学习思路}
+
+\begin{equation}\label{eqn:8.1.1}
+    f(x) = 0
+\end{equation}
+
+\begin{enumerate}
+    \item 根的存在性；
+    \item 根的搜索；
+    \item 根的精确化。
+\end{enumerate}
+
+\subsection{根的存在性}
+
+\begin{definition}
+    如果存在$x^*$使得$f(x^*) = 0$,则称$x^*$为方程(\ref{eqn:8.1.1})的根或函数$f(x)$的零点。
+\end{definition}
+
+\begin{theorem}
+    设函数$f(x)$在区间$[a,b]$上连续，如果
+    \begin{equation*}
+        f(a) \cdots f(b) < 0
+    \end{equation*}
+    则方程$f(x) = 0$在$[a,b]$内至少有一实根$x^*$。
+\end{theorem}
+
+\begin{definition}[m重根]
+    若
+    \begin{equation*}
+        f(x) = (x-x^*)^mg(x)
+    \end{equation*}
+    其中，$g(x^*) \neq 0,m$为正整数，则当$m = 1$时，称$x^*$为方程(\ref{eqn:8.1.1})的单根或函数$f(x)$的单零点。
+    当$m \geq 2$时，称$x^*$为方程(\ref{eqn:8.1.1})的m重根或函数$f(x)$的m重零点。
+\end{definition}
+
+\subsection{根的搜索}
+
+\begin{enumerate}
+    \item 图解法
+    \item 解析法
+    \item 近似方程法
+    \item 定步长搜索法$\surd$ 
+\end{enumerate}
+
+\begin{definition}[定步长搜索法]
+    1. 画出$f(x)$的略图，从而看出曲线与$x$轴交点的位置。
+    2.从左端点$x=a$出发，按某个预先选定的步长$h$一步一步地向右跨，每跨一步都检验每步起点$x_0$和终点$x_0+h$的函数值，若$f(x_0) \cdot f(x_0+h) \leq 0$，那么所求的根$x^*$必在$x_0$与$x_0+h$之间，这里可取$x_0$或$x_0+h$作为根的初始近似。
+\end{definition}
+
+\begin{example}
+    考察方程
+    \begin{equation*}
+        f(x) = x^3-x-1 = 0
+    \end{equation*}
+    %这里有个表格不会打
+\end{example}
+
+\section{二分法}
+%两个图片
+$|x_{k+1}-x_k < \varepsilon_1$或$|f(x)| < \varepsilon_2 $
+后者不能保证$x$的精度。
+
+\begin{enumerate}
+    \item 计算$f(x)$在有界区间$[a,b]$端点处的值$f(a),f(b)$。
+    \item 计算区间中点$x_1$及$f(x)$在区间中点处的函数值$f(x_1)$。
+    \item 判断若$f(x_1) = 0$，则$x_1$即是根，否则检验：
+    \begin{enumerate}
+        \item 若$f(x_1)$与$f(a)$异号，则知解位于区间$[a,x_1]$，$b_1 = x_1,a_1 = a$；
+        \item 若$f(x_1)$与$f(a)$同号，则知解位于区间$[x_1,b]$，$a_1 = x_1,b_1 = b$；
+    \end{enumerate}
+        反复执行步骤2、3，便可得到一系列有根区间：
+        \begin{equation*}
+            [a,b]\supset [a_1,b_1] \supset [a_2,b_2] \supset \cdots \supset [a_n,b_n] \supset \cdots
+        \end{equation*}
+    \item 当$|b_{k+1}-a_{k+1}| < \varepsilon$时，停止；
+        $x_{k+1} = \frac{1}{2}(a_k+b_k)$即为根的近似。
+\end{enumerate}
+
+\begin{remark}
+    当$n \rightarrow \infty $时，$b_n-a_n \rightarrow 0$，即这些区间必将收缩于一点，也就是方程的根。在实际计算中，只要$[a_n,b_n]$的区间长度小于预定容许误差$\varepsilon$就可以停止搜索，即
+    \begin{equation*}
+        \frac{b-a}{2^n} < \varepsilon
+    \end{equation*}
+    然后取其中点$x_n$作为方程的一个根的近似值。
+\end{remark}
+
+\begin{example}
+    证明方程$e^x+10x-2 = 0$存在唯一的实根$x^* \in (0,1)$。用二分法求出此根，要求误差不超过$0.5 \times 10^{-2}$。
+    \begin{solution}
+    解：
+        记$f(x) = e^x+10x-2$则对任意$x \in R$，
+        \begin{equation*}
+            f'(x) = e^x+10 > 0
+        \end{equation*}
+        因而，$f(x)$是严格单调的，$f(x) = 0$最多有一个根，
+        又因为$f(0) = -1 < 0,f(1) = e+8 > 0$
+        所以，$f(x) = 0$，有唯一实根$x^* \in (0,1)$
+        用二分法求解，要使$|x_k-x^*| \leq 0.5 \times 10^{-2}$，只要
+        \begin{equation*}
+            \frac{1-0}{2^{k+1}} \leq 0.5 \times 10^{-2}
+        \end{equation*}
+        解得$k \geq \frac{2}{\lg 2} = 6.64$，取$k = 7$。所以只要二等分7次，即可求得满足精度要求的根。计算过程如表8.2.1所示。
+        %少了个表8.2.1
+        所以，$x^* \approx 0.5 \times (0.0859375+0.09375) \approx 0.09$ 
+    \end{solution}
+ \end{example}
+
+\begin{extend}[二分法的优缺点]
+    优点：\begin{enumerate}
+        \item 简单；
+        \item 对$f(x)$要求不高（只要连续即可）。
+    \end{enumerate}
+    缺点：\begin{enumerate}
+        \item 无法求复根及偶重根；
+        \item 收敛慢。
+    \end{enumerate}
+\end{extend}
+
+\section{迭代法}
+
+使用迭代法求解非线性代数方程的步骤为：
+\begin{enumerate}
+    \item 迭代格式的构造；
+    \item 迭代格式的收敛性分析；
+    \item 迭代格式的收敛速度与误差分析。
+\end{enumerate}
+
+\subsection{简单迭代法}
+
+\subsubsection{迭代格式的构造}
+\begin{equation*}
+    f(x) = 0 \Longleftrightarrow x = \varphi(x)
+\end{equation*}
+方程(8.3.1)称为不动点方程，$\varphi(x)$称为迭代函数。
+满足(8.3.1)式的点称为不动点。这样就将求$f(x)$的零点问题转化为求$\varphi(x)$的不动点问题。
+以不动点方程为原型构造迭代格式
+\begin{equation*}
+    x_{k+1} = \varphi(x_k),(k = 0,1,\cdots)
+\end{equation*}
+称这种迭代格式为不动点迭代。
+
+\begin{example}
+    求代数方程$2x^3-x-1 = 0$的根。
+    \begin{solution}
+        解：显然，1是方程的一个根，位于区间$[0,1.5]$内。
+
+        迭代格式1：
+        将方程等价变换为：$x = 2x^3-1$
+        构造迭代格式：$x_{k+1} = 2x^3_k-1$
+        取迭代初始值：$x_0 = 0$
+        迭代过程：
+        \begin{equation*}
+            \left\{
+                \begin{aligned}x_0 & =0 & \\
+                x_1 & =2x_0^3-1=-1\\
+                x_2 & =2x_1^3-1=-3\\
+                x_3 & =2x_2^3-1=-55\\
+                  & \cdots
+                \end{aligned}
+            \right.
+        \end{equation*}
+        上式显然迭代发散。
+
+        迭代格式2：
+        将方程等价变换为：$x = \sqrt[3]{\frac{x+1}{2}} $
+        取初值：$x_0 = 0$
+        迭代过程：
+        \begin{equation*}
+            \left\{
+                \begin{aligned}
+                    x_0 & =0\\
+                    x_1 & =\sqrt[3]{\frac{x_0+1}2}=\sqrt[3]{\frac12}\approx0.7937\\
+                    x_2 & =\sqrt[3]{\frac{x_1+1}2}=\sqrt[3]{\frac{1.7937}2}\approx0.9644
+                \end{aligned}
+            \right.
+        \end{equation*}
+        以此类推，收敛于1。
+    \end{solution}
+    \begin{notice}
+        同样的方程，不同的迭代公式，不同的收敛性。
+    \end{notice}
+\end{example}
+
+\begin{remark}
+    \begin{enumerate}
+        \item 简单迭代法的迭代函数不唯一，迭代函数不同，收敛性不同；
+        \item 非线性方程的根不唯一，迭代点列收敛与否不仅与迭代函数有关，还与初始点有关。
+    \end{enumerate}
+\end{remark}
+
+\subsubsection{迭代过程的收敛性}
+\begin{theorem}
+    如果$\varphi(x)$满足下列条件
+    \begin{enumerate}
+        \item 当$x \in [a,b]$，$\varphi(x) \in [a,b]$
+        \item 对任意$x \in [a,b]$，存在$0 < L < 1$，使
+        \begin{equation*}
+            |\varphi'(x)| \leq L < 1
+        \end{equation*}
+    \end{enumerate}
+    则方程$x = \varphi(x)$在$[a,b]$上有唯一的根$x^*$，且对任意初值$x_0 \in [a,b]$，迭代序列$x_{k+1} = \varphi(x_k)(k =0,1,\cdots )$收敛于$x^*$。
+    \begin{remark}
+        此处$L$可以看成是$|\varphi'(x)|$在区间$[a,b]$内的最大值。
+    \end{remark}
+\end{theorem}
+
+\subsubsection{迭代法的误差估计}
+在定理8.1的条件下，简单迭代法产生的迭代点列有如下误差估计式：
+\begin{align}
+        |x_k-x^*| \leq \frac{L^k}{1-L}|x_1-x_0|\\
+        |x_k-x^*| \leq \frac{1}{1-L}|x_{k+1}-x_k|\\
+        |x_k-x^*| \leq \frac{L}{1-L}|x_k-x_{k-1}|
+\end{align}
+
+\begin{example}
+    求方程$f(x) = x^3+4x^2-10 = 0$在$[1,1.5]$内的根$x^*$。
+    \begin{solution}
+        解：
+        原方程可以等价变形为下列三个迭代格式：
+        \begin{equation}\label{eqn:1}
+            x_{k+1} = 10+x_k-4x_k^2-x_k^3(k=0,1,2,\cdots )
+        \end{equation}
+        \begin{equation}\label{eqn:2}
+            x_{k+1} \frac{1}{2}\sqrt{10-x_k^3}(k = 0,1,2,\cdots )
+        \end{equation}
+        \begin{equation}\label{eqn:3}
+            x_{k+1} = \sqrt{\frac{10}{x_k+4}}(k = 0,1,2,\cdots )
+        \end{equation}
+
+        由迭代格式(\ref{eqn:1})
+        取初值$x_0 = 1.25$得：
+        \begin{align*}
+            x_1 &= 3.046875\\
+            x_2 &= -26.04005
+        \end{align*}
+
+        \begin{notice}
+            结果是发散的。
+        \end{notice}
+
+        由迭代格式(\ref{eqn:2})
+        取初值$x_0 = 1.25$得：
+        \begin{align*}
+            x_1 &= \varphi(x_0) = 1.41835,\\
+            x_2 &= \varphi(x_1) = 1.33666,\\
+            x_3 &= \varphi(x_2) = 1.37948,\\
+            x_4 &= \varphi(x_3) = 1.35786,\\
+            x_5 &= \varphi(x_4) = 1.36898,\\
+            x_6 &= \varphi(x_5) = 1.36331,\\
+            x_7 &= \varphi(x_6) = 1.36621,\\
+            x_8 &= \varphi(x_7) = 1.36473,\\
+            x_9 &= \varphi(x_8) = 1.36549,\\
+            x_{10} &= \varphi(x_9) = 1.36510
+        \end{align*}
+        结果精确到四位有效数字，迭代到$x_{10}$得到收敛结果。
+        \begin{notice}
+            迭代10步才能得到收敛的结果。
+        \end{notice}
+
+        由迭代格式(\ref{eqn:3})
+        取初值$x_0 = 1.25$得：
+        \begin{align}
+            x_1 &= \varphi(x_0) = 1.38013,\\
+            x_2 &= \varphi(x_1) = 1.36334,\\
+            x_3 &= \varphi(x_2) = 1.36547,\\
+            x_4 &= \varphi(x_3) = 1.36512
+        \end{align}
+        结果精确到四位有效数字，迭代到$x_4$得到收敛结果。
+        \begin{notice}
+            四步就能得到收敛的结果。
+        \end{notice}
+    \end{solution}
+\end{example}
+
+\begin{extend}
+    分析：
+    迭代格式(1)的迭代函数为：
+    \begin{equation*}
+        \varphi(x) = 10+x-4x^2-x^3
+    \end{equation*}
+    求导得
+    \begin{equation*}
+        \varphi'(x) = 1-8x-3x^2 
+    \end{equation*}
+    当$x \in [1,1.5]$时，
+    \begin{equation*}
+        |\varphi'(x)| = 3x^2+8x-1 \geq 10 > 1
+    \end{equation*}
+    故迭代格式(1)是发散的。
+
+    迭代格式(2)的迭代函数为：
+    \begin{equation*}
+        \varphi(x) = \frac{1}{2}\sqrt{10-x^3}
+    \end{equation*}
+    当$x \in [1,1.5]$时，
+    \begin{align*}
+        \varphi(x) \in [\varphi(1.5),\varphi(1)] & = [\frac{1}{2}\sqrt{10-{1.5}^3},\frac{1}{2}\sqrt{10-1^3}]\\
+        & = [1.287,1.5] \in [1,1.5]
+    \end{align*}
+    由
+        \begin{align*}
+            \varphi'(x) &= -\frac{3x^2}{4\sqrt{10-x^3}} < 0\\
+            \varphi''(x) &= -\frac{3}{8}x(10-x^3)(10-x^3)^{-\frac{3}{2}} < 0
+        \end{align*}
+    知，当$x \in [1,1.5]$时，
+    \begin{equation*}
+        |\varphi'(x)| \leq |\varphi'(1.5)| = \frac{3}{4} \frac{{1.5}^2}{\sqrt{1.-{1.5}^2}} = 0.6556 < 1
+    \end{equation*}
+    所以迭代格式(2)是收敛的。
+
+    迭代格式(3)的迭代函数为：
+    \begin{equation*}
+        \varphi(x) = \sqrt{\frac{10}{x+4}}
+    \end{equation*}
+    当$x \in [1,1.5]$时，
+    \begin{align*}
+        \varphi(x) = [\varphi(1.5),\varphi(1)] & = \left[\sqrt{\frac{10}{1.5+4}},\sqrt{\frac{10}{1+4}}\right]\\
+        & = [1.348,1.414] \subset [1,1.5]
+    \end{align*}
+    由
+        \begin{align*}
+            \varphi'(x) &= -\frac{1}{2}\sqrt{10}(x+4)^{-\frac{3}{2}} < 0,\\
+            \varphi''(x) &= -\frac{3}{4}\sqrt{10}(x+4)^{\frac{5}{2}} > 0
+        \end{align*}
+    知，当$x \in [1,1.5]$时，
+    \begin{equation*}
+        |\varphi'(x)| \leq |\varphi'(1)| = \frac{1}{2}\sqrt{10}(1+4)^{-\frac{3}{2}} = \frac{\sqrt{2}}{10} = 0.1414
+    \end{equation*}
+    所以迭代格式(3)也是收敛的。
+
+    通过以上算例可以看出，对迭代函数$\varphi(x)$求导，所得到的$|\varphi'(x)|$的霞姐若是大于1，则迭代格式发散；若上界小于1，则收敛；且上界越小收敛速度越快。
+\end{extend}
+
+\subsubsection{迭代过程的局部收敛性}
+\begin{definition}
+    若存在$x^*$的某个邻域N：$|x-x^*| \leq \delta $使迭代过程$x_{k+1} = \varphi(x_k)$对任意初值$x_0 \in N$均收敛，则称迭代过程$x_{k+1} = \varphi(x_k)$在$x^*$邻近具有局部收敛性。
+\end{definition}
+
+\begin{theorem}
+    设$x^*$为方程$x = \varphi(x)$的根，$\varphi'(x)$在$x^*$的邻近连续且$|\varphi'(x^*)| < 1$，则迭代过程$x^{k+1} = \varphi(x_k)$在$x^*$邻近具有局部收敛性。
+\end{theorem}
+
+\subsubsection{迭代过程的收敛速度}
+\begin{definition}
+    设由某方法确定的序列${x_k}$收敛于方程的根$x^*$，如果存在正实数$p$，使得
+    \begin{equation*}
+        \lim_{k \to \infty }\frac{|x^*-x_{k+1}|}{|x^*-x_k|} = C(C\text{为非零常数})
+    \end{equation*}
+    则称序列${x_k}$收敛于$x^*$的收敛速度是$p$阶的，或称该方法具有$p$阶收敛速度。
+    当$p = 1$时，称该方法为线性（一次）收敛；
+    当$p = 2$时，称该方法为平方（二次）收敛；
+    当$1<p<2$或$C = 0,p = 1$时，称该方法为超线性收敛。
+\end{definition}
+
+\subsubsection{加速收敛技术}
+
+$L$越小迭代法的收敛速度越快，因此，可以从寻找较小的$L$来改进迭代格式以加快收敛速度。
+
+(1)松弛法
+引入待定参数$\lambda \neq -1$，将$x = \varphi(x)$作等价变形为
+\begin{equation}
+    x = \frac{\lambda}{1+\lambda}x+\frac{1}{1+\lambda}\varphi(x)
+\end{equation}
+将方程右端记为$\varPsi(x)$,则得到新的迭代格式
+\begin{equation*}
+    x_{k+1} = \varPsi(x_k)
+\end{equation*}
+由定理8.1知
+\begin{equation*}
+    |\varphi'(x)| \leq L < 1
+\end{equation*}
+为了使新的迭代格式比原来迭代格式收敛得更快，只要满足
+\begin{equation*}
+    |\varPsi'(x)|<|\varphi'(x)|
+\end{equation*}
+且$|\varPsi'(x)| = |\frac{1}{1+\lambda}(\lambda+\varphi'(x))|$越小，所获取的$L$就越小，迭代法收敛的就越快，因此我们希望$\varPsi'(x) \rightarrow 0$。
+可取$\lambda_k = \varphi'(x_k) \neq -1$，若记$\omega_k = \frac{1}{1+\lambda_k}$，则(8.3.4)式可改写为
+\begin{equation*}
+    x_{k+1} = (1-\omega_k)x_k+\omega_k\varphi(x_k)
+\end{equation*}
+$\omega_k$称为松弛因子，这种方法称为松弛法。为使迭代速度加快，需要边计算边调整松弛因子。由于计算松弛因子需要用到微商，在实际应用中不便使用，具有一定局限性。若迭代法是线性收敛的，当计算$\varphi'(x)$不方便时，可以采用埃特金加速公式。
+
+(2)埃特金加速公式
+设迭代法是线性收敛的，由定义知
+\begin{equation*}
+    \lim_{k \to \infty}\frac{x_{k+1}-x^*}{x_k-x^*}=c \neq 0
+\end{equation*}
+成立，故当$k \to \infty$时有
+\begin{equation*}
+    \frac{x_{k+1}-x^*}{x_k-x^*} \approx \frac{x_{k+2}-x^*}{x_{k+1}-x^*}
+\end{equation*}
+由此可得$x^*$的近似值
+\begin{equation}
+    x^* \approx x_k-\frac{(x_{k+1}-x_k)^2}{x_{k+2}-2x_{k+1}=x_k} = \overline{x_k}
+\end{equation}
+由此获得比$x_k$，$x_{k+1}$和$x_{k+2}$更好的近似值$\bar{x}_k$。该式称为埃特金加速公式。
+
+(3)Steffensen加速法：
+将埃特金加速公式与不动点迭代相结合，可得
+\begin{equation*}
+    \begin{cases}
+        x_{k+1}^{(1)}=\boldsymbol{\varphi}(x_k),\quad x_{k+1}^{(2)}=\boldsymbol{\varphi}(x_{k+1}^{(1)})\\
+        x_{_{k+1}}=x_k-\frac{\left(x_{k+1}^{(1)}-x_k\right)^2}{x_{k+1}^{(2)}-2x_{k+1}^{(1)}+x_k},\quad k=0,1,\cdots&
+    \end{cases}
+\end{equation*}
+利用(8.3.6)式构造序列${x_k}$的方法称为Steffensen加速法。
+即每进行两次不动点迭代，就执行一次Aitken加速。
+
+\begin{example}
+    试用简单迭代法和Steffensen加速法求方程
+    \begin{equation*}
+        x = e^{-x}
+    \end{equation*}
+    在$x = 0.5$附近的根，精确至四位有效数。
+\end{example}
+
+\begin{solution}
+    记$\varphi(x) = e^{-x}$，简单迭代法公式为:\[x_{k+1} = \varphi(x_k),k = 0,1,2,\cdots\]
+    计算得
+    
+    \begin{table}[h!]
+        \begin{tabular}{|c|c|c|c|c|c|}
+            \hline
+            $k$&$x_k$&$k$&$x_k$&$k$&$x_k$\\
+            \hline
+            0&0.5&7&0.5584380&14&0.5671188\\
+            1&0.6065306&8&0.5664094&15&0.5671571\\
+            2&0.5452392&9&0.5675596&16&0.5671354\\
+            3&0.5797031&10&0.5669072&17&0.5671477\\
+            4&0.5600646&11&0.5672772&18&0.5671407\\
+            5&0.5711721&12&0.5670673&&\\
+            6&0.5648629&13&0.5671863&&\\
+            \hline
+        \end{tabular}
+    \end{table}
+
+    Aitken加速公式：\[x_{k+1}=x_k-\frac{\left(x_{k+1}^{(1)}-x_k\right)^2}{x_{k+1}^{(2)}-2x_{k+1}^{(1)}+x_k}\]
+    计算得%%又一个表
+    所以，$x^* \approx 0.5671$
+\end{solution}
+
+\section{牛顿法}
+
+\subsection{牛顿迭代公式}
+考虑非线性方程：
+\begin{equation*}
+    f(x) = 0
+\end{equation*}
+取$x_0 \approx x^*$，将$f(x)$在$x_0$做一阶Taylor展开：
+\begin{equation*}
+    f(x)=f(x_0)+f^{\prime}(x_0)(x-x_0)+\frac{f^{\prime\prime}(\xi)}{2!}(x-x_0)^2
+\end{equation*}
+$\xi$在$x_0$和$x$之间。
+
+将$(x^*-x_0)^2$看成高阶小量，则有：
+\begin{equation*}
+    0 = f(x^*) \approx f(x_0)+f'(x_0)(x^*-x_0) \Rightarrow x^* \approx x_0-\frac{f(x_0)}{f'(x_0)}
+\end{equation*}
+记
+\[x_1 = x_0-\frac{f(x_0)}{f'(x_0)}\]
+再将$f(x)$在$x_1$做一阶Taylor展开，并忽略二阶项得
+\[0=f(x)\approx f(x_1)+f^{\prime}(x_1)(x-x_1)\Longrightarrow x^*\approx x_2=x_1-\frac{f(x_1)}{f^{\prime}(x_1)}\]
+依此类推，可构造迭代公式
+\begin{equation}
+    x_{k+1}=x_k-\frac{f(x_k)}{f'(x_k)}
+\end{equation}
+公式(6.4.1)称为牛顿迭代公式。
+
+只要$f \in C^1$，且每步迭代都有$f'(x_k) \neq 0$，且$\lim_{k\to\infty}x_k=x^*$，则
+\[x^{*}\underset{}{\operatorname*{=}}\lim\limits_{k\to\infty}x_{k+1}=\underset{k\to\infty}{\operatorname*{\lim}}\left[x_{k}-\frac{f(x_k)}{f'(x_k)}\right]=x^{*}-\frac{f(x*)}{f'(x*)}\]
+从而
+\[f(x^*) = 0\]
+即$x^*$就是$f(x)$的根。
+故只要牛顿迭代格式收敛，则必收敛到$f(x)$的根。
+
+\subsection{牛顿法的几何意义}
+
+\subsection{牛顿法的收敛性}
+
+\subsubsection{牛顿法收敛的条件}
+\begin{theorem}
+    设$f(x)$在$[a,b]$上二阶连续可导且满足下列条件。
+    \begin{enumerate}
+        \item \[f(a) \cdot f(b) < 0;\]
+        \item \[f'(x) \neq 0;\]
+        \item $f''(x)$在区间$[a,b]$上不变号；
+        \item 取$x_0 \in[a,b]$，使得$f''(x)\cdot f(x_0)>0$
+    \end{enumerate}
+    则由(6.4.1)确定的牛顿迭代序列${x_k}$二阶收敛于$f(x)$在$[a,b]$上的唯一单根$x^*$。
+\end{theorem}
+
+\begin{remark}
+    Newton法的收敛性依赖于$x_0$的选取。
+\end{remark}
+
+\begin{notice}
+    Newton法是局部收敛的算法！且是条件最为严格的。
+\end{notice}
+
+\subsubsection{迭代法收敛阶的判别}
+\begin{theorem}
+    如果$\varphi(x)$在$x^*$附近的某个邻域内有$p(p \geq 1)$阶连续导数，且
+    \begin{align*}
+        &\varphi^{(j)}(x^*)=0 \quad(j=1,2,\ldots,p-1)\\
+        &\varphi^{(p)}(x^*) \neq 0
+    \end{align*}
+    则迭代格式$x_{k+1} = \varphi(x_k)$在$x^*$附近是$p$阶局部收敛的，且有
+    \begin{equation*}
+        \lim_{k\to\infty}\frac{(x_{k+1}-x^*)}{(x_k-x^*)^p}=\frac{\varphi^{(p)}(x^*)}{p!}
+    \end{equation*}
+\end{theorem}
+
+\subsubsection{牛顿迭代法的局部收敛性和收敛速度}
+若$x^*$是$f(x^*)$的一个单根，即$f(x^*) = 0,f'(x) \neq 0$，且$f$在包含$x^*$的一个区间二阶连续可导，则Newton迭代法至少二阶收敛，即$\varphi'(x^*) = 0$。且
+\begin{align*}
+    \lim_{k\to\infty}\frac{x_{k+1}-x^*}{\left(x_k-x^*\right)^2}=\frac{f^{\prime\prime}(x^*)}{2f^{\prime}(x^*)}
+    \varphi^{\prime}(x)=\frac{f(x)f^{\prime\prime}(x)}{\left[f^{\prime}(x)\right]^2}
+\end{align*}
+其中，$\varphi(x) = x-\frac{f(x)}{f'(x)}$为牛顿迭代函数。
+值得注意的是，当$f(x)$充分光滑且$x^*$是$f(x) = 0$的重根时，牛顿法在$x^*$的附近是线性收敛的。即
+\begin{equation*}
+    \varphi'(x^*) \neq 0
+\end{equation*}
+
+\begin{example}
+    用牛顿法求方程的根：$xe^x-1 = 0$
+    \begin{solution}
+        解：
+        由牛顿迭代公式$x_{k+1}=x_k-\frac{f(x_k)}{f'(x_k)}$得：
+        \begin{equation*}
+            x_{k+1}=x_k-\frac{x_k-e^{-x_k}}{1+x_k}
+        \end{equation*}
+        取初值$x_0 = 0.5$
+        %%计算结果又是一个表
+    \end{solution}
+\end{example}
+
+\begin{example}
+    Leonardo与1225年研究了方程
+    \begin{equation*}
+        x^3+2x^2+10x-20 = 0
+    \end{equation*}
+    并得出该方程的一个近似根$x = 1.368808107$。试用牛顿法求出此结果。
+    \begin{solution}
+        解：
+        记\[f(x)=x^3+2x^2+10x-20\]
+        则\[f'(x)=3x^2+4x+10=3(x+\frac{2}{3})^2+\frac{26}{3}\]
+        当$x \in R$时，$f'(x) > 0$即$f(x)$为单调函数，
+        又\[f(1) = -7 < 0,f(2) = 16 > 0\]
+        所以$f(x) = 0$有唯一实根$x^* \in(1,2)$。
+        改写：
+        \begin{align*}
+            f(x) = ((x+2)x+10)x-20\\
+            f'(x) = (3x+4)x+10
+        \end{align*}
+        用牛顿迭代格式：
+        \begin{equation*}
+            \begin{cases}
+                x_{k+1} = x_k-\frac{f(x_k)}{f'(x_k)},k=0,1,2,\cdot\\
+                x_0 = 1.5
+            \end{cases}
+        \end{equation*}
+        %%表
+        所以，$x^* \approx 1.368808107$
+    \end{solution}
+    \begin{remark}
+        牛顿法只用了3步就得到具有10位有效数字的近似解。
+    \end{remark}
+\end{example}
+
+\subsubsection{牛顿法的计算步骤}
+\begin{enumerate}
+    \item 准备：$x_0,f_0 = f(x_0),f'_0 = f'(x_0)$
+    \item 迭代：$x_1 = x_0-\frac{f_0}{f'_0},f_1 = f(x_1),f'_1 = f'(x_1)$
+    \item 控制：若$|f_1|<\varepsilon_1$或$|\delta|<\varepsilon_2$，停$x^* = x_1$；否则转4步
+         \begin{equation*}
+            \delta = 
+            \begin{cases}
+                |x_1-x_0| & \text{if} |x_1|<c\\
+                \frac{|x_1-x_0|}{|x_1|} & \text{if} |x_1| \geq c
+            \end{cases}
+         \end{equation*}
+    \item 修改：若迭代次数$>N$，或$f'_1 = 0$，则方法失败，否则继续。
+\end{enumerate}
+
+\begin{remark}[牛顿迭代法的优缺点]
+    优点：公式简单，使用方便，易于编程，收敛速度快，易于求解；
+    缺点：计算量大，每次迭代都要计算函数值与导数值。
+\end{remark}
+
+
+\subsubsection{牛顿法应用举例}
+1.求正数平方根
+设$C > 0$，求$x = \sqrt{C}$
+\begin{solution}
+    解：
+    令$f(x) = x^2-C$则$f'(x) = 2x$
+    于是，牛顿迭代公式为
+    \begin{equation*}
+        x_{k+1} = x_k-\frac{x_k^2-C}{2x_k} \Rightarrow x_{k+1} = \frac{1}{2}[x_k+\frac{C}{x_k}]
+    \end{equation*}
+    收敛性分析：
+    \begin{align*}
+        x_{k+1}-\sqrt{c} & = \frac{1}{2}[x_k+\frac{c}{x_k}]-\sqrt{c}\\
+        & = \frac{1}{2x_k}[x^2_k-2x_k\sqrt{c}+c]\\
+        & = \frac{1}{2x_k}(x_k-\sqrt{c})^2
+    \end{align*}
+    同理可得：
+    \begin{equation*}
+        x_{k+1}+\sqrt{c} = \frac{1}{2}[x_k+\frac{c}{x_k}] = \frac{1}{2x_k}(x_k+\sqrt{c})^2
+    \end{equation*}
+    从而有
+    \begin{align*}
+        &\frac{x_{k+1}-\sqrt{c}}{x_{k+1}+\sqrt{c}}
+        = \left(\frac{x_{k}-\sqrt{c}}{x_{k}-\sqrt{c}}\right)^2 \\
+        =& \left(\frac{x_{k-1}-\sqrt{c}}{x_{k-1}-\sqrt{c}}\right)^{2^2}
+        = \left(\frac{x_{0}-\sqrt{c}}{x_{0}-\sqrt{c}}\right)^{2^{k+1}}
+    \end{align*}
+    要使$\lim_{k \to \infty} = \sqrt{c}$，则需$(\frac{x_{0}-\sqrt{c}}{x_{}-\sqrt{c}})^{2^{k+1}} \to 0,k \to \infty$
+    令$r = \frac{x_{0}-\sqrt{c}}{x_{}-\sqrt{c}}$，则$|r| < 1$
+    故要使平方根的牛顿迭代格式收敛，只需取初值
+    \[x_0 > 0\]
+    且当迭代格式收敛时，有
+    \begin{equation*}
+        \lim_{k \to \infty}\frac{|e_{k+1}|}{|e_k|^2} = \frac{1}{2\sqrt{c}}
+    \end{equation*}
+    即求正数平方根的牛顿迭代格式二阶收敛。
+    \begin{equation*}
+        x_{k+1} = \frac{1}{2[x_k+\frac{c}{x_k}]}
+    \end{equation*}
+\end{solution}
+
+\begin{remark}
+    求正数平方根的牛顿法是局部收敛的，要求初值>0。
+\end{remark}
+
+\begin{example}
+    用牛顿法求$\sqrt{115}$
+    \begin{solution}
+        取$x_0 = 10,c = 115$迭代结果如下：%表
+        所以$\sqrt{115} \approx 10.73805$
+    \end{solution}
+\end{example}
+
+2.求倒数算法
+用牛顿法求非零数$a$的倒数，不用除法。
+\begin{solution}
+    解：
+    考虑方程
+    \[\frac{1}{x}-a = 0\]
+    令\[f(x) = \frac{1}{x}-a\]
+    则牛顿迭代格式为
+    \[x_{k+1} = x_k-\frac{\frac{1}{x_k}-a}{-\frac{1}{x_k^2}}\]
+    即
+    \[x_{k+1} = x_k(2-ax_k)\]
+
+    收敛性分析：
+    \begin{align*}
+        x_{k+1}-\frac{1}{a} & = x_k(2-ax_k)\\
+        & = -a(x_k-\frac{1}{a})^2
+    \end{align*}
+    将上式等价变形得
+    \[ax_{k+1}-1 = -(ax_k-1)^2\]
+    即
+    \[1-ax_{k+1} = (1-ax_k)^2\]
+    令$r_k = 1-ax_k$，有
+    \[r_{k+1} = r_k^2 = r_{k-1}^{2^2} = \cdots = r_0^{2^k}\]
+    要使$r_k \to 0$，需$|r_0| = |1-ax_0| < 1$，即$0 < x_0 <\frac{2}{a}$
+    \begin{remark}
+        求倒数算法要求初值$x_0$满足$0 < x_0 <\frac{2}{a}$
+    \end{remark}
+    此时有
+    \[\lim_{k \to \infty}\frac{|e_{k+1}|}{|e_k|^2} = a\]
+    即求倒数的牛顿算法二阶收敛。
+\end{solution}
+
+
+\subsection{求m重根的牛顿法-修正牛顿法}
+
+设\begin{align*}
+    f(x^*) = f'(x^*) = \cdots = f^{(m-1)}(x^*) = 0\\
+    f^{(m)}(x^*) \neq 0,(m \geq 2)
+\end{align*}
+
+修正格式一：构造迭代格式
+\begin{equation}
+    x_{k+1} = x_k-m\frac{f(x_k)}{f'(x_k)}
+\end{equation}
+则迭代格式(6.4.2)至少2阶收敛。
+\begin{remark}
+    重数m的确定：
+    令
+    \begin{equation*}
+        \varPsi(x) = \frac{[f'(x)]^2}{[f'(x)]^2-f(x)f''(x)}
+    \end{equation*}
+    则
+    \begin{equation*}
+        m = \lim_{x \to x^*}\varPsi(x)
+    \end{equation*}
+\end{remark}
+
+修正格式二：
+令
+\[u(x) = \frac{f(x)}{f'(x)}\]
+则$x^*$是$u(x)$的单根，即$u(x^*) = 0,u'(x^*) \neq 0$
+构造迭代格式
+\begin{equation}
+    x_{k+1} = x_k-\frac{u(x_k)}{u'(x_k)}
+\end{equation}
+则迭代格式(6.4.3)至少2阶收敛。
+
+
+\subsection{牛顿法的变形}
+
+\subsubsection{牛顿下山法的基本思想}
+由于Newton迭代法的收敛性依赖于初值$x_0$的选取，如果$x_0$离方程的根$x^*$较远，则Newton迭代法可能发散。
+为了防止迭代发散，可以将Newton迭代法与下山法结合起来，放宽初值$x_0$的选取范围，为此，将(6.4.1)式修改为：
+\begin{equation*}
+    x_{k+1} = x_k-\lambda\frac{f(x_k)}{f'(x_k)},(k=0,1,2,\cdots)
+\end{equation*}
+其中，$0 < \lambda \leq 1$称为下山因子，选择下山因子时，希望$f(x_k)$满足下山法具有的单调性，即
+\begin{equation*}
+    |f(x_{k+1})| < |f(x_k)|,(k = 0,1,2,\cdots)
+\end{equation*}
+这种算法称为Newton下山法。
+
+在实际应用中，可选择$\lambda = \lambda_k,0<\lambda_k \leq 1$
+
+\subsubsection{牛顿下山法的计算步骤}
+\begin{enumerate}
+    \item 选取初始近似值$x_0$；
+    \item 取下山因子$\lambda = 1$；
+    \item 计算$x_{k+1} = x_k -\lambda\frac{f(x_k)}{f'(x_k)}$
+    \item 计算$f(x_{k+1})$，并比较$|f(x_{k+1})|$与$|f(x_k)|$的大小，分一下二种情况
+    
+    \begin{enumerate}
+        \item 若$|f(x_{k+1})| < |f(x_k)|$，则当$|x_{k+1}-x_k| < \varepsilon_2$时，取$x^* \approx x_{k+1}$，计算过程结束；当$\abs{x_{k+1}-x_k} \geq \varepsilon_2$时，则把$x_{k+1}$作为新的近似值，并返回到第2步中。
+        \item 若$|f(x_{k+1})| \geq |f(x_k)|$，则当$\lambda \leq \varepsilon_\lambda$时，取$x^* \approx x_{k}$，计算过程结束；否则，若$\lambda \leq \varepsilon_\lambda$，而$|f(x_{k+1})| \geq \varepsilon_1$时，则把$x_{k+1}$加上一个适当选定的小正数，即取$x_{k+1}+\delta$作为新的$x_k$值，并转向第3步重复计算；当$\lambda > \varepsilon_\lambda$且$|f(x_{k+1})| \geq \varepsilon_1$时，则将下山因子缩小一半，取$\frac{\lambda}{2}$代入，并转向第3步重复计算。
+    \end{enumerate}
+\end{enumerate}
+
+\begin{example}
+    求方程$f(x) = x^3-x-1 = 0$的根。$x_0 = 0.6$
+    \begin{solution}
+        牛顿下山法的计算结果：%表
+    \end{solution}
+\end{example}
