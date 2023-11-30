@@ -70,6 +70,7 @@ Jiaqi Z.
   - 二阶Runge-Kutta方法
   - 三阶Runge-Kutta方法
   - 四阶Runge-Kutta方法
+- [X] 附录C 复习题
 
 ## 关于程序语言
 
