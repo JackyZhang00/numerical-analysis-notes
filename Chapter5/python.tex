@@ -571,7 +571,7 @@ $\cdots$
 若直接从矩阵$A$的元素得到计算$L,U$的递推公式, 而不需要中间步骤, 则称这种分解方法为\emph{直接三角分解法}
 
 \subsubsection{直接三角分解法}
-\begin{example}
+\begin{example}\label{example:三角分解法解方程组}
     使用三角分解法解方程组
     \begin{equation*}
         \begin{cases}
@@ -705,7 +705,7 @@ $\cdots$
     \end{equation*}
 \end{solution}
 
-\begin{example}
+\begin{example}\label{example: 矩阵三角分解法求解方程组}
     用矩阵三角分解法求解方程组
     \begin{equation*}
         \mqty(
@@ -872,7 +872,90 @@ x = doolittle_solver(A, b)
 print("x=", x)
 \end{lstlisting}
 
-类似地, 还有紧凑格式的列主元Doolittle三角分解法, 不做详细说明. 需要特别注意的是, 在变换矩阵过程中所得到的消元因子, \emph{不参与行变换的计算, 但需要参与行交换}. 
+与前面的列主元Gauss消去法类似, Doolittle三角分解法也可以考虑列主元. 下面的两个例题将演示如何使用列主元Doolittle三角分解法.
+
+\begin{example}\label{example: 矩阵列主元Doolittle三角分解法求解方程组}
+    使用列主元的Doolittle三角分解法求解方程组
+    \begin{equation*}
+        \begin{cases}
+            x_1+x_2+x_3=6\\
+            4x_2-x_3=5\\
+            2x_1-2x_2+x_3=1
+        \end{cases}
+    \end{equation*}
+\end{example}
+
+\begin{solution}
+    系数矩阵为
+    \begin{equation*}
+        A=\mqty(1&1&1\\0&4&-1\\2&-2&1)
+    \end{equation*}
+    对第一列取主元2, 并将其与第1行交换, 得到矩阵
+    \begin{equation*}
+        \mqty(2&-2&1\\0&4&-1\\1&1&1)
+    \end{equation*}
+    得消元因子$m_{31}=1/2$, 变换得
+    \begin{equation*}
+        \mqty(2&-2&1\\0&4&-1\\0&2&\frac{1}{2})
+    \end{equation*}
+    类似地, 可得$m_{32}=1/2$, 从而得到矩阵
+    \begin{equation*}
+        \mqty(2&-2&1\\0&4&-1\\0&0&1)
+    \end{equation*}
+
+    最终可得到矩阵分解为
+    \begin{equation*}
+        A=\mqty(1&0&0\\0&1&0\\\frac{1}{2}&\frac{1}{2}&1)\mqty(2&-2&1\\0&4&-1\\0&0&1)
+    \end{equation*}
+    解方程组
+    \begin{align*}
+        \mqty(1&0&0\\0&1&0\\\frac{1}{2}&\frac{1}{2}&1)\mqty(y_1\\y_2\\y_3)&=\mqty(1\\5\\6)\\
+        \mqty(2&-2&1\\0&4&-1\\0&0&1)\mqty(x_1\\x_2\\x_3)&=\mqty(y_1\\y_2\\y_3)\\
+    \end{align*}
+    最终解得$x=\transpose{(1,2,3)}$
+    
+    其结果与例\ref{example:三角分解法解方程组}相同.
+\end{solution}
+
+\begin{example}\label{example: 矩阵列主元紧凑Doolittle三角分解法求解方程组}
+    使用紧凑格式的Doolittle三角分解法求解线性方程组
+    \begin{equation*}
+        \mqty(1&2&3\\2&5&2\\3&1&5)\mqty(x_1\\x_2\\x_3)=\mqty(14\\18\\20)
+    \end{equation*}
+\end{example}
+
+\begin{solution}
+    考虑增广矩阵
+    \begin{equation*}
+        \mqty(1&2&3&14\\2&5&2&18\\3&1&5&20)
+    \end{equation*}
+    对第一行和第三行交换(取第一列主元3), 得到矩阵
+    \begin{equation*}
+        \mqty(3&1&5&20\\2&5&2&18\\1&2&3&14)
+    \end{equation*}
+    得消元因子
+    \begin{align*}
+        m_{21}&=\frac{2}{3}\\
+        m_{31}&=\frac{1}{3}
+    \end{align*}
+    变换矩阵得
+    \begin{equation*}
+        \mqty(3&1&5&20\\\frac{2}{3}&\frac{13}{3}&-\frac{4}{3}&\frac{14}{3}\\\frac{1}{3}&\frac{5}{3}&\frac{4}{3}&\frac{22}{3})
+    \end{equation*}
+    计算第二列的消元因子, 有$m_{32}=\frac{5}{13}$, 从而变换后矩阵为
+    \begin{equation*}
+        \mqty(3&1&5&20\\0&\frac{2}{3}&\frac{13}{3}&-\frac{4}{3}\\\frac{1}{3}&\frac{5}{13}&\frac{24}{13}&\frac{72}{13})
+    \end{equation*}
+    从而得
+    \begin{align*}
+        L&=\mqty(1&0&0\\\frac{2}{3}&1&0\\\frac{1}{3}&\frac{5}{13}&1)\\
+        U&=\mqty(3&1&5\\0&\frac{13}{3}&-\frac{4}{3}\\0&0&\frac{24}{13})\\
+        y&=\mqty(20\\\frac{14}{3}\\\frac{72}{13})
+    \end{align*}
+    解方程$Ux=y$, 可得$x=\transpose{(1,2,3)}$, 其结果与例题\ref{example: 矩阵三角分解法求解方程组}相同
+\end{solution}
+
+需要特别注意的是, 在使用紧凑格式的Doolittle三角分解法求解时, 在变换矩阵过程中所得到的消元因子, \emph{不参与行变换的计算, 但需要参与行交换}. 
 
 \section{Gauss消去法变形}
 
